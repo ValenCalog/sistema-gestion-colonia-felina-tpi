@@ -3,20 +3,20 @@ package Clases;
 
 public class Usuario{
     private String idUsuario;
-    /*Capaz podriamos hacer que idUsuario sea int, para programarlo como 
-    autoincremental -> static int idUsuario
-    Entonces en el constructor de Usuario: idUsuario++*/
-    
     private String nombre;
     private String apellido;
-    private long DNI;
+    private String DNI;
     private String correo;
     private String telefono;
     private String contraseña;
     private String estado;
     private String rol;
- 
-    public Usuario(String nombre, String apellido, long DNI, String correo, String telefono, String contraseña, String estado, String rol){
+    private Reputacion unaReputacion;
+    
+    //Veterinario deberia seguir siendo subclase de usuario? Siendo que no va a tener Familia.
+    
+    public Usuario(String idUsuario, String nombre, String apellido, String DNI, String correo, String telefono, String contraseña, String estado, String rol, Reputacion unaReputacion) {
+        this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.apellido = apellido;
         this.DNI = DNI;
@@ -25,6 +25,7 @@ public class Usuario{
         this.contraseña = contraseña;
         this.estado = estado;
         this.rol = rol;
+        this.unaReputacion = unaReputacion;
     }
 
     public String getRol() {

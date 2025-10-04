@@ -1,12 +1,15 @@
 
 package Clases;
 
+import java.util.List;
+
 public class Familia {
     private String idFamilia;
     private String disponibilidad;
     private String observaciones;
     private String direccion;
     private String codigoFamilia;
+    private List<Usuario> listaUsuarios;
 
     public Familia(String disponibilidad, String observaciones, String direccion) {
         this.disponibilidad = disponibilidad;
