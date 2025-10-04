@@ -22,7 +22,7 @@ El sistema busca facilitar la gestión de una colonia urbana de gatos callejeros
 ## 🛠️ Tecnologías utilizadas  
 
 - **Lenguaje principal**: Java  
-- **Aplicación Desktop**: Java Swing/JavaFX  
+- **Aplicación Desktop**: Java Swing
 - **Aplicación Web**: Java JSP  
 - **Base de datos**: MySQL  
 - **Diagramado**: UML (Lucidchart y draw.io)  
