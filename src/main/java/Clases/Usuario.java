@@ -3,7 +3,7 @@ package Clases;
 
 public class Usuario{
     private String idUsuario;
-    private String nombre;
+    String nombre;
     private String apellido;
     private String DNI;
     private String correo;
@@ -12,8 +12,6 @@ public class Usuario{
     private String estado;
     private String rol;
     private Reputacion unaReputacion;
-    
-    //Veterinario deberia seguir siendo subclase de usuario? Siendo que no va a tener Familia.
     
     public Usuario(String idUsuario, String nombre, String apellido, String DNI, String correo, String telefono, String contraseña, String estado, String rol, Reputacion unaReputacion) {
         this.idUsuario = idUsuario;

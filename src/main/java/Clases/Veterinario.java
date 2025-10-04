@@ -9,12 +9,18 @@ public class Veterinario extends Usuario{
         this.matricula = matricula;
     }
     
+    public String getNombre(){
+        return nombre; 
+        //Esto obviamente requerira mas adelante otra implementacion
+        //Por ahora esta asi SOLO para ver el nombre del veterinario en el Estudio
+    }
+    
     public int getMatricula() {
         return matricula;
     }
 
     public void setMatricula(int matricula) {
         this.matricula = matricula;
-    }
+    } 
     
 }

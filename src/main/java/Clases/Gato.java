@@ -38,6 +38,10 @@ public class Gato {
     public String obtenerInfoGato(){
         return "El nombre del gato es: "+nombre+" y su color es: "+color;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
     
     
 }

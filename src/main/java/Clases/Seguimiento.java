@@ -9,13 +9,14 @@ public class Seguimiento{
     //private LocalDate fecha;
     private String tipoDeContacto;
     private String observaciones;
+    private Usuario unUsuario;
 
-    public Seguimiento(Date fecha, String tipoDeContacto, String observaciones) {
+    public Seguimiento(Date fecha, String tipoDeContacto, String observaciones, Usuario unUsuario) {
         this.fecha = fecha;
         this.tipoDeContacto = tipoDeContacto;
         this.observaciones = observaciones;
-        //El metodo "registrarSeguimiento()" del UML era este metodo constructor, no?
-        // ↳ Si es asi, ver la implementacion de idSeguimiento
+        this.unUsuario = unUsuario;
+        //Falta la implementacion del idSeguimiento++
     }
     
     public String obtenerInfoDeSeguimiento(){
