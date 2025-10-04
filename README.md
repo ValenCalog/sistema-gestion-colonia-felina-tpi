@@ -5,6 +5,8 @@ Proyecto desarrollado como **Trabajo Práctico Final 2025** para la materia **Pr
 El sistema busca facilitar la gestión de una colonia urbana de gatos callejeros mantenida por voluntarios, veterinarios y familias adoptantes.  
 
 ---
+## Estado del proyecto
+🚧 Este sistema aún está en desarrollo.
 
 ## ✨ Funcionalidades principales  
 
