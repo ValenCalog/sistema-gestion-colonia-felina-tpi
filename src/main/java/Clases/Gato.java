@@ -9,14 +9,17 @@ public class Gato {
     private String fotografia; //Ver como se va a terminar implementando esto
     private String estadoSalud;
     private String disponibilidad;
+    private Zona unaZona;
 
-    public Gato(String nombre, String color, String caracteristicas, String fotografia, String estadoSalud) {
+    public Gato(String nombre, String color, String caracteristicas, String fotografia, String estadoSalud, Zona unaZona) {
         this.nombre = nombre;
         this.color = color;
         this.caracteristicas = caracteristicas;
         this.fotografia = fotografia;
         this.estadoSalud = estadoSalud;
+        this.unaZona = unaZona;
         this.disponibilidad = "Disponible"; //Estos van a ser los estados?
+        //Falta la implementacion del idGato++
     }
 
     public String getEstadoSalud() {
