@@ -11,4 +11,36 @@
         <maven.compiler.target>17</maven.compiler.target>
         <exec.mainClass>com.prog.tpi_colonia_felina_paii.TPI_colonia_felina_PAII</exec.mainClass>
     </properties>
+    
+    <dependencies>
+        <!-- API de JPA -->
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
+        <!-- implementación de JPA: Hibernate -->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>6.4.4.Final</version>
+        </dependency>
+
+        <!-- Driver JDBC para MySQL -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>9.0.0</version>
+        </dependency>
+
+        <!-- para logs más claros -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.13</version>
+        </dependency>
+        
+    </dependencies>
+    
 </project>
