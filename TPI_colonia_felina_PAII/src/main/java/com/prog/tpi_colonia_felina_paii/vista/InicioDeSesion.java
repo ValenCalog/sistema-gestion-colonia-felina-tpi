@@ -55,6 +55,7 @@ public class InicioDeSesion extends javax.swing.JFrame {
         bg.add(labelNombreUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 230, -1, -1));
 
         password.setBackground(new java.awt.Color(255, 255, 255));
+        password.setForeground(java.awt.Color.gray);
         password.setText("********");
         password.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -69,6 +70,7 @@ public class InicioDeSesion extends javax.swing.JFrame {
         bg.add(password, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 340, 390, -1));
 
         nombreUsuario.setBackground(new java.awt.Color(255, 255, 255));
+        nombreUsuario.setForeground(java.awt.Color.gray);
         nombreUsuario.setText("Introduce tu nombre de usuario");
         nombreUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
