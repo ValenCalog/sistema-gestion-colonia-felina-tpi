@@ -30,9 +30,10 @@ public class InicioDeSesion extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnIniciarSesion = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(800, 500));
 
         bg.setBackground(new java.awt.Color(197, 197, 197));
         bg.setForeground(new java.awt.Color(204, 204, 204));
@@ -41,18 +42,21 @@ public class InicioDeSesion extends javax.swing.JFrame {
         titulo.setBackground(new java.awt.Color(0, 0, 0));
         titulo.setFont(new java.awt.Font("Roboto Bk", 1, 36)); // NOI18N
         titulo.setForeground(new java.awt.Color(0, 0, 0));
+        titulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         titulo.setText("Gestión de Colonia Felina");
-        bg.add(titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 110, 610, -1));
+        titulo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bg.add(titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 800, -1));
 
         bienvenida.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         bienvenida.setForeground(new java.awt.Color(102, 102, 102));
+        bienvenida.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         bienvenida.setText("Bienvenido de nuevo. Por favor, introduce tus datos.");
-        bg.add(bienvenida, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 160, 340, 40));
+        bg.add(bienvenida, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 810, 40));
 
         labelNombreUsuario.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
         labelNombreUsuario.setForeground(new java.awt.Color(0, 0, 0));
         labelNombreUsuario.setText("Nombre de usuario");
-        bg.add(labelNombreUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 230, -1, -1));
+        bg.add(labelNombreUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 210, -1, -1));
 
         password.setBackground(new java.awt.Color(255, 255, 255));
         password.setForeground(java.awt.Color.gray);
@@ -67,7 +71,7 @@ public class InicioDeSesion extends javax.swing.JFrame {
                 passwordActionPerformed(evt);
             }
         });
-        bg.add(password, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 340, 390, -1));
+        bg.add(password, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 310, 390, -1));
 
         nombreUsuario.setBackground(new java.awt.Color(255, 255, 255));
         nombreUsuario.setForeground(java.awt.Color.gray);
@@ -82,16 +86,16 @@ public class InicioDeSesion extends javax.swing.JFrame {
                 nombreUsuarioActionPerformed(evt);
             }
         });
-        bg.add(nombreUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 260, 390, -1));
+        bg.add(nombreUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 240, 390, -1));
 
         jLabel1.setBackground(new java.awt.Color(0, 0, 0));
         jLabel1.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Contraseña");
-        bg.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 310, -1, -1));
+        bg.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 280, -1, -1));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/huella.png"))); // NOI18N
-        bg.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, 70, -1));
+        bg.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 20, 70, -1));
 
         btnIniciarSesion.setBackground(new java.awt.Color(255, 112, 0));
         btnIniciarSesion.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
@@ -101,7 +105,21 @@ public class InicioDeSesion extends javax.swing.JFrame {
                 btnIniciarSesionActionPerformed(evt);
             }
         });
-        bg.add(btnIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 390, 390, 50));
+        bg.add(btnIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 370, 390, 50));
+
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("¿No tienes cuenta aún?");
+        bg.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 450, 140, 30));
+
+        jButton1.setBackground(java.awt.Color.lightGray);
+        jButton1.setForeground(new java.awt.Color(255, 102, 0));
+        jButton1.setText("Registrate Aqui");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        bg.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 450, 140, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -151,12 +169,18 @@ public class InicioDeSesion extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bg;
     private javax.swing.JLabel bienvenida;
     private javax.swing.JButton btnIniciarSesion;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel labelNombreUsuario;
     private javax.swing.JTextField nombreUsuario;
     private javax.swing.JPasswordField password;
