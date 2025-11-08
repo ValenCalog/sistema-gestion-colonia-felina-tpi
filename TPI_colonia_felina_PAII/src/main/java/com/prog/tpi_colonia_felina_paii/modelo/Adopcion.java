@@ -4,6 +4,8 @@ package com.prog.tpi_colonia_felina_paii.modelo;
 import com.prog.tpi_colonia_felina_paii.enums.TipoAdopcion;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Adopcion {
@@ -25,6 +27,16 @@ public class Adopcion {
     @ManyToOne
     @JoinColumn(name = "id_familia")
     private Familia familiaAdoptante;
+    
+    @OneToMany(mappedBy = "adopcion",
+           cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+           orphanRemoval = false,
+           fetch = FetchType.LAZY)
+    @OrderBy("fechaHora DESC")
+    private List<Seguimiento> seguimientos = new ArrayList<>();
+
+    public Adopcion() {
+    }
 
     public Adopcion(TipoAdopcion tipo, String estado, Gato gato) {
         this.tipo = tipo;
@@ -32,10 +44,12 @@ public class Adopcion {
         this.estado = estado;
         this.gato = gato;
     }
-
-    public Adopcion() {
+    
+    public void agregarSeguimiento(Seguimiento s) {
+        seguimientos.add(s);
+        s.setAdopcion(this);
     }
-
+    
     public Long getIdAdopcion() {
         return idAdopcion;
     }
@@ -83,5 +97,15 @@ public class Adopcion {
     public void setFamiliaAdoptante(Familia familiaAdoptante) {
         this.familiaAdoptante = familiaAdoptante;
     }
+
+    public List<Seguimiento> getSeguimientos() {
+        return seguimientos;
+    }
+
+    public void setSeguimientos(List<Seguimiento> seguimientos) {
+        this.seguimientos = seguimientos;
+    }
+
+    
 
 }

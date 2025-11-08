@@ -122,5 +122,8 @@ public class Familia {
         this.postulaciones = postulaciones;
     }
     
-    
+    public void agregarMiembroFamilia(Usuario miembro){
+        miembrosFamilia.add(miembro);
+        
+    }
 }

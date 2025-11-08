@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -18,12 +19,17 @@ public class Reputacion {
     
     private double promedioValoracion;
     
-    @OneToOne(mappedBy = "reputacion")
+    @OneToOne
+    @JoinColumn(name = "id_usuario", unique = true, nullable = false)
     private Usuario usuario;
 
     public Reputacion() {
     }
     
+    public Reputacion(Usuario usuario) { 
+        this.usuario = usuario; 
+    }
+
     public void agregarValoracion(int nuevaValoracion){
         double totalAnterior = promedioValoracion * cantidadValoraciones;
         cantidadValoraciones++;
