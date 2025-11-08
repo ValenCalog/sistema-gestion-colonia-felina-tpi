@@ -2,10 +2,12 @@
 package com.prog.tpi_colonia_felina_paii.modelo;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
 
@@ -22,6 +24,10 @@ public class CertificadoAptitud {
     @OneToOne
     @JoinColumn(name = "gato_id", nullable = false, unique = true)
     private Gato gato;
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_veterinario", nullable = false)
+    private Veterinario veterinario;
 
     public CertificadoAptitud() {
         this.fechaEmision = LocalDate.now();

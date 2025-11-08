@@ -53,11 +53,8 @@ public class Usuario {
     
     //Relacion con familia si tiene rol MIEMBRO_FAMILIA:
     @ManyToOne
-    @JoinColumn(name = "id_familia")
+    @JoinColumn(name = "id_familia", nullable = true)
     private Familia familia;
-    
-    @OneToMany(mappedBy = "usuario")
-    private List<Tarea> tareas = new ArrayList<>(); //tareas que realizó
 
     public Usuario() {
     }
@@ -159,14 +156,6 @@ public class Usuario {
 
     public void setFamilia(Familia familia) {
         this.familia = familia;
-    }
-
-    public List<Tarea> getTareas() {
-        return tareas;
-    }
-
-    public void setTareas(List<Tarea> tareas) {
-        this.tareas = tareas;
     }
 
 }

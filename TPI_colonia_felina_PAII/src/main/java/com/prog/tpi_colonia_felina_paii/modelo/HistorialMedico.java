@@ -64,5 +64,21 @@ public class HistorialMedico {
         estudios.add(e);
         e.setHistorial(this);
     }
+
+    public List<Estudio> getEstudios() {
+        return estudios;
+    }
+
+    public void setEstudios(List<Estudio> estudios) {
+        this.estudios = estudios;
+    }
+
+    public List<Diagnostico> getDiagnosticos() {
+        return diagnosticos;
+    }
+
+    public void setDiagnosticos(List<Diagnostico> diagnosticos) {
+        this.diagnosticos = diagnosticos;
+    }
     
 }
