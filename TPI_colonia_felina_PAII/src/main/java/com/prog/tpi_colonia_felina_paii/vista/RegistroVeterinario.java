@@ -31,18 +31,18 @@ public class RegistroVeterinario extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtCorreoVet = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        txtTelefonoVet = new javax.swing.JTextField();
+        jPasswordField1 = new javax.swing.JPasswordField();
         jPanel3 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        txtApellidoVet = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        txtNombreVet = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        txtDniVet = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -67,28 +67,42 @@ public class RegistroVeterinario extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Correo");
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField1.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        jTextField1.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
-        jTextField1.setText("Ingresa tu contraseña");
-
         jLabel4.setFont(new java.awt.Font("Roboto Bk", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Contraseña");
 
-        jTextField2.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField2.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        jTextField2.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
-        jTextField2.setText("Ingresa tu correo");
+        txtCorreoVet.setBackground(new java.awt.Color(255, 255, 255));
+        txtCorreoVet.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        txtCorreoVet.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
+        txtCorreoVet.setText("Ingresa tu correo");
+        txtCorreoVet.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                txtCorreoVetMousePressed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Roboto Bk", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Telefono");
 
-        jTextField3.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField3.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        jTextField3.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
-        jTextField3.setText("Ingresa tu telefono");
+        txtTelefonoVet.setBackground(new java.awt.Color(255, 255, 255));
+        txtTelefonoVet.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        txtTelefonoVet.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
+        txtTelefonoVet.setText("Ingresa tu telefono");
+        txtTelefonoVet.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                txtTelefonoVetMousePressed(evt);
+            }
+        });
+
+        jPasswordField1.setBackground(new java.awt.Color(255, 255, 255));
+        jPasswordField1.setForeground(new java.awt.Color(102, 102, 102));
+        jPasswordField1.setText("********");
+        jPasswordField1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPasswordField1MousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -96,13 +110,13 @@ public class RegistroVeterinario extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtTelefonoVet, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCorreoVet, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPasswordField1))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -111,15 +125,15 @@ public class RegistroVeterinario extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtCorreoVet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(11, 11, 11)
+                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtTelefonoVet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
@@ -129,28 +143,48 @@ public class RegistroVeterinario extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Nombre");
 
-        jTextField4.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField4.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        jTextField4.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
-        jTextField4.setText("Ingresa tu apellido");
+        txtApellidoVet.setBackground(new java.awt.Color(255, 255, 255));
+        txtApellidoVet.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        txtApellidoVet.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
+        txtApellidoVet.setText("Ingresa tu apellido");
+        txtApellidoVet.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                txtApellidoVetMousePressed(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Roboto Bk", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Apellido");
 
-        jTextField5.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField5.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        jTextField5.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
-        jTextField5.setText("Ingresa tu nombre");
+        txtNombreVet.setBackground(new java.awt.Color(255, 255, 255));
+        txtNombreVet.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        txtNombreVet.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
+        txtNombreVet.setText("Ingresa tu nombre");
+        txtNombreVet.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                txtNombreVetMousePressed(evt);
+            }
+        });
+        txtNombreVet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreVetActionPerformed(evt);
+            }
+        });
 
         jLabel8.setFont(new java.awt.Font("Roboto Bk", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("DNI");
 
-        jTextField6.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField6.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        jTextField6.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
-        jTextField6.setText("Ingresa tu DNI");
+        txtDniVet.setBackground(new java.awt.Color(255, 255, 255));
+        txtDniVet.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        txtDniVet.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
+        txtDniVet.setText("Ingresa tu DNI");
+        txtDniVet.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                txtDniVetMousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -159,12 +193,12 @@ public class RegistroVeterinario extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDniVet, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNombreVet, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtApellidoVet, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -173,15 +207,15 @@ public class RegistroVeterinario extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtNombreVet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtApellidoVet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtDniVet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
@@ -270,6 +304,47 @@ public class RegistroVeterinario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void txtNombreVetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreVetActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreVetActionPerformed
+
+    private void txtNombreVetMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtNombreVetMousePressed
+        if(txtNombreVet.getText().equals("Ingresa tu nombre")){
+            txtNombreVet.setText("");
+        }
+        
+    }//GEN-LAST:event_txtNombreVetMousePressed
+
+    private void txtApellidoVetMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtApellidoVetMousePressed
+        if(txtApellidoVet.getText().equals("Ingresa tu apellido")){
+            txtApellidoVet.setText("");
+        }
+    }//GEN-LAST:event_txtApellidoVetMousePressed
+
+    private void txtDniVetMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtDniVetMousePressed
+        if(txtDniVet.getText().equals("Ingresa tu DNI")){
+            txtDniVet.setText("");
+        }
+    }//GEN-LAST:event_txtDniVetMousePressed
+
+    private void txtCorreoVetMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCorreoVetMousePressed
+        if(txtCorreoVet.getText().equals("Ingresa tu correo")){
+            txtCorreoVet.setText("");
+        }
+    }//GEN-LAST:event_txtCorreoVetMousePressed
+
+    private void jPasswordField1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPasswordField1MousePressed
+        if(jPasswordField1.getPassword().equals("********")){
+            jPasswordField1.setText("");
+        }
+    }//GEN-LAST:event_jPasswordField1MousePressed
+
+    private void txtTelefonoVetMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtTelefonoVetMousePressed
+        if(txtTelefonoVet.getText().equals("Ingresa tu telefono")){
+            txtTelefonoVet.setText("");
+        }
+    }//GEN-LAST:event_txtTelefonoVetMousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -320,11 +395,11 @@ public class RegistroVeterinario extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
+    private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JTextField txtApellidoVet;
+    private javax.swing.JTextField txtCorreoVet;
+    private javax.swing.JTextField txtDniVet;
+    private javax.swing.JTextField txtNombreVet;
+    private javax.swing.JTextField txtTelefonoVet;
     // End of variables declaration//GEN-END:variables
 }
