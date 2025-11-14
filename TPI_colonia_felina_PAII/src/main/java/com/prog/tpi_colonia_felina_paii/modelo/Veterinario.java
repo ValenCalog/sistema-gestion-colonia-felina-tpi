@@ -16,6 +16,10 @@ public class Veterinario extends Usuario{
     public Veterinario() {
     }
     
+    public Veterinario(String matricula){
+        this.matricula = matricula;
+    }
+    
     public Veterinario(String matricula, String nombre, String apellido, String DNI, String correo, String telefono, String contrasenia, EstadoUsuario Estado) {
         super(nombre, apellido, DNI, correo, telefono, contrasenia, Estado, Rol.VETERINARIO);
         this.matricula = matricula;
