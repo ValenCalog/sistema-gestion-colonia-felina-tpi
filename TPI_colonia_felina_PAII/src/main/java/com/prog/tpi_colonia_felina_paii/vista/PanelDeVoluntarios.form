@@ -212,7 +212,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Bienvenida, Valen!"/>
+                <Property name="text" type="java.lang.String" value="Bienvenido/a"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btnNuevaTarea">
@@ -233,6 +233,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Registrar Gato"/>
               </Properties>
+              <Events>
+                <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnNuevoGatoMousePressed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>

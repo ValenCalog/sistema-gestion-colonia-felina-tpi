@@ -94,7 +94,7 @@ public class PanelDeVoluntarios extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Roboto Bk", 1, 36)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Bienvenida, Valen!");
+        jLabel2.setText("Bienvenido/a");
 
         btnNuevaTarea.setBackground(new java.awt.Color(255, 112, 0));
         btnNuevaTarea.setText("Crear Nueva Tarea");
@@ -106,6 +106,11 @@ public class PanelDeVoluntarios extends javax.swing.JFrame {
 
         btnNuevoGato.setBackground(new java.awt.Color(59, 130, 246));
         btnNuevoGato.setText("Registrar Gato");
+        btnNuevoGato.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnNuevoGatoMousePressed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
@@ -233,6 +238,12 @@ public class PanelDeVoluntarios extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnNuevoGatoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoGatoMousePressed
+        RegistroGato rg = new RegistroGato();
+        rg.setVisible(true);
+        this.setVisible(false); 
+    }//GEN-LAST:event_btnNuevoGatoMousePressed
 
     /**
      * @param args the command line arguments

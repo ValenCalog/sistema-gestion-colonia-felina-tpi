@@ -53,10 +53,10 @@
               </Group>
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace pref="312" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="jButton4" min="-2" pref="180" max="-2" attributes="0"/>
-                      <Component id="jButton1" min="-2" pref="180" max="-2" attributes="0"/>
-                      <Component id="jButton3" min="-2" pref="180" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="jButton4" pref="180" max="32767" attributes="0"/>
+                      <Component id="jButton1" pref="180" max="32767" attributes="0"/>
+                      <Component id="jButton3" alignment="1" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="308" max="-2" attributes="0"/>
               </Group>
@@ -69,11 +69,11 @@
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
                   <Component id="jButton3" min="-2" pref="60" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
                   <Component id="jButton1" min="-2" pref="60" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
                   <Component id="jButton4" min="-2" pref="60" max="-2" attributes="0"/>
-                  <EmptySpace pref="106" max="32767" attributes="0"/>
+                  <EmptySpace pref="90" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -107,7 +107,7 @@
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="70" red="ff" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Veterinario"/>
+            <Property name="text" type="java.lang.String" value="Voluntario o Administrador"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
@@ -118,7 +118,7 @@
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="70" red="ff" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Voluntario o Administrador"/>
+            <Property name="text" type="java.lang.String" value="Veterinario"/>
           </Properties>
         </Component>
       </SubComponents>

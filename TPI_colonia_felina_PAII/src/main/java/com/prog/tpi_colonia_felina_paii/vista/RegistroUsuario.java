@@ -4,16 +4,21 @@
  */
 package com.prog.tpi_colonia_felina_paii.vista;
 
+import com.prog.tpi_colonia_felina_paii.controlador.ControladorRegistroUsuarios;
+
 /**
  *
  * @author User
  */
-public class RegistroVeterinario extends javax.swing.JFrame {
+public class RegistroUsuario extends javax.swing.JFrame {
 
     /**
      * Creates new form RegistroVeterinario
      */
-    public RegistroVeterinario() {
+    
+    private ControladorRegistroUsuarios miControl;
+    
+    public RegistroUsuario() {
         initComponents();
     }
 
@@ -26,26 +31,29 @@ public class RegistroVeterinario extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        roles = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        txtCorreoVet = new javax.swing.JTextField();
+        txtCorreo = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txtTelefonoVet = new javax.swing.JTextField();
+        txtTelefono = new javax.swing.JTextField();
         jPasswordField1 = new javax.swing.JPasswordField();
         jPanel3 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        txtApellidoVet = new javax.swing.JTextField();
+        txtApellido = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        txtNombreVet = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        txtDniVet = new javax.swing.JTextField();
+        txtDni = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        voluntario = new javax.swing.JRadioButton();
+        admin = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -71,13 +79,13 @@ public class RegistroVeterinario extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Contraseña");
 
-        txtCorreoVet.setBackground(new java.awt.Color(255, 255, 255));
-        txtCorreoVet.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        txtCorreoVet.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
-        txtCorreoVet.setText("Ingresa tu correo");
-        txtCorreoVet.addMouseListener(new java.awt.event.MouseAdapter() {
+        txtCorreo.setBackground(new java.awt.Color(255, 255, 255));
+        txtCorreo.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        txtCorreo.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
+        txtCorreo.setText("Ingresa tu correo");
+        txtCorreo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                txtCorreoVetMousePressed(evt);
+                txtCorreoMousePressed(evt);
             }
         });
 
@@ -85,13 +93,13 @@ public class RegistroVeterinario extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Telefono");
 
-        txtTelefonoVet.setBackground(new java.awt.Color(255, 255, 255));
-        txtTelefonoVet.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        txtTelefonoVet.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
-        txtTelefonoVet.setText("Ingresa tu telefono");
-        txtTelefonoVet.addMouseListener(new java.awt.event.MouseAdapter() {
+        txtTelefono.setBackground(new java.awt.Color(255, 255, 255));
+        txtTelefono.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        txtTelefono.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
+        txtTelefono.setText("Ingresa tu telefono");
+        txtTelefono.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                txtTelefonoVetMousePressed(evt);
+                txtTelefonoMousePressed(evt);
             }
         });
 
@@ -111,9 +119,9 @@ public class RegistroVeterinario extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtTelefonoVet, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+                    .addComponent(txtTelefono, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCorreoVet, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+                    .addComponent(txtCorreo, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPasswordField1))
@@ -125,7 +133,7 @@ public class RegistroVeterinario extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtCorreoVet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addGap(11, 11, 11)
@@ -133,7 +141,7 @@ public class RegistroVeterinario extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtTelefonoVet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
@@ -143,13 +151,13 @@ public class RegistroVeterinario extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Nombre");
 
-        txtApellidoVet.setBackground(new java.awt.Color(255, 255, 255));
-        txtApellidoVet.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        txtApellidoVet.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
-        txtApellidoVet.setText("Ingresa tu apellido");
-        txtApellidoVet.addMouseListener(new java.awt.event.MouseAdapter() {
+        txtApellido.setBackground(new java.awt.Color(255, 255, 255));
+        txtApellido.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        txtApellido.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
+        txtApellido.setText("Ingresa tu apellido");
+        txtApellido.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                txtApellidoVetMousePressed(evt);
+                txtApellidoMousePressed(evt);
             }
         });
 
@@ -157,18 +165,18 @@ public class RegistroVeterinario extends javax.swing.JFrame {
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Apellido");
 
-        txtNombreVet.setBackground(new java.awt.Color(255, 255, 255));
-        txtNombreVet.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        txtNombreVet.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
-        txtNombreVet.setText("Ingresa tu nombre");
-        txtNombreVet.addMouseListener(new java.awt.event.MouseAdapter() {
+        txtNombre.setBackground(new java.awt.Color(255, 255, 255));
+        txtNombre.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        txtNombre.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
+        txtNombre.setText("Ingresa tu nombre");
+        txtNombre.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                txtNombreVetMousePressed(evt);
+                txtNombreMousePressed(evt);
             }
         });
-        txtNombreVet.addActionListener(new java.awt.event.ActionListener() {
+        txtNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNombreVetActionPerformed(evt);
+                txtNombreActionPerformed(evt);
             }
         });
 
@@ -176,13 +184,13 @@ public class RegistroVeterinario extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("DNI");
 
-        txtDniVet.setBackground(new java.awt.Color(255, 255, 255));
-        txtDniVet.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        txtDniVet.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
-        txtDniVet.setText("Ingresa tu DNI");
-        txtDniVet.addMouseListener(new java.awt.event.MouseAdapter() {
+        txtDni.setBackground(new java.awt.Color(255, 255, 255));
+        txtDni.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        txtDni.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
+        txtDni.setText("Ingresa tu DNI");
+        txtDni.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                txtDniVetMousePressed(evt);
+                txtDniMousePressed(evt);
             }
         });
 
@@ -193,12 +201,12 @@ public class RegistroVeterinario extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtDniVet, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDni, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNombreVet, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtApellidoVet, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -207,15 +215,15 @@ public class RegistroVeterinario extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNombreVet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtApellidoVet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtDniVet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
@@ -234,11 +242,27 @@ public class RegistroVeterinario extends javax.swing.JFrame {
         jButton1.setBackground(javax.swing.UIManager.getDefaults().getColor("Actions.Green"));
         jButton1.setFont(new java.awt.Font("Roboto Bk", 1, 18)); // NOI18N
         jButton1.setText("Crear Cuenta");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton1MousePressed(evt);
+            }
+        });
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        roles.add(voluntario);
+        voluntario.setFont(new java.awt.Font("Roboto Bk", 0, 12)); // NOI18N
+        voluntario.setForeground(new java.awt.Color(0, 0, 0));
+        voluntario.setText("Voluntario");
+        voluntario.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        roles.add(admin);
+        admin.setFont(new java.awt.Font("Roboto Bk", 0, 12)); // NOI18N
+        admin.setForeground(new java.awt.Color(0, 0, 0));
+        admin.setText("Admin");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -252,19 +276,27 @@ public class RegistroVeterinario extends javax.swing.JFrame {
                         .addContainerGap())
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(57, 57, 57)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(57, 57, 57)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(105, 105, 105)
+                        .addComponent(voluntario, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(admin, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(44, 44, 44)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 63, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(63, 63, 63))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -281,9 +313,12 @@ public class RegistroVeterinario extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(voluntario)
+                    .addComponent(admin)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -304,34 +339,34 @@ public class RegistroVeterinario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void txtNombreVetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreVetActionPerformed
+    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombreVetActionPerformed
+    }//GEN-LAST:event_txtNombreActionPerformed
 
-    private void txtNombreVetMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtNombreVetMousePressed
-        if(txtNombreVet.getText().equals("Ingresa tu nombre")){
-            txtNombreVet.setText("");
+    private void txtNombreMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtNombreMousePressed
+        if(txtNombre.getText().equals("Ingresa tu nombre")){
+            txtNombre.setText("");
         }
         
-    }//GEN-LAST:event_txtNombreVetMousePressed
+    }//GEN-LAST:event_txtNombreMousePressed
 
-    private void txtApellidoVetMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtApellidoVetMousePressed
-        if(txtApellidoVet.getText().equals("Ingresa tu apellido")){
-            txtApellidoVet.setText("");
+    private void txtApellidoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtApellidoMousePressed
+        if(txtApellido.getText().equals("Ingresa tu apellido")){
+            txtApellido.setText("");
         }
-    }//GEN-LAST:event_txtApellidoVetMousePressed
+    }//GEN-LAST:event_txtApellidoMousePressed
 
-    private void txtDniVetMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtDniVetMousePressed
-        if(txtDniVet.getText().equals("Ingresa tu DNI")){
-            txtDniVet.setText("");
+    private void txtDniMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtDniMousePressed
+        if(txtDni.getText().equals("Ingresa tu DNI")){
+            txtDni.setText("");
         }
-    }//GEN-LAST:event_txtDniVetMousePressed
+    }//GEN-LAST:event_txtDniMousePressed
 
-    private void txtCorreoVetMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCorreoVetMousePressed
-        if(txtCorreoVet.getText().equals("Ingresa tu correo")){
-            txtCorreoVet.setText("");
+    private void txtCorreoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCorreoMousePressed
+        if(txtCorreo.getText().equals("Ingresa tu correo")){
+            txtCorreo.setText("");
         }
-    }//GEN-LAST:event_txtCorreoVetMousePressed
+    }//GEN-LAST:event_txtCorreoMousePressed
 
     private void jPasswordField1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPasswordField1MousePressed
         if(jPasswordField1.getPassword().equals("********")){
@@ -339,11 +374,38 @@ public class RegistroVeterinario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jPasswordField1MousePressed
 
-    private void txtTelefonoVetMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtTelefonoVetMousePressed
-        if(txtTelefonoVet.getText().equals("Ingresa tu telefono")){
-            txtTelefonoVet.setText("");
+    private void txtTelefonoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtTelefonoMousePressed
+        if(txtTelefono.getText().equals("Ingresa tu telefono")){
+            txtTelefono.setText("");
         }
-    }//GEN-LAST:event_txtTelefonoVetMousePressed
+    }//GEN-LAST:event_txtTelefonoMousePressed
+
+    private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
+        if (admin.isSelected()) {
+        miControl.registrarAdmin(
+            txtNombre.getText(),
+            txtApellido.getText(),
+            txtDni.getText(),
+            txtCorreo.getText(),
+            new String(jPasswordField1.getPassword()),
+            txtTelefono.getText()
+        );
+    } else {
+        if (voluntario.isSelected()) {
+
+            miControl.registrarVoluntario(
+                txtNombre.getText(),
+                txtApellido.getText(),
+                txtDni.getText(),
+                txtCorreo.getText(),
+                new String(jPasswordField1.getPassword()),
+                txtTelefono.getText()
+            );
+        } else {
+            System.out.println("Seleccione un rol");
+        }
+    }
+    }//GEN-LAST:event_jButton1MousePressed
 
     /**
      * @param args the command line arguments
@@ -362,25 +424,35 @@ public class RegistroVeterinario extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RegistroVeterinario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegistroUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RegistroVeterinario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegistroUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RegistroVeterinario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegistroUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RegistroVeterinario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegistroUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RegistroVeterinario().setVisible(true);
+                new RegistroUsuario().setVisible(true);
             }
         });
     }
 
+    public ControladorRegistroUsuarios getMiControl() {
+        return miControl;
+    }
+
+    public void setMiControl(ControladorRegistroUsuarios miControl) {
+        this.miControl = miControl;
+    }
+    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton admin;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -396,10 +468,12 @@ public class RegistroVeterinario extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField txtApellidoVet;
-    private javax.swing.JTextField txtCorreoVet;
-    private javax.swing.JTextField txtDniVet;
-    private javax.swing.JTextField txtNombreVet;
-    private javax.swing.JTextField txtTelefonoVet;
+    private javax.swing.ButtonGroup roles;
+    private javax.swing.JTextField txtApellido;
+    private javax.swing.JTextField txtCorreo;
+    private javax.swing.JTextField txtDni;
+    private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtTelefono;
+    private javax.swing.JRadioButton voluntario;
     // End of variables declaration//GEN-END:variables
 }

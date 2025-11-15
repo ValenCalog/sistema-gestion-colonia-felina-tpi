@@ -4,6 +4,14 @@
  */
 package com.prog.tpi_colonia_felina_paii.vista;
 
+import com.prog.tpi_colonia_felina_paii.controlador.ControladorRegistroUsuarios;
+import com.prog.tpi_colonia_felina_paii.dao.FamiliaDAOImpl;
+import com.prog.tpi_colonia_felina_paii.dao.IFamiliaDAO;
+import com.prog.tpi_colonia_felina_paii.dao.IUsuarioDAO;
+import com.prog.tpi_colonia_felina_paii.dao.IVeterinarioDAO;
+import com.prog.tpi_colonia_felina_paii.dao.UsuarioDAOJPAImpl;
+import com.prog.tpi_colonia_felina_paii.dao.VeterinarioDAOJPAImpl;
+
 /**
  *
  * @author User
@@ -47,7 +55,7 @@ public class MenuRegistros extends javax.swing.JFrame {
         jButton1.setText("Hogar");
 
         jButton3.setBackground(new java.awt.Color(255, 112, 0));
-        jButton3.setText("Veterinario");
+        jButton3.setText("Voluntario o Administrador");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -55,7 +63,7 @@ public class MenuRegistros extends javax.swing.JFrame {
         });
 
         jButton4.setBackground(new java.awt.Color(255, 112, 0));
-        jButton4.setText("Voluntario o Administrador");
+        jButton4.setText("Veterinario");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -67,10 +75,10 @@ public class MenuRegistros extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(312, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(308, 308, 308))
         );
         jPanel1Layout.setVerticalGroup(
@@ -80,11 +88,11 @@ public class MenuRegistros extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(43, 43, 43)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
+                .addGap(51, 51, 51)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(46, 46, 46)
+                .addGap(54, 54, 54)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(106, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -102,7 +110,13 @@ public class MenuRegistros extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        RegistroVeterinario rv = new RegistroVeterinario();
+        RegistroUsuario rv = new RegistroUsuario();
+        IUsuarioDAO usuarioDAO = new UsuarioDAOJPAImpl();
+        IFamiliaDAO familiaDAO = new FamiliaDAOImpl();
+        IVeterinarioDAO veterinarioDAO = new VeterinarioDAOJPAImpl();
+        
+        ControladorRegistroUsuarios controlRegistro = new ControladorRegistroUsuarios(usuarioDAO, veterinarioDAO, familiaDAO);
+        rv.setMiControl(controlRegistro);
         rv.setVisible(true);
         this.setVisible(false);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -150,3 +164,5 @@ public class MenuRegistros extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
+
+

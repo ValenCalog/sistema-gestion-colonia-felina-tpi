@@ -166,12 +166,13 @@ public class InicioDeSesion extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordMousePressed
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         MenuRegistros mr = new MenuRegistros();
         mr.setVisible(true);
+        
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
