@@ -12,7 +12,16 @@ public class UsuarioDAOJPAImpl implements IUsuarioDAO {
 
     @Override
     public void crear(Usuario usuario) {
-        em.persist(usuario);
+        try {
+            DBService.beginTransaction();  
+            em.persist(usuario);       
+            DBService.commitTransaction();  
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback(); 
+            }
+            throw e; 
+        }
     }
      
     @Override
@@ -26,7 +35,7 @@ public class UsuarioDAOJPAImpl implements IUsuarioDAO {
     @Override
     public boolean existeEmail(String email) {
         String jpql = "SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END " +
-                  "FROM Usuario u WHERE u.email = :email";
+                  "FROM Usuario u WHERE u.correo = :email";
         return em.createQuery(jpql, Boolean.class)
              .setParameter("email", email)
              .getSingleResult();

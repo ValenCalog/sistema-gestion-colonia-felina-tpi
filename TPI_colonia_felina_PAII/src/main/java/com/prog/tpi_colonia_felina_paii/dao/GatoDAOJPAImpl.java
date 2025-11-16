@@ -13,21 +13,48 @@ public class GatoDAOJPAImpl implements IGatoDAO{
     
     @Override
     public void guardarGato(Gato gato) {
-        em.persist(gato);
+        try{
+            DBService.beginTransaction();  
+            em.persist(gato);
+            DBService.commitTransaction();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback(); 
+            }
+            throw e; 
+        }
     }
 
     @Override
     public void actualizar(Gato g) {
-        em.merge(g);
+        try{
+            DBService.beginTransaction();  
+            em.merge(g);
+            DBService.commitTransaction();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback(); 
+            }
+            throw e; 
+        }
     }
 
     @Override
     public void eliminar(Gato g) {
-        Gato adjunto = g;
-        if (!em.contains(g)) {
-            adjunto = em.merge(g);
+        try {
+            DBService.beginTransaction();
+            Gato adjunto = g;
+            if (!em.contains(g)) {
+                adjunto = em.merge(g);   
+            }
+            em.remove(adjunto);          
+            DBService.commitTransaction();
+        } catch (Exception e) {
+                if (em.getTransaction().isActive()) {
+                    em.getTransaction().rollback();
+                }
+                throw e;
         }
-        em.remove(adjunto);
     }
 
     @Override

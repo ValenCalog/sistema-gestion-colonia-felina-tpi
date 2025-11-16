@@ -25,10 +25,10 @@ public class Familia {
     @OneToMany(mappedBy = "familia", orphanRemoval = false)
     private List<Usuario> miembrosFamilia = new ArrayList<>();
     
-    @OneToMany(mappedBy = "familia", orphanRemoval = false)
+    @OneToMany(mappedBy = "familiaAdoptante", orphanRemoval = false)
     private List<Adopcion> adopciones = new ArrayList<>();
     
-    @OneToMany(mappedBy = "familia", orphanRemoval = false)
+    @OneToMany(mappedBy = "familiaPostulante", orphanRemoval = false)
     private List<Postulacion> postulaciones = new ArrayList<>();
 
     public Familia() {

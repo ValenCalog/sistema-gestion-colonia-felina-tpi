@@ -13,7 +13,7 @@ public class PuntoDeAvistamiento {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
     private String nombre;
     
     private Double latitud;
@@ -33,11 +33,11 @@ public class PuntoDeAvistamiento {
         this.zona = zona;
     }
     
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

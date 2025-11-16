@@ -10,7 +10,16 @@ public class VeterinarioDAOJPAImpl implements IVeterinarioDAO{
     
     @Override
     public void crear(Veterinario v) {
+        try{
+        DBService.beginTransaction();
         em.persist(v);
+        DBService.commitTransaction();  
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback(); 
+            }
+            throw e; 
+        }
     }
     
 }

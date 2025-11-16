@@ -39,7 +39,7 @@ public class Diagnostico {
     private Veterinario veterinario;
     
     @OneToMany(
-        mappedBy = "historial",
+        mappedBy = "diagnostico",
         cascade = CascadeType.ALL,     
         orphanRemoval = true,          
         fetch = FetchType.LAZY
