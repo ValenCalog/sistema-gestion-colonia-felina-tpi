@@ -5,7 +5,7 @@ import com.prog.tpi_colonia_felina_paii.modelo.Gato;
 import java.util.List;
 
 public interface IGatoDAO {
-    public void guardarGato(Gato gato);
+    void guardarGato(Gato gato);
     
     void actualizar(Gato g);
 
