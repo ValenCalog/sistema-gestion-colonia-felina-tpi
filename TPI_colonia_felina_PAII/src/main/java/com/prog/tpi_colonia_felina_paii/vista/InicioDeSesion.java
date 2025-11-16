@@ -4,12 +4,16 @@
  */
 package com.prog.tpi_colonia_felina_paii.vista;
 
+import com.prog.tpi_colonia_felina_paii.controlador.ControladorLogin;
+import com.prog.tpi_colonia_felina_paii.modelo.Usuario;
 import java.awt.Color;
 
 public class InicioDeSesion extends javax.swing.JFrame {
-
+    
+    private final ControladorLogin controladorLogin;
     public InicioDeSesion() {
         initComponents();
+        controladorLogin = new ControladorLogin();
     }
 
     /**
@@ -25,8 +29,8 @@ public class InicioDeSesion extends javax.swing.JFrame {
         titulo = new javax.swing.JLabel();
         bienvenida = new javax.swing.JLabel();
         labelNombreUsuario = new javax.swing.JLabel();
-        password = new javax.swing.JPasswordField();
-        nombreUsuario = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JPasswordField();
+        txtCorreo = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnIniciarSesion = new javax.swing.JButton();
@@ -58,35 +62,35 @@ public class InicioDeSesion extends javax.swing.JFrame {
         labelNombreUsuario.setText("Nombre de usuario");
         bg.add(labelNombreUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 210, -1, -1));
 
-        password.setBackground(new java.awt.Color(255, 255, 255));
-        password.setForeground(java.awt.Color.gray);
-        password.setText("********");
-        password.addMouseListener(new java.awt.event.MouseAdapter() {
+        txtPassword.setBackground(new java.awt.Color(255, 255, 255));
+        txtPassword.setForeground(java.awt.Color.gray);
+        txtPassword.setText("********");
+        txtPassword.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                passwordMousePressed(evt);
+                txtPasswordMousePressed(evt);
             }
         });
-        password.addActionListener(new java.awt.event.ActionListener() {
+        txtPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                passwordActionPerformed(evt);
+                txtPasswordActionPerformed(evt);
             }
         });
-        bg.add(password, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 310, 390, -1));
+        bg.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 310, 390, -1));
 
-        nombreUsuario.setBackground(new java.awt.Color(255, 255, 255));
-        nombreUsuario.setForeground(java.awt.Color.gray);
-        nombreUsuario.setText("Introduce tu nombre de usuario");
-        nombreUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+        txtCorreo.setBackground(new java.awt.Color(255, 255, 255));
+        txtCorreo.setForeground(java.awt.Color.gray);
+        txtCorreo.setText("Introduce tu nombre de usuario");
+        txtCorreo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                nombreUsuarioMousePressed(evt);
+                txtCorreoMousePressed(evt);
             }
         });
-        nombreUsuario.addActionListener(new java.awt.event.ActionListener() {
+        txtCorreo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nombreUsuarioActionPerformed(evt);
+                txtCorreoActionPerformed(evt);
             }
         });
-        bg.add(nombreUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 240, 390, -1));
+        bg.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 240, 390, -1));
 
         jLabel1.setBackground(new java.awt.Color(0, 0, 0));
         jLabel1.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
@@ -135,38 +139,51 @@ public class InicioDeSesion extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void nombreUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreUsuarioActionPerformed
+    private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
 
-    }//GEN-LAST:event_nombreUsuarioActionPerformed
+    }//GEN-LAST:event_txtCorreoActionPerformed
 
-    private void passwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordActionPerformed
+    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_passwordActionPerformed
+    }//GEN-LAST:event_txtPasswordActionPerformed
 
-    private void nombreUsuarioMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nombreUsuarioMousePressed
-        if(nombreUsuario.getText().equals("Introduce tu nombre de usuario")){
-            nombreUsuario.setText("");
-            nombreUsuario.setForeground(Color.black);
+    private void txtCorreoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCorreoMousePressed
+        if(txtCorreo.getText().equals("Introduce tu nombre de usuario")){
+            txtCorreo.setText("");
+            txtCorreo.setForeground(Color.black);
         }
-        if(String.valueOf(password.getPassword()).isEmpty()){
-            password.setText("********");
-            password.setForeground(Color.gray);
+        if(String.valueOf(txtPassword.getPassword()).isEmpty()){
+            txtPassword.setText("********");
+            txtPassword.setForeground(Color.gray);
         }
-    }//GEN-LAST:event_nombreUsuarioMousePressed
+    }//GEN-LAST:event_txtCorreoMousePressed
 
-    private void passwordMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passwordMousePressed
-        if(String.valueOf(password.getPassword()).equals("********")){
-            password.setText("");
-            password.setForeground(Color.black);
+    private void txtPasswordMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPasswordMousePressed
+        if(String.valueOf(txtPassword.getPassword()).equals("********")){
+            txtPassword.setText("");
+            txtPassword.setForeground(Color.black);
         }
-        if(nombreUsuario.getText().isEmpty()){
-            nombreUsuario.setText("Introduce tu nombre de usuario");
-            nombreUsuario.setForeground(Color.gray);            
+        if(txtCorreo.getText().isEmpty()){
+            txtCorreo.setText("Introduce tu nombre de usuario");
+            txtCorreo.setForeground(Color.gray);            
         }
-    }//GEN-LAST:event_passwordMousePressed
+    }//GEN-LAST:event_txtPasswordMousePressed
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-        
+        String correo = txtCorreo.getText();
+        String password = new String(txtPassword.getPassword());
+        try{
+            Usuario usuarioLogueado = controladorLogin.autenticar(correo,password);
+            if(usuarioLogueado != null){
+                this.dispose();
+                PanelDeVoluntarios pdu = new PanelDeVoluntarios(usuarioLogueado);
+                pdu.setVisible(true);
+                this.setVisible(false);
+            }
+        }catch(Exception e){
+            System.out.println("Error al iniciar Sesion");
+        }
+    
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -185,8 +202,8 @@ public class InicioDeSesion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel labelNombreUsuario;
-    private javax.swing.JTextField nombreUsuario;
-    private javax.swing.JPasswordField password;
     private javax.swing.JLabel titulo;
+    private javax.swing.JTextField txtCorreo;
+    private javax.swing.JPasswordField txtPassword;
     // End of variables declaration//GEN-END:variables
 }

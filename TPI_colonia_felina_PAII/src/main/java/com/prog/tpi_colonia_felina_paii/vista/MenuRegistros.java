@@ -53,6 +53,11 @@ public class MenuRegistros extends javax.swing.JFrame {
 
         jButton1.setBackground(new java.awt.Color(255, 112, 0));
         jButton1.setText("Hogar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton3.setBackground(new java.awt.Color(255, 112, 0));
         jButton3.setText("Voluntario o Administrador");
@@ -64,6 +69,11 @@ public class MenuRegistros extends javax.swing.JFrame {
 
         jButton4.setBackground(new java.awt.Color(255, 112, 0));
         jButton4.setText("Veterinario");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -118,8 +128,26 @@ public class MenuRegistros extends javax.swing.JFrame {
         ControladorRegistroUsuarios controlRegistro = new ControladorRegistroUsuarios(usuarioDAO, veterinarioDAO, familiaDAO);
         rv.setMiControl(controlRegistro);
         rv.setVisible(true);
-        this.setVisible(false);        // TODO add your handling code here:
+        this.setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        RegistroVeterinario rv = new RegistroVeterinario();
+        IUsuarioDAO usuarioDAO = new UsuarioDAOJPAImpl();
+        IFamiliaDAO familiaDAO = new FamiliaDAOImpl();
+        IVeterinarioDAO veterinarioDAO = new VeterinarioDAOJPAImpl();
+        
+        ControladorRegistroUsuarios controlRegistro = new ControladorRegistroUsuarios(usuarioDAO, veterinarioDAO, familiaDAO);
+        rv.setMiControl(controlRegistro);
+        rv.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        RegistroHogar rh = new RegistroHogar();
+        rh.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

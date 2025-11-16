@@ -382,7 +382,7 @@ public class RegistroUsuario extends javax.swing.JFrame {
 
     private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
         if (admin.isSelected()) {
-        miControl.registrarAdmin(
+            miControl.registrarAdmin(
             txtNombre.getText(),
             txtApellido.getText(),
             txtDni.getText(),

@@ -22,4 +22,8 @@ public class ControladorLogin {
         }
         return u;
     }
+
+    public Usuario autenticar(String correo, String password) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

@@ -4,16 +4,17 @@
  */
 package com.prog.tpi_colonia_felina_paii.vista;
 
+import com.prog.tpi_colonia_felina_paii.modelo.Usuario;
+
 /**
  *
  * @author User
  */
 public class PanelDeVoluntarios extends javax.swing.JFrame {
 
-    /**
-     * Creates new form PanelDeVoluntarios
-     */
-    public PanelDeVoluntarios() {
+    private Usuario usuarioLogueado;
+    public PanelDeVoluntarios(Usuario usuarioLogueado) {
+        this.usuarioLogueado = usuarioLogueado;
         initComponents();
     }
 
@@ -109,6 +110,11 @@ public class PanelDeVoluntarios extends javax.swing.JFrame {
         btnNuevoGato.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 btnNuevoGatoMousePressed(evt);
+            }
+        });
+        btnNuevoGato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoGatoActionPerformed(evt);
             }
         });
 
@@ -232,7 +238,10 @@ public class PanelDeVoluntarios extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNuevaTareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaTareaActionPerformed
-        // TODO add your handling code here:
+        
+        RegistroTareas rt = new RegistroTareas(usuarioLogueado);
+        rt.setVisible(true);
+        this.setVisible(false); 
     }//GEN-LAST:event_btnNuevaTareaActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -245,40 +254,10 @@ public class PanelDeVoluntarios extends javax.swing.JFrame {
         this.setVisible(false); 
     }//GEN-LAST:event_btnNuevoGatoMousePressed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PanelDeVoluntarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PanelDeVoluntarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PanelDeVoluntarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PanelDeVoluntarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void btnNuevoGatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoGatoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNuevoGatoActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new PanelDeVoluntarios().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bg;
