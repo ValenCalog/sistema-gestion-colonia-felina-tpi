@@ -1,6 +1,7 @@
 
 package com.prog.tpi_colonia_felina_paii.controlador;
 import com.prog.tpi_colonia_felina_paii.dao.DBService;
+import com.prog.tpi_colonia_felina_paii.dao.GatoDAOJPAImpl;
 import com.prog.tpi_colonia_felina_paii.dao.IGatoDAO;
 import com.prog.tpi_colonia_felina_paii.enums.Disponibilidad;
 import com.prog.tpi_colonia_felina_paii.enums.EstadoSalud;
@@ -17,8 +18,8 @@ public class ControladorGato {
     private final IGatoDAO gatoDAO;
     // private final GatosFrame vista; // s
 
-    public ControladorGato(IGatoDAO gatoDAO /*, GatosFrame vista*/) {
-        this.gatoDAO = gatoDAO;
+    public ControladorGato() {
+        gatoDAO = new GatoDAOJPAImpl();
         // this.vista = vista;
     }
 

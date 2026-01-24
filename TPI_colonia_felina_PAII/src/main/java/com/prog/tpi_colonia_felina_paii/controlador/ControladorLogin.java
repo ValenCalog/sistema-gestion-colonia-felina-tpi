@@ -2,6 +2,7 @@
 package com.prog.tpi_colonia_felina_paii.controlador;
 
 import com.prog.tpi_colonia_felina_paii.dao.IUsuarioDAO;
+import com.prog.tpi_colonia_felina_paii.dao.UsuarioDAOJPAImpl;
 import com.prog.tpi_colonia_felina_paii.modelo.Usuario;
 import com.prog.tpi_colonia_felina_paii.util.PasswordHasher;
 
@@ -9,7 +10,7 @@ public class ControladorLogin {
     private final IUsuarioDAO usuarioDAO;
 
     public ControladorLogin() {
-        this.usuarioDAO = null;
+        this.usuarioDAO = new UsuarioDAOJPAImpl();
     }
     
     public Usuario login(String email, String password){
@@ -24,6 +25,15 @@ public class ControladorLogin {
     }
 
     public Usuario autenticar(String correo, String password) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Usuario u = usuarioDAO.buscarPorEmail(correo);
+        if(u != null){
+            if(PasswordHasher.matches(password, u.getContrasenia())){
+                return u;
+            }else{
+                return null;
+            }
+        }else{
+            return null;
+        }
     }
 }

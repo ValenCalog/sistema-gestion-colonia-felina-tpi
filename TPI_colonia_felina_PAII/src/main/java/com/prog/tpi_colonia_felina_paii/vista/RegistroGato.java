@@ -22,6 +22,8 @@ public class RegistroGato extends javax.swing.JFrame {
     private ControladorGato miControl;
     public RegistroGato() {
         initComponents();
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(EstadoSalud.values()));
+        miControl = new ControladorGato();
     }
 
     /**
@@ -42,7 +44,7 @@ public class RegistroGato extends javax.swing.JFrame {
         txtColor = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtCaracteristicas = new javax.swing.JTextField();
-        txtCorreoVet1 = new javax.swing.JTextField();
+        txtNombreGato = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
@@ -95,13 +97,18 @@ public class RegistroGato extends javax.swing.JFrame {
             }
         });
 
-        txtCorreoVet1.setBackground(new java.awt.Color(255, 255, 255));
-        txtCorreoVet1.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        txtCorreoVet1.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
-        txtCorreoVet1.setText("Ingresa el nombre del gato");
-        txtCorreoVet1.addMouseListener(new java.awt.event.MouseAdapter() {
+        txtNombreGato.setBackground(new java.awt.Color(255, 255, 255));
+        txtNombreGato.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        txtNombreGato.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.borderColor"));
+        txtNombreGato.setText("Ingresa el nombre del gato");
+        txtNombreGato.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                txtCorreoVet1MousePressed(evt);
+                txtNombreGatoMousePressed(evt);
+            }
+        });
+        txtNombreGato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreGatoActionPerformed(evt);
             }
         });
 
@@ -111,7 +118,7 @@ public class RegistroGato extends javax.swing.JFrame {
 
         jComboBox1.setBackground(new java.awt.Color(255, 255, 255));
         jComboBox1.setForeground(new java.awt.Color(0, 0, 0));
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ENFERMO", "SANO", "EN_TRATAMIENTO", "ESTERILIZADO" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(EstadoSalud.values()));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -127,7 +134,7 @@ public class RegistroGato extends javax.swing.JFrame {
                         .addComponent(txtColor, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtCorreoVet1, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE))
+                        .addComponent(txtNombreGato, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE))
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
@@ -137,7 +144,7 @@ public class RegistroGato extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtCorreoVet1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtNombreGato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -224,24 +231,30 @@ public class RegistroGato extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtCaracteristicasMousePressed
 
-    private void txtCorreoVet1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCorreoVet1MousePressed
+    private void txtNombreGatoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtNombreGatoMousePressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCorreoVet1MousePressed
+    }//GEN-LAST:event_txtNombreGatoMousePressed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        EstadoSalud estado = 
-                (EstadoSalud) jComboBox1.getSelectedItem();
-        miControl.registrarGato(
+        EstadoSalud estado = (EstadoSalud) jComboBox1.getSelectedItem();
+        miControl.registrarGato(txtNombreGato.getText(),
         txtColor.getText(),
         txtCaracteristicas.getText(),
-        null, //No hay fotografia
-        estado
+        null, 
+        estado,
+        Disponibilidad.DISPONIBLE,
+        null,
+        null);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
 
         
     }//GEN-LAST:event_jButton1MousePressed
+
+    private void txtNombreGatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreGatoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreGatoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -271,16 +284,12 @@ public class RegistroGato extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RegistroGato().setVisible(true);
-            }
-        });
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<EstadoSalud> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -291,6 +300,6 @@ public class RegistroGato extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField txtCaracteristicas;
     private javax.swing.JTextField txtColor;
-    private javax.swing.JTextField txtCorreoVet1;
+    private javax.swing.JTextField txtNombreGato;
     // End of variables declaration//GEN-END:variables
 }

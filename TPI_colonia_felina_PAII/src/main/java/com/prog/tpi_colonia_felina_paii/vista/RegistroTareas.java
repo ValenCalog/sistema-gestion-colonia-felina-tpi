@@ -10,6 +10,8 @@ import com.prog.tpi_colonia_felina_paii.dao.GatoDAOJPAImpl;
 import com.prog.tpi_colonia_felina_paii.enums.TipoDeTarea;
 import com.prog.tpi_colonia_felina_paii.modelo.Gato;
 import com.prog.tpi_colonia_felina_paii.modelo.Usuario;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,9 +27,8 @@ public class RegistroTareas extends javax.swing.JFrame {
     public RegistroTareas(Usuario usuarioLogueado) {
         initComponents();
         this.usuarioLogueado = usuarioLogueado;
-        IGatoDAO gatoDAO = new GatoDAOJPAImpl();
-        controladorGato = new ControladorGato(gatoDAO);
-
+        controladorGato = new ControladorGato();
+        miControl = new ControladorTareas();
         configurarTablaGatos();
         cargarGatosEnTabla();
         
@@ -35,10 +36,10 @@ public class RegistroTareas extends javax.swing.JFrame {
     }
     
     private void cargarOpcionesTareas(){
-        jComboBox1.removeAllItems(); // saco "Item 1", "Item 2", etc.
+        jComboBox1.removeAllItems();
 
     for (TipoDeTarea d : TipoDeTarea.values()) {
-        jComboBox1.addItem(d.name());   // o d.toString() si querés
+        jComboBox1.addItem(d);  
     }
     }
     /**
@@ -61,7 +62,7 @@ public class RegistroTareas extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtObservaciones = new javax.swing.JTextArea();
         jLabel17 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
@@ -126,10 +127,10 @@ public class RegistroTareas extends javax.swing.JFrame {
         jLabel16.setForeground(new java.awt.Color(0, 0, 0));
         jLabel16.setText("Observaciones");
 
-        jTextArea1.setBackground(new java.awt.Color(255, 255, 255));
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        txtObservaciones.setBackground(new java.awt.Color(255, 255, 255));
+        txtObservaciones.setColumns(20);
+        txtObservaciones.setRows(5);
+        jScrollPane2.setViewportView(txtObservaciones);
 
         jLabel17.setFont(new java.awt.Font("Roboto Bk", 1, 14)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(0, 0, 0));
@@ -137,7 +138,8 @@ public class RegistroTareas extends javax.swing.JFrame {
 
         jComboBox1.setBackground(new java.awt.Color(255, 255, 255));
         jComboBox1.setForeground(new java.awt.Color(0, 0, 0));
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(TipoDeTarea.values())
+        );
 
         jButton1.setBackground(javax.swing.UIManager.getDefaults().getColor("Actions.Green"));
         jButton1.setText("Registrar Tarea");
@@ -228,14 +230,16 @@ public class RegistroTareas extends javax.swing.JFrame {
     }//GEN-LAST:event_txtUbicacionActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        TipoTarea tarea = 
-                (TipoTarea) jComboBox1.getSelectedItem();
+        TipoDeTarea tarea = 
+                (TipoDeTarea) jComboBox1.getSelectedItem();
+        long fila = tablaGatos.getSelectedRow() +1;
+        LocalDate fechaFormateada = fecha.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         miControl.registrarTarea(
-            int fila = tablaGatos.getSelectedRow(),
+            fila,
             usuarioLogueado,
-            fecha.getDate(),
+            fechaFormateada,
             txtUbicacion.getText(),
-            txtObservaciones.getText,
+            txtObservaciones.getText(),
             tarea
         );
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -299,17 +303,13 @@ public class RegistroTareas extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new RegistroTareas().setVisible(true);
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel bienvenida;
     private com.toedter.calendar.JDateChooser fecha;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<TipoDeTarea> jComboBox1;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
@@ -317,9 +317,9 @@ public class RegistroTareas extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTable tablaGatos;
     private javax.swing.JLabel titulo1;
+    private javax.swing.JTextArea txtObservaciones;
     private javax.swing.JTextField txtUbicacion;
     // End of variables declaration//GEN-END:variables
 }

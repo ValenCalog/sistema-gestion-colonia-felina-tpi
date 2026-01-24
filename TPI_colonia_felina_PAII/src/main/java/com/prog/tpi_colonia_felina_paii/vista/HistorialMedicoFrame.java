@@ -112,7 +112,7 @@ public class HistorialMedicoFrame extends javax.swing.JFrame {
             return;
         }
         Diagnostico d = diagnosticosModel.getDiagnosticoEn(fila);
-        JOptionPane.showMessageDialog(this, "Acá abrís NuevoTratamientoDialog para diag=" + d.getId(), "Info", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Acá abrís NuevoTratamientoDialog para diag=" + d.getIdDiagnostico(), "Info", JOptionPane.INFORMATION_MESSAGE);
         // luego:
         // new NuevoTratamientoDialog(this, controlador, d.getId(), idVeterinarioActual).setVisible(true);
         // cargarDatos();

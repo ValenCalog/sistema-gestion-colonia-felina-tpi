@@ -26,7 +26,7 @@ public class UsuarioDAOJPAImpl implements IUsuarioDAO {
      
     @Override
     public Usuario buscarPorEmail(String email) {
-        TypedQuery<Usuario> q = em.createQuery("SELECT u FROM Usuario u WHERE u.email = :email", Usuario.class);
+        TypedQuery<Usuario> q = em.createQuery("SELECT u FROM Usuario u WHERE u.correo = :email", Usuario.class);
         q.setParameter("email", email);
         Usuario usuario = q.getSingleResult();
         return usuario;
