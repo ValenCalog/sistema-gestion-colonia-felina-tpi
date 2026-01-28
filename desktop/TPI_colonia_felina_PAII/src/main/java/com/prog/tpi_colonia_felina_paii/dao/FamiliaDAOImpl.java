@@ -10,6 +10,20 @@ public class FamiliaDAOImpl implements IFamiliaDAO{
     
     @Override
     public void crear(Familia familia) {
-        em.persist(familia);
+        try {
+            em.getTransaction().begin();
+            
+            em.persist(familia);
+            
+            em.getTransaction().commit();
+            
+        } catch (Exception e) {
+
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+            throw new RuntimeException("Error al guardar la familia", e);
+        }
     }
 }

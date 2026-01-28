@@ -43,6 +43,32 @@
                     <span><%= request.getAttribute("error") %></span>
                 </div>
             <% } %>
+            
+            <% 
+                String mensaje = request.getParameter("registro");
+                
+                if(mensaje != null && mensaje.equals("exito")){
+            %>
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+                    <strong class="font-bold">¡Registro exitoso!</strong>
+                    <span class="block sm:inline">Ya puedes iniciar sesión con tu cuenta.</span>
+                </div>    
+            <%
+                }
+            %>
+            
+            <% 
+            // Mensaje de PENDIENTE de aprobación (Voluntario)
+            if ("pendiente".equals(mensaje)) { 
+            %>
+                <div class="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-lg relative mb-4 flex gap-3 shadow-sm">
+                    <span class="material-symbols-outlined text-yellow-600">hourglass_top</span>
+                    <div>
+                        <strong class="font-bold block">¡Solicitud Recibida!</strong>
+                        <span class="text-sm">Tu cuenta debe ser verificada por un administrador. Cuando sea verificada podrás acceder</span>
+                    </div>
+                </div>
+            <% } %>
 
             <form action="LoginServlet" method="POST" class="flex flex-col gap-5">
                 
@@ -81,7 +107,7 @@
             <div class="text-center">
                 <p class="text-body text-sm">
                     ¿Eres nuevo aquí? 
-                    <a class="link ml-1" href="registroFamilia.jsp">Regístrate</a>
+                    <a class="link ml-1" href="seleccionarRol.jsp">Regístrate</a>
                 </p>
             </div>
         </div>
