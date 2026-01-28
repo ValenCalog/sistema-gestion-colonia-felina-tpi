@@ -3,6 +3,7 @@ package com.prog.tpi_colonia_felina_paii.controlador;
 
 import com.prog.tpi_colonia_felina_paii.dao.IUsuarioDAO;
 import com.prog.tpi_colonia_felina_paii.dao.UsuarioDAOJPAImpl;
+import com.prog.tpi_colonia_felina_paii.enums.EstadoUsuario;
 import com.prog.tpi_colonia_felina_paii.modelo.Usuario;
 import com.prog.tpi_colonia_felina_paii.util.PasswordHasher;
 
@@ -15,6 +16,9 @@ public class ControladorLogin {
     
     public Usuario login(String email, String password){
         Usuario u = usuarioDAO.buscarPorEmail(email);
+        if (u.getEstado() != EstadoUsuario.ACTIVO) {
+                    throw new IllegalArgumentException("Tu cuenta aún no ha sido aprobada por un administrador.");
+            }
         if (u == null){
             throw new IllegalArgumentException("Usuario o contraseña incorrectos");
         }
@@ -28,7 +32,7 @@ public class ControladorLogin {
         Usuario u = usuarioDAO.buscarPorEmail(correo);
         if(u != null){
             if(PasswordHasher.matches(password, u.getContrasenia())){
-                return u;
+                    return u;
             }else{
                 return null;
             }
