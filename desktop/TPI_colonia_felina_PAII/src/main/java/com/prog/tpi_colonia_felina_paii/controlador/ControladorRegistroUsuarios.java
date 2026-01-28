@@ -79,7 +79,12 @@ public class ControladorRegistroUsuarios {
         try {
             validarEmailUnico(email);
             var hash = PasswordHasher.hash(password);
-           usuarioDAO.crear(new Usuario(nombre, apellido,DNI, email, telefono,hash ,EstadoUsuario.ACTIVO, Rol.VOLUNTARIO));
+
+            Usuario u = new Usuario(nombre, apellido, DNI, email, telefono, hash, 
+                                    EstadoUsuario.PENDIENTE, 
+                                    Rol.VOLUNTARIO);
+
+            usuarioDAO.crear(u);
         } catch (RuntimeException e) {
             throw e;
         }
