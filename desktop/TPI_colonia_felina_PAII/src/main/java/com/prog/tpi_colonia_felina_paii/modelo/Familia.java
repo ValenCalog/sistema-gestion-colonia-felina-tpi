@@ -124,7 +124,7 @@ public class Familia {
     
     public void agregarMiembroFamilia(Usuario miembro){
         miembrosFamilia.add(miembro);
-        
+        miembro.setFamilia(this);
     }
     
 }

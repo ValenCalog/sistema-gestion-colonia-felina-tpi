@@ -38,18 +38,19 @@ public class ControladorRegistroUsuarios {
     
         validarEmailUnico(emailUsuario);
 
-        // 1) Crear familia
         Familia fam = new Familia(disp, observaciones, direccion);      
 
-        // 2) Crear usuario miembro
         String hash = PasswordHasher.hash(password);
         Usuario u = new Usuario(nombre, apellido,DNI, emailUsuario, telefono,hash ,EstadoUsuario.ACTIVO ,Rol.MIEMBRO_FAMILIA);
 
-        // Vincular ambas partes
         fam.agregarMiembroFamilia(u); // setea u.setFamilia(this)
-
-        // 3) Persistir (por simplicidad, asumimos cascadas o persistimos ambos)
-        familiaDAO.crear(fam);   
+        
+        familiaDAO.crear(fam);
+        
+        if (fam.getIdFamilia() != null) {
+            u.setFamilia(fam); 
+        }
+        
         usuarioDAO.crear(u);    
     
     }
