@@ -102,7 +102,7 @@ public class ControladorRegistroUsuarios {
                 throw new IllegalArgumentException("Matrícula obligatoria");
 
             var hash = PasswordHasher.hash(password);
-            Usuario user =  new Usuario(nombre, apellido,DNI, email, telefono,hash ,EstadoUsuario.ACTIVO ,Rol.VETERINARIO);
+            Usuario user =  new Usuario(nombre, apellido,DNI, email, telefono,hash ,EstadoUsuario.PENDIENTE ,Rol.VETERINARIO);
             usuarioDAO.crear(user);
 
             Veterinario vet = new Veterinario(matricula);
