@@ -10,7 +10,9 @@ import java.util.List;
 public class UsuarioDAOJPAImpl implements IUsuarioDAO {
     
     private final EntityManager em = DBService.getEntityManager();
-
+    
+    
+    
     @Override
     public void crear(Usuario usuario) {
         try {
