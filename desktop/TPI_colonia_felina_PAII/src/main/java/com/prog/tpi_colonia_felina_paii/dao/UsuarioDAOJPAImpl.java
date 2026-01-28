@@ -1,6 +1,7 @@
 
 package com.prog.tpi_colonia_felina_paii.dao;
 
+import com.prog.tpi_colonia_felina_paii.enums.Rol;
 import com.prog.tpi_colonia_felina_paii.modelo.Usuario;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -40,4 +41,23 @@ public class UsuarioDAOJPAImpl implements IUsuarioDAO {
              .setParameter("email", email)
              .getSingleResult();
     }
+
+    @Override
+    public List<Usuario> buscarPorRol(Rol rol) {
+        String jpql = "SELECT u FROM Usuario u WHERE u.rol = :rol ORDER BY u.apellido ASC";
+
+        TypedQuery<Usuario> q = em.createQuery(jpql, Usuario.class);
+        q.setParameter("rol", rol);
+
+        return q.getResultList(); 
+    }
+    
+    @Override
+    public List<Usuario> listarTodos() {
+        String jpql = "SELECT u FROM Usuario u ORDER BY u.apellido ASC, u.nombre ASC";
+        TypedQuery<Usuario> q = em.createQuery(jpql, Usuario.class);
+
+        return q.getResultList();
+    }
+    
 }

@@ -23,10 +23,17 @@
             <version>${jakartaee}</version>
             <scope>provided</scope>
         </dependency>
+     
         <dependency>
             <groupId>com.prog</groupId>
             <artifactId>TPI_colonia_felina_PAII</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
         </dependency>
     </dependencies>
     
