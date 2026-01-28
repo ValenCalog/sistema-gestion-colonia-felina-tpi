@@ -56,6 +56,19 @@
             <%
                 }
             %>
+            
+            <% 
+            // Mensaje de PENDIENTE de aprobación (Voluntario)
+            if ("pendiente".equals(mensaje)) { 
+            %>
+                <div class="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-lg relative mb-4 flex gap-3 shadow-sm">
+                    <span class="material-symbols-outlined text-yellow-600">hourglass_top</span>
+                    <div>
+                        <strong class="font-bold block">¡Solicitud Recibida!</strong>
+                        <span class="text-sm">Tu cuenta debe ser verificada por un administrador. Cuando sea verificada podrás acceder</span>
+                    </div>
+                </div>
+            <% } %>
 
             <form action="LoginServlet" method="POST" class="flex flex-col gap-5">
                 
