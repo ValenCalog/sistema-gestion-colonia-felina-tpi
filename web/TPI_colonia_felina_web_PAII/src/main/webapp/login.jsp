@@ -36,6 +36,13 @@
                 <h1 class="heading-xl text-3xl mb-2">Bienvenido</h1>
                 <p class="text-body">Ingresa tus credenciales para acceder.</p>
             </div>
+            
+            <% if (request.getAttribute("error") != null) { %>
+                <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg flex items-center gap-2">
+                    <span class="material-symbols-outlined">error</span>
+                    <span><%= request.getAttribute("error") %></span>
+                </div>
+            <% } %>
 
             <form action="LoginServlet" method="POST" class="flex flex-col gap-5">
                 
