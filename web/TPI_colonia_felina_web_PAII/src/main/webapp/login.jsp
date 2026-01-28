@@ -81,7 +81,7 @@
             <div class="text-center">
                 <p class="text-body text-sm">
                     ¿Eres nuevo aquí? 
-                    <a class="link ml-1" href="registroFamilia.jsp">Regístrate</a>
+                    <a class="link ml-1" href="seleccionarRol.jsp">Regístrate</a>
                 </p>
             </div>
         </div>
