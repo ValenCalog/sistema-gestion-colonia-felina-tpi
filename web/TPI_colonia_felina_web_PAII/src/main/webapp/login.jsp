@@ -43,6 +43,19 @@
                     <span><%= request.getAttribute("error") %></span>
                 </div>
             <% } %>
+            
+            <% 
+                String mensaje = request.getParameter("registro");
+                
+                if(mensaje != null && mensaje.equals("exito")){
+            %>
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+                    <strong class="font-bold">¡Registro exitoso!</strong>
+                    <span class="block sm:inline">Ya puedes iniciar sesión con tu cuenta.</span>
+                </div>    
+            <%
+                }
+            %>
 
             <form action="LoginServlet" method="POST" class="flex flex-col gap-5">
                 

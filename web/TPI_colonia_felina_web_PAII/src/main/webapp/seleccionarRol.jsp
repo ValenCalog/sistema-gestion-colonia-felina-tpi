@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Selección de Rol - GatoGestion</title>
+    <title>Selección de Rol</title>
     
     <jsp:include page="/WEB-INF/fragmentos/cabecera-estilos.jsp" />
 </head>
