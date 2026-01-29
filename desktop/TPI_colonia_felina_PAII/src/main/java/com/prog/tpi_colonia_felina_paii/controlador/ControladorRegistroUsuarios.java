@@ -101,11 +101,19 @@ public class ControladorRegistroUsuarios {
             if (matricula == null || matricula.isBlank())
                 throw new IllegalArgumentException("Matrícula obligatoria");
 
-            var hash = PasswordHasher.hash(password);
-            Usuario user =  new Usuario(nombre, apellido,DNI, email, telefono,hash ,EstadoUsuario.PENDIENTE ,Rol.VETERINARIO);
-            usuarioDAO.crear(user);
+            String hash = PasswordHasher.hash(password);
+    
+            Veterinario vet = new Veterinario();
+            vet.setMatricula(matricula);
+            vet.setNombre(nombre);
+            vet.setApellido(apellido);
+            vet.setDNI(DNI);
+            vet.setCorreo(email);
+            vet.setTelefono(telefono);
+            vet.setContrasenia(hash);
+            vet.setRol(Rol.VETERINARIO);
+            vet.setEstado(EstadoUsuario.INACTIVO);
 
-            Veterinario vet = new Veterinario(matricula);
             veterinarioDAO.crear(vet);
         } catch (RuntimeException e) {
             throw e;
