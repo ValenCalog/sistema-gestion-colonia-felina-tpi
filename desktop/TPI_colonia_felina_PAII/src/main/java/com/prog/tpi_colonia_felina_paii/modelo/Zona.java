@@ -2,6 +2,7 @@
 package com.prog.tpi_colonia_felina_paii.modelo;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,6 +23,9 @@ public class Zona {
 
     private Double latitud;
     private Double longitud;
+    
+    @Column(columnDefinition = "TEXT") 
+    private String coordenadas; // el JSON gigante que genera Leaflet:
     
     @OneToMany(mappedBy = "zona", cascade = CascadeType.ALL)
     private List<PuntoDeAvistamiento> puntosDeAvistamiento = new ArrayList<>();
@@ -104,7 +108,13 @@ public class Zona {
     public void setGatos(List<Gato> gatos) {
         this.gatos = gatos;
     }
-    
-    
 
+    public String getCoordenadas() {
+        return coordenadas;
+    }
+
+    public void setCoordenadas(String coordenadas) {
+        this.coordenadas = coordenadas;
+    }
+    
 }
