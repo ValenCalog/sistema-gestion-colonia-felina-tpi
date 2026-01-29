@@ -69,6 +69,18 @@
                     </div>
                 </div>
             <% } %>
+            
+            <% 
+            //Mensaje de que que un usuario se ha unido a una familia y registrado correctamente
+                if ("unido".equals(mensaje)) { 
+            %>
+            <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined">diversity_3</span> <div>
+                    <strong class="font-bold">¡Bienvenido a la Familia!</strong>
+                    <span class="block sm:inline">Te has vinculado correctamente. Ya puedes iniciar sesión.</span>
+                </div>
+            </div>
+            <% } %>
 
             <form action="LoginServlet" method="POST" class="flex flex-col gap-5">
                 
