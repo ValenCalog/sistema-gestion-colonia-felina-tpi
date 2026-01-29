@@ -117,4 +117,41 @@ public class ControladorRegistroUsuarios {
             throw new IllegalArgumentException("El email ya está registrado");
         }
     }
+    
+    public void registrarUsuarioEnFamiliaExistente(String nombre, String apellido, String DNI,
+            String email, String password, String telefono, long idFamilia) {
+
+        validarEmailUnico(email);
+
+        Familia familia = familiaDAO.buscarPorId(idFamilia);
+        
+        if (familia == null) {
+            throw new IllegalArgumentException("Error de seguridad: La familia no existe.");
+        }
+
+        String hash = PasswordHasher.hash(password);
+        
+        Usuario nuevoUsuario = new Usuario(
+            nombre, 
+            apellido, 
+            DNI, 
+            email, 
+            telefono, 
+            hash, 
+            EstadoUsuario.ACTIVO, // Entra directo porque tiene el código
+            Rol.MIEMBRO_FAMILIA
+        );
+
+        nuevoUsuario.setFamilia(familia);
+
+        usuarioDAO.crear(nuevoUsuario);
+    }
+    
+    public Familia buscarFamiliaPorCodigo(String codigo) {
+        if (codigo == null || codigo.trim().isEmpty()) {
+            return null;
+        }
+        
+        return familiaDAO.buscarPorCodigo(codigo.trim().toUpperCase());
+    }
 }
