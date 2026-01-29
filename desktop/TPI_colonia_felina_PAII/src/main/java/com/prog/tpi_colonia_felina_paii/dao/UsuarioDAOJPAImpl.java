@@ -81,4 +81,35 @@ public class UsuarioDAOJPAImpl implements IUsuarioDAO {
         }
     }
     
+    @Override
+    public List<Usuario> buscarConFiltros(String textoBusqueda, Rol rolFiltro) {
+        // Construimos la consulta base
+        StringBuilder jpql = new StringBuilder("SELECT u FROM Usuario u WHERE 1=1");
+
+        // 1. Filtro de Texto (Nombre, Apellido o Correo)
+        if (textoBusqueda != null && !textoBusqueda.isEmpty()) {
+            jpql.append(" AND (LOWER(u.nombre) LIKE :texto OR LOWER(u.apellido) LIKE :texto OR LOWER(u.correo) LIKE :texto)");
+        }
+
+        // 2. Filtro de Rol
+        if (rolFiltro != null) {
+            jpql.append(" AND u.rol = :rol");
+        }
+
+        // Ordenamos
+        jpql.append(" ORDER BY u.apellido ASC");
+
+        var query = em.createQuery(jpql.toString(), Usuario.class);
+
+        // Asignamos los parámetros si existen
+        if (textoBusqueda != null && !textoBusqueda.isEmpty()) {
+            query.setParameter("texto", "%" + textoBusqueda.toLowerCase() + "%");
+        }
+        if (rolFiltro != null) {
+            query.setParameter("rol", rolFiltro);
+        }
+
+        return query.getResultList();
+    }
+    
 }

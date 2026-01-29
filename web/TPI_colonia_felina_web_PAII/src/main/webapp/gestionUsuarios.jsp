@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gestión de Usuarios - GatoGestion</title>
+    <title>Gestión de Usuarios - Misión Michi</title>
     
     <jsp:include page="/WEB-INF/fragmentos/cabecera-estilos.jsp" />
     
@@ -72,7 +72,7 @@
             <header class="lg:hidden flex items-center justify-between px-4 py-3 bg-surface-card dark:bg-surface-cardDark border-b border-border-light dark:border-border-dark">
                 <div class="flex items-center gap-2">
                     <span class="material-symbols-outlined">menu</span>
-                    <span class="font-bold text-lg">GatoGestion</span>
+                    <span class="font-bold text-lg">Misión Michi</span>
                 </div>
                 <div class="w-8 h-8 rounded-full bg-gray-200 overflow-hidden">
                     <img alt="User" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=100&auto=format&fit=crop"/>
@@ -91,27 +91,54 @@
                     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
                         <div class="flex flex-col gap-2">
                             <h1 class="heading-xl !text-3xl md:!text-4xl">Gestión de Usuarios</h1>
-                            <p class="text-body max-w-2xl">Administra el acceso y permisos de voluntarios, veterinarios y adoptantes.</p>
+                            <p class="text-body max-w-2xl">Administra el acceso y permisos.</p>
                         </div>
+
+                        <a href="AdminServlet?accion=crear" class="btn btn-primary shadow-lg shadow-primary/30">
+                            <span class="material-symbols-outlined mr-2">add</span>
+                            Nuevo Usuario
+                        </a>
                     </div>
 
-                    <div class="card flex flex-col md:flex-row gap-4 p-4 items-center">
+                    <form action="AdminServlet" method="GET" class="card flex flex-col md:flex-row gap-4 p-4 items-center">
+                        <input type="hidden" name="accion" value="listar">
+
                         <div class="relative grow w-full">
                             <span class="material-symbols-outlined input-icon">search</span>
-                            <input class="input-field" placeholder="Buscar por nombre o email..." type="text"/>
+                            <input class="input-field" 
+                                   type="text" 
+                                   name="busqueda" 
+                                   placeholder="Buscar por nombre, apellido o email..." 
+                                   value="<%= request.getAttribute("busquedaActual") != null ? request.getAttribute("busquedaActual") : "" %>"
+                            />
                         </div>
+
                         <div class="flex gap-3 w-full md:w-auto">
-                            <select class="input-field w-full md:w-40 h-11 py-0 cursor-pointer">
+                            <select name="filtroRol" class="input-field w-full md:w-48 h-11 py-0 cursor-pointer" onchange="this.form.submit()">
                                 <option value="">Todos los Roles</option>
-                                <option value="admin">Admin</option>
-                                <option value="volunteer">Voluntario</option>
-                                <option value="vet">Veterinario</option>
+                                <% 
+                                   // Recuperamos el rol seleccionado actualmente para marcarlo
+                                   String rolActual = (String) request.getAttribute("rolActual");
+
+                                   // Iteramos los roles (asumiendo que los pasaste desde el Servlet o usando el Enum directo)
+                                   for(com.prog.tpi_colonia_felina_paii.enums.Rol r : com.prog.tpi_colonia_felina_paii.enums.Rol.values()) { 
+                                       String selected = (rolActual != null && rolActual.equals(r.toString())) ? "selected" : "";
+                                %>
+                                    <option value="<%= r %>" <%= selected %>><%= r %></option>
+                                <% } %>
                             </select>
-                            <button class="btn btn-secondary px-3">
+
+                            <button type="submit" class="btn btn-secondary px-3" title="Buscar">
                                 <span class="material-symbols-outlined">filter_list</span>
                             </button>
+
+                            <% if (request.getAttribute("busquedaActual") != null || request.getAttribute("rolActual") != null) { %>
+                                <a href="AdminServlet?accion=listar" class="btn btn-outline !text-ink-light border-border-light hover:bg-gray-100" title="Limpiar filtros">
+                                    <span class="material-symbols-outlined">close</span>
+                                </a>
+                            <% } %>
                         </div>
-                    </div>
+                    </form>
 
                     <div class="bg-surface-card dark:bg-surface-cardDark rounded-xl shadow-sm border border-border-light dark:border-border-dark overflow-hidden">
                         <div class="overflow-x-auto">
@@ -190,8 +217,7 @@
                                 </tbody>
                             </table>
                         </div>
-
-                        <div class="flex items-center justify-between px-6 py-4 border-t border-border-light dark:border-border-dark bg-surface-card dark:bg-surface-cardDark">
+                        <!-- <div class="flex items-center justify-between px-6 py-4 border-t border-border-light dark:border-border-dark bg-surface-card dark:bg-surface-cardDark">
                             <p class="text-sm text-ink-light">Mostrando <span class="font-bold text-ink dark:text-white">1-5</span> de <span class="font-bold">24</span> resultados</p>
                             <div class="flex items-center gap-2">
                                 <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-border-light dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50" disabled>
@@ -203,7 +229,7 @@
                                     <span class="material-symbols-outlined text-[18px]">chevron_right</span>
                                 </button>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     
                 </div>

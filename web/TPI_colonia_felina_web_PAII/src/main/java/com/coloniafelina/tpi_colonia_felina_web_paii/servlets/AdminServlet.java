@@ -60,11 +60,30 @@ public class AdminServlet extends HttpServlet {
     // ==========================================
     // MÉTODOS AUXILIARES
     // ==========================================
-
+    
     private void listarUsuarios(HttpServletRequest request, HttpServletResponse response, UsuarioDAOJPAImpl dao) 
-            throws ServletException, IOException {
-        List<Usuario> lista = dao.listarTodos();
+        throws ServletException, IOException {
+    
+        //Capturamos lo que viene del JSP
+        String busqueda = request.getParameter("busqueda");
+        String rolStr = request.getParameter("filtroRol");
+
+        //Preparamos el Rol (si viene vacío es null)
+        com.prog.tpi_colonia_felina_paii.enums.Rol rolFiltro = null;
+        if (rolStr != null && !rolStr.isEmpty()) {
+            rolFiltro = com.prog.tpi_colonia_felina_paii.enums.Rol.valueOf(rolStr);
+        }
+
+        //Llamamos al DAO
+        List<Usuario> lista = dao.buscarConFiltros(busqueda, rolFiltro);
+
+        //Guardamos la lista Y los filtros
         request.setAttribute("usuarios", lista);
+        request.setAttribute("busquedaActual", busqueda);
+        request.setAttribute("rolActual", rolStr);
+
+        request.setAttribute("listaRoles", com.prog.tpi_colonia_felina_paii.enums.Rol.values());
+
         request.getRequestDispatcher("gestionUsuarios.jsp").forward(request, response);
     }
 
