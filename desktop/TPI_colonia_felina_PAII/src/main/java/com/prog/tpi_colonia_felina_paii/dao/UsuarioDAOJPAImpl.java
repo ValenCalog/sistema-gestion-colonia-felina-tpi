@@ -62,4 +62,23 @@ public class UsuarioDAOJPAImpl implements IUsuarioDAO {
         return q.getResultList();
     }
     
+    @Override
+    public Usuario buscarPorId(Long id) {
+        return em.find(Usuario.class, id);
+    }
+    
+    @Override
+    public void editar(Usuario usuario) {
+        try {
+            em.getTransaction().begin();
+            em.merge(usuario); // .merge() actualiza un objeto existente
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+    
 }

@@ -38,7 +38,7 @@
                         <span class="material-symbols-outlined">dashboard</span>
                         <span class="text-sm">Dashboard</span>
                     </a>
-                    <a class="sidebar-link" href="gestionUsuarios.jsp">
+                    <a class="sidebar-link" href="AdminServlet">
                         <span class="material-symbols-outlined">group</span>
                         <span class="text-sm font-medium">Usuarios</span>
                     </a>

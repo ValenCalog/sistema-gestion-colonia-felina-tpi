@@ -12,4 +12,6 @@ public interface IUsuarioDAO {
     public boolean existeEmail(String email);
     public List<Usuario> buscarPorRol(Rol rol);
     public List<Usuario> listarTodos();
+    public Usuario buscarPorId(Long id);
+    public void editar(Usuario usuario);
 }
