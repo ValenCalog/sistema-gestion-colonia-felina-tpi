@@ -54,7 +54,7 @@
                 </div>
 
                 <nav class="flex flex-col gap-2 flex-1">
-                    <a class="sidebar-link" href="DashboardServlet">
+                    <a class="sidebar-link" href="adminPanel.jsp">
                         <span class="material-symbols-outlined">dashboard</span>
                         <span class="text-sm">Dashboard</span>
                     </a>
