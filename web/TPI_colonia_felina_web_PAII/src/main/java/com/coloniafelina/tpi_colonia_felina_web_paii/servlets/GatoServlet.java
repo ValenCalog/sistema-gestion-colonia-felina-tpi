@@ -30,7 +30,7 @@ public class GatoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         GatoDAOJPAImpl gatoDAO = new GatoDAOJPAImpl();
         ZonaDAOJPAImpl zonaDAO = new ZonaDAOJPAImpl();
 
@@ -41,7 +41,7 @@ public class GatoServlet extends HttpServlet {
             case "crear":
                 cargarFormulario(request, response, zonaDAO, null);
                 break;
-                
+
             case "editar":
                 try {
                     Long id = Long.parseLong(request.getParameter("id"));
@@ -51,13 +51,30 @@ public class GatoServlet extends HttpServlet {
                     response.sendRedirect("GatoServlet?accion=listar");
                 }
                 break;
-                
+
+            
+            case "verDetalle":
+                try {
+                    Long id = Long.parseLong(request.getParameter("id"));
+                    Gato gato = gatoDAO.buscarPorId(id);
+
+                    if (gato != null) {
+                        request.setAttribute("gato", gato);
+                        request.getRequestDispatcher("detalleGato.jsp").forward(request, response);
+                    } else {
+                        // si no existe el ID (QR viejo o inválido), volvemos a la lista con error
+                        response.sendRedirect("GatoServlet?accion=listar&error=Gato+no+encontrado");
+                    }
+                } catch (Exception e) {
+                    response.sendRedirect("GatoServlet?accion=listar");
+                }
+                break;
+
             case "listar":
             default:
                 List<Gato> listaGatos = gatoDAO.buscarTodos();
                 request.setAttribute("gatos", listaGatos);
-                // Si aún no tienes 'listarGatos.jsp', usamos el formulario para que no de error 404
-                cargarFormulario(request, response, zonaDAO, null);
+                request.getRequestDispatcher("listaGatos.jsp").forward(request, response);
                 break;
         }
     }
