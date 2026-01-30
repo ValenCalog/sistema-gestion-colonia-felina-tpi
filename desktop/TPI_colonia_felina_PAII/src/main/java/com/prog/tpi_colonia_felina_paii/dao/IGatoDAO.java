@@ -14,4 +14,6 @@ public interface IGatoDAO {
     Gato buscarPorId(Long id);
 
     List<Gato> buscarTodos();
+    
+    List<Gato> buscarDisponibles();
 }
