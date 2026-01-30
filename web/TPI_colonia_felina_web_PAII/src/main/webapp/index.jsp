@@ -32,9 +32,11 @@
                 <nav class="flex gap-9">
                     <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Adoptar</a>
                     <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Acerca De</a>
-                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Iniciar Sesión</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors" href="login.jsp">Iniciar Sesión</a>
                 </nav>
-                <button class="btn btn-primary text-sm">Sumate a la Comunidad</button>
+                <a href="seleccionarRol.jsp" class="btn btn-primary text-sm">
+                    Sumate a la Comunidad
+                </a>
             </div>
 
             <div class="md:hidden">
@@ -96,7 +98,7 @@
                                     <h3 class="text-xl font-bold">Voluntarios</h3>
                                     <p class="text-body">Trabajo en terreno. Ayuda a alimentar, atrapar, transportar y monitorear colonias locales.</p>
                                 </div>
-                                <a class="mt-auto pt-4 text-primary font-bold text-sm hover:underline flex items-center gap-1" href="#">
+                                <a class="mt-auto pt-4 text-primary font-bold text-sm hover:underline flex items-center gap-1" href="registroVoluntario.jsp">
                                     Únete <span class="material-symbols-outlined text-sm">arrow_forward</span>
                                 </a>
                             </div>
@@ -109,7 +111,7 @@
                                     <h3 class="text-xl font-bold">Veterinarios</h3>
                                     <p class="text-body">Cuidadores expertos. Brinda atención médica esencial a gatos de colonia: esterilizaciones, vacunaciones y tratamientos que mejoran su calidad de vida.</p>
                                 </div>
-                                <a class="mt-auto pt-4 text-primary font-bold text-sm hover:underline flex items-center gap-1" href="#">
+                                <a class="mt-auto pt-4 text-primary font-bold text-sm hover:underline flex items-center gap-1" href="registroVeterinario.jsp">
                                     Colabora como Veterinario <span class="material-symbols-outlined text-sm">arrow_forward</span>
                                 </a>
                             </div>
@@ -184,7 +186,7 @@
                                 <h2 class="text-white text-3xl md:text-4xl font-black tracking-tight">¿Listo/a para generar un impacto?</h2>
                                 <p class="text-gray-300 text-lg">Únete a una comunidad de vecinos compasivos dedicados a mejorar la vida de los gatos callejeros.</p>
                                 <div class="flex flex-col sm:flex-row gap-4 mt-2">
-                                    <button class="btn btn-primary h-12 w-full sm:w-auto">Únete ahora</button>
+                                    <a class="btn btn-primary h-12 w-full sm:w-auto" href="seleccionarRol.jsp">Únete ahora</a>
                                 </div>
                             </div>
                         </div>
