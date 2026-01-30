@@ -61,7 +61,7 @@ public class GatoServlet extends HttpServlet {
 
                     if (gato != null) {
                         request.setAttribute("gato", gato);
-                        request.getRequestDispatcher("detalleGato.jsp").forward(request, response);
+                        request.getRequestDispatcher("detalleGatoVoluntario.jsp").forward(request, response);
                     } else {
                         // si no existe el ID (QR viejo o inválido), volvemos a la lista con error
                         response.sendRedirect("GatoServlet?accion=listar&error=Gato+no+encontrado");
