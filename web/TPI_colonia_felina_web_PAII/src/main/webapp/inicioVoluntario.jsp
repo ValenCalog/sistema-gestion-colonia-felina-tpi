@@ -36,9 +36,10 @@
                         <p class="text-body text-lg">Aquí está el resumen de actividad de la colonia.</p>
                     </div>
                     <div class="flex gap-3 w-full md:w-auto">
-                        <a href="GatoServlet?accion=nuevo" class="btn btn-secondary flex-1 md:flex-none gap-2">
+                        <a href="GatoServlet?accion=crear" class="btn btn-secondary flex-1 md:flex-none gap-2">
                             <span class="material-symbols-outlined">add_circle</span> Nuevo Gato
                         </a>
+                     
                         <a href="TareaServlet?accion=nueva" class="btn btn-primary flex-1 md:flex-none gap-2 shadow-lg shadow-primary/20">
                             <span class="material-symbols-outlined">edit_square</span> Registrar Tarea
                         </a>
