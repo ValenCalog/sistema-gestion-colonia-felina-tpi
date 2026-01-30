@@ -61,8 +61,8 @@ public class Gato {
     @ManyToOne
     @JoinColumn(name = "id_zona", nullable = true)
     private Zona zona;
-
-    @ManyToOne
+    
+    @ManyToOne(cascade = CascadeType.ALL) // <--- ¡AGREGA ESTO!
     @JoinColumn(name = "id_punto_avistamiento", nullable = true)
     private PuntoDeAvistamiento puntoAvistamiento;
     

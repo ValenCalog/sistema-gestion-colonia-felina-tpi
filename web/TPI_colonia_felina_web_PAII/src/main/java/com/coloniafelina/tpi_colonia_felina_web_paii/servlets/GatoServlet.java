@@ -91,24 +91,26 @@ public class GatoServlet extends HttpServlet {
             e.printStackTrace(); 
         }
 
+        // Guardamos la zona en una variable para usarla después)
+        Zona zonaSeleccionada = null; 
         String idZonaStr = request.getParameter("idZona");
+        
         if (idZonaStr != null && !idZonaStr.isEmpty()) {
-            Zona zona = zonaDAO.buscarPorId(Long.parseLong(idZonaStr));
-            gato.setZona(zona);
+            zonaSeleccionada = zonaDAO.buscarPorId(Long.parseLong(idZonaStr));
+            gato.setZona(zonaSeleccionada);
         } else {
             gato.setZona(null); 
         }
 
         // Lógica de IMAGEN
         Part filePart = request.getPart("foto"); 
-        String rutaFoto = guardarImagen(filePart); // Llamamos al método mágico
+        String rutaFoto = guardarImagen(filePart);
         
         if (rutaFoto != null) {
             gato.setFotografia(rutaFoto);
         } else if (esNuevo) {
             gato.setFotografia(null);
         }
-        // Si es edición y rutaFoto es null, mantenemos la foto vieja (no hacemos set)
 
         // Lógica de PUNTO DE AVISTAMIENTO
         String latStr = request.getParameter("latitud");
@@ -116,7 +118,7 @@ public class GatoServlet extends HttpServlet {
 
         if (latStr != null && !latStr.isEmpty() && lonStr != null && !lonStr.isEmpty()) {
             PuntoDeAvistamiento punto;
-          
+            
             if (gato.getPuntoAvistamiento() != null) {
                 punto = gato.getPuntoAvistamiento();
             } else {
@@ -126,13 +128,17 @@ public class GatoServlet extends HttpServlet {
             try {
                 punto.setLatitud(Double.parseDouble(latStr));
                 punto.setLongitud(Double.parseDouble(lonStr));
+                
+                // Asignamos al punto la misma zona que al gato
+                punto.setZona(zonaSeleccionada); 
+                // ----------------------------------------
+                
                 gato.setPuntoAvistamiento(punto);
             } catch (NumberFormatException e) {
                 System.out.println("Error coordenadas: " + e.getMessage());
             }
         }
 
-        // Guardar en Base de Datos
         try {
             if (esNuevo) {
                 gatoDAO.guardarGato(gato);
@@ -155,7 +161,8 @@ public class GatoServlet extends HttpServlet {
         try {
             // RUTA FÍSICA
             // Usamos doble barra \\ para Windows
-            String uploadPath = "C:\\Users\\User\\Documents\\tpi_gatos_uploads";
+            // En el método guardarImagen
+            String uploadPath = "C:\\tpi_gatos_uploads";
             
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) {
