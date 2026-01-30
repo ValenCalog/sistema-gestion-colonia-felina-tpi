@@ -43,7 +43,7 @@
                         <span class="material-symbols-outlined">group</span>
                         <span class="text-sm">Usuarios</span>
                     </a>
-                    <a class="sidebar-link" href="#">
+                    <a class="sidebar-link" href="ZonaServlet">
                         <span class="material-symbols-outlined">map</span>
                         <span class="text-sm font-medium">Zonas</span>
                     </a>
