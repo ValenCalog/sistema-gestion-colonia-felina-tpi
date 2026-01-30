@@ -34,5 +34,9 @@ public class ZonaDAOJPAImpl implements IZonaDAO{
         }
     }
     
+    @Override
+    public Zona buscarPorId(Long id){
+        return em.find(Zona.class,id);
+    }
 
 }

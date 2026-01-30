@@ -7,4 +7,5 @@ import java.util.List;
 public interface IZonaDAO {
     public void guardarZona(Zona zona);
     public List<Zona> buscarTodas();
+    public Zona buscarPorId(Long id);
 }
