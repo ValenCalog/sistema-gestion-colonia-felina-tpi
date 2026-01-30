@@ -1,9 +1,11 @@
 
 package com.prog.tpi_colonia_felina_paii.dao;
 
+import com.prog.tpi_colonia_felina_paii.enums.Disponibilidad;
 import com.prog.tpi_colonia_felina_paii.modelo.Gato;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -71,4 +73,16 @@ public class GatoDAOJPAImpl implements IGatoDAO{
         return q.getResultList();
     }
     
+    @Override
+    public List<Gato> buscarDisponibles() {
+        try {
+            String jpql = "SELECT g FROM Gato g WHERE g.disponibilidad = :estado";
+            TypedQuery<Gato> query = em.createQuery(jpql, Gato.class);
+            query.setParameter("estado", Disponibilidad.DISPONIBLE);
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>(); 
+        }
+    }
 }

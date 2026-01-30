@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -68,6 +69,16 @@ public class GatoServlet extends HttpServlet {
                 } catch (Exception e) {
                     response.sendRedirect("GatoServlet?accion=listar");
                 }
+                break;
+                
+            // En el case "catalogo"
+            case "catalogo":
+                String filtroEsterilizado = request.getParameter("esterilizado"); // "true" o null
+
+                List<Gato> gatosFiltrados = gatoDAO.buscarDisponibles();
+
+                request.setAttribute("gatos", gatosFiltrados);
+                request.getRequestDispatcher("catalogoGatos.jsp").forward(request, response);
                 break;
 
             case "listar":
