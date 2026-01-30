@@ -1,11 +1,13 @@
+<%@page import="java.util.List"%>
+<%@page import="com.prog.tpi_colonia_felina_paii.modelo.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gestión de Usuarios - GatoGestion</title>
+    <title>Gestión de Usuarios - Misión Michi</title>
     
     <jsp:include page="/WEB-INF/fragmentos/cabecera-estilos.jsp" />
     
@@ -70,7 +72,7 @@
             <header class="lg:hidden flex items-center justify-between px-4 py-3 bg-surface-card dark:bg-surface-cardDark border-b border-border-light dark:border-border-dark">
                 <div class="flex items-center gap-2">
                     <span class="material-symbols-outlined">menu</span>
-                    <span class="font-bold text-lg">GatoGestion</span>
+                    <span class="font-bold text-lg">Misión Michi</span>
                 </div>
                 <div class="w-8 h-8 rounded-full bg-gray-200 overflow-hidden">
                     <img alt="User" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=100&auto=format&fit=crop"/>
@@ -89,27 +91,54 @@
                     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
                         <div class="flex flex-col gap-2">
                             <h1 class="heading-xl !text-3xl md:!text-4xl">Gestión de Usuarios</h1>
-                            <p class="text-body max-w-2xl">Administra el acceso y permisos de voluntarios, veterinarios y adoptantes.</p>
+                            <p class="text-body max-w-2xl">Administra el acceso y permisos.</p>
                         </div>
+
+                        <a href="AdminServlet?accion=crear" class="btn btn-primary shadow-lg shadow-primary/30">
+                            <span class="material-symbols-outlined mr-2">add</span>
+                            Nuevo Usuario
+                        </a>
                     </div>
 
-                    <div class="card flex flex-col md:flex-row gap-4 p-4 items-center">
+                    <form action="AdminServlet" method="GET" class="card flex flex-col md:flex-row gap-4 p-4 items-center">
+                        <input type="hidden" name="accion" value="listar">
+
                         <div class="relative grow w-full">
                             <span class="material-symbols-outlined input-icon">search</span>
-                            <input class="input-field" placeholder="Buscar por nombre o email..." type="text"/>
+                            <input class="input-field" 
+                                   type="text" 
+                                   name="busqueda" 
+                                   placeholder="Buscar por nombre, apellido o email..." 
+                                   value="<%= request.getAttribute("busquedaActual") != null ? request.getAttribute("busquedaActual") : "" %>"
+                            />
                         </div>
+
                         <div class="flex gap-3 w-full md:w-auto">
-                            <select class="input-field w-full md:w-40 h-11 py-0 cursor-pointer">
+                            <select name="filtroRol" class="input-field w-full md:w-48 h-11 py-0 cursor-pointer" onchange="this.form.submit()">
                                 <option value="">Todos los Roles</option>
-                                <option value="admin">Admin</option>
-                                <option value="volunteer">Voluntario</option>
-                                <option value="vet">Veterinario</option>
+                                <% 
+                                   // Recuperamos el rol seleccionado actualmente para marcarlo
+                                   String rolActual = (String) request.getAttribute("rolActual");
+
+                                   // Iteramos los roles (asumiendo que los pasaste desde el Servlet o usando el Enum directo)
+                                   for(com.prog.tpi_colonia_felina_paii.enums.Rol r : com.prog.tpi_colonia_felina_paii.enums.Rol.values()) { 
+                                       String selected = (rolActual != null && rolActual.equals(r.toString())) ? "selected" : "";
+                                %>
+                                    <option value="<%= r %>" <%= selected %>><%= r %></option>
+                                <% } %>
                             </select>
-                            <button class="btn btn-secondary px-3">
+
+                            <button type="submit" class="btn btn-secondary px-3" title="Buscar">
                                 <span class="material-symbols-outlined">filter_list</span>
                             </button>
+
+                            <% if (request.getAttribute("busquedaActual") != null || request.getAttribute("rolActual") != null) { %>
+                                <a href="AdminServlet?accion=listar" class="btn btn-outline !text-ink-light border-border-light hover:bg-gray-100" title="Limpiar filtros">
+                                    <span class="material-symbols-outlined">close</span>
+                                </a>
+                            <% } %>
                         </div>
-                    </div>
+                    </form>
 
                     <div class="bg-surface-card dark:bg-surface-cardDark rounded-xl shadow-sm border border-border-light dark:border-border-dark overflow-hidden">
                         <div class="overflow-x-auto">
@@ -118,89 +147,77 @@
                                     <tr>
                                         <th class="table-header text-xs uppercase tracking-wider text-ink-light">Usuario</th>
                                         <th class="table-header text-xs uppercase tracking-wider text-ink-light">Rol</th>
-                                        <th class="table-header text-xs uppercase tracking-wider text-ink-light">Zona Asignada</th>
+
                                         <th class="table-header text-xs uppercase tracking-wider text-ink-light">Estado</th>
-                                        <th class="table-header text-right"></th>
-                                    </tr>
+                                        <th class="table-header text-right"></th> </tr>
                                 </thead>
                                 <tbody class="divide-y divide-border-light dark:divide-border-dark">
-                                    <c:forEach items="${usuarios}" var="u">
+                                    <%
+                                        List<Usuario> lista = (List<Usuario>) request.getAttribute("usuarios");
 
-                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors">
+                                        if (lista != null && !lista.isEmpty()) {
+                                            for (Usuario u : lista) {
+                                    %>
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors">
 
-                                            <td class="table-cell whitespace-nowrap">
-                                                <div class="flex items-center gap-3">
-                                                    <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                                                        ${u.nombre.charAt(0)}${u.apellido.charAt(0)}
-                                                    </div>
-                                                    <div class="flex flex-col">
-                                                        <p class="text-sm font-bold">${u.nombre} ${u.apellido}</p>
-                                                        <p class="text-xs text-ink-light">${u.email}</p>
-                                                    </div>
+                                        <td class="table-cell whitespace-nowrap">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                                                    <%= (u.getNombre() != null ? u.getNombre().charAt(0) : '-') %><%= (u.getApellido() != null ? u.getApellido().charAt(0) : '-') %>
                                                 </div>
-                                            </td>
-
-                                            <td class="table-cell whitespace-nowrap">
-                                                <c:choose>
-                                                    <c:when test="${u.rol == 'ADMIN'}">
-                                                        <span class="badge badge-admin">
-                                                            <span class="material-symbols-outlined text-[14px]">admin_panel_settings</span>
-                                                            Administrador
-                                                        </span>
-                                                    </c:when>
-                                                    <c:when test="${u.rol == 'VOLUNTARIO'}">
-                                                        <span class="badge badge-volunteer">
-                                                            <span class="material-symbols-outlined text-[14px]">volunteer_activism</span>
-                                                            Voluntario
-                                                        </span>
-                                                    </c:when>
-                                                    <c:when test="${u.rol == 'VETERINARIO'}">
-                                                        <span class="badge badge-vet">
-                                                            <span class="material-symbols-outlined text-[14px]">medical_services</span>
-                                                            Veterinario
-                                                        </span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="badge badge-adopter">
-                                                            <span class="material-symbols-outlined text-[14px]">pets</span>
-                                                            ${u.rol}
-                                                        </span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-
-                                            <td class="table-cell whitespace-nowrap text-sm">
-                                                <c:out value="${u.zona != null ? u.zona.nombre : 'Sin Zona Asignada'}" />
-                                            </td>
-
-                                            <td class="table-cell whitespace-nowrap">
-                                                <div class="flex items-center gap-2 text-sm font-medium">
-                                                    <span class="h-2 w-2 rounded-full ${u.activo ? 'bg-emerald-500' : 'bg-gray-400'}"></span> 
-                                                    ${u.activo ? 'Activo' : 'Inactivo'}
+                                                <div class="flex flex-col">
+                                                    <p class="text-sm font-bold"><%= u.getNombre() %> <%= u.getApellido() %></p>
+                                                    <p class="text-xs text-ink-light"><%= u.getCorreo() %></p>
                                                 </div>
-                                            </td>
+                                            </div>
+                                        </td>
 
-                                            <td class="table-cell text-right">
-                                                <a href="UsuarioServlet?accion=editar&id=${u.idUsuario}" class="text-ink-light hover:text-primary transition-colors">
-                                                    <span class="material-symbols-outlined">edit</span>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
+                                        <td class="table-cell whitespace-nowrap">
+                                            <% 
+                                               String rolNombre = (u.getRol() != null) ? u.getRol().toString() : "SIN ROL";
+                                               String rolClase = "badge-adopter"; 
 
-                                    <c:if test="${empty usuarios}">
-                                        <tr>
-                                            <td colspan="5" class="p-8 text-center text-ink-light">
-                                                No hay usuarios registrados en el sistema.
-                                            </td>
-                                        </tr>
-                                    </c:if>
+                                               if("ADMIN".equals(rolNombre)) rolClase = "badge-admin";
+                                               else if("VOLUNTARIO".equals(rolNombre)) rolClase = "badge-volunteer";
+                                               else if("VETERINARIO".equals(rolNombre)) rolClase = "badge-vet";
+                                            %>
+                                            <span class="badge <%= rolClase %>">
+                                                <span class="material-symbols-outlined text-[14px]">pets</span>
+                                                <%= rolNombre %>
+                                            </span>
+                                        </td>
 
+                                        <td class="table-cell whitespace-nowrap">
+                                            <div class="flex items-center gap-2 text-sm font-medium">
+                                                <% 
+                                                   String estadoStr = (u.getEstado() != null) ? u.getEstado().toString() : "DESCONOCIDO";
+                                                   boolean isActivo = "ACTIVO".equals(estadoStr);
+                                                %>
+                                                <span class="h-2 w-2 rounded-full <%= isActivo ? "bg-emerald-500" : "bg-gray-400" %>"></span> 
+                                                <%= estadoStr %>
+                                            </div>
+                                        </td>
+
+                                        <td class="table-cell text-right">
+                                            <a href="AdminServlet?accion=editar&id=<%= u.getIdUsuario() %>" class="text-ink-light hover:text-primary transition-colors">
+                                                <span class="material-symbols-outlined">edit</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <% 
+                                            } 
+                                        } else { 
+                                    %>
+                                    <tr>
+                                        <td colspan="4" class="p-8 text-center text-ink-light">
+                                            No se encontraron usuarios.
+                                        </td>
+                                    </tr>
+                                    <% } %>
                                 </tbody>
                             </table>
                         </div>
-
-                        <div class="flex items-center justify-between px-6 py-4 border-t border-border-light dark:border-border-dark bg-surface-card dark:bg-surface-cardDark">
+                        <!-- <div class="flex items-center justify-between px-6 py-4 border-t border-border-light dark:border-border-dark bg-surface-card dark:bg-surface-cardDark">
                             <p class="text-sm text-ink-light">Mostrando <span class="font-bold text-ink dark:text-white">1-5</span> de <span class="font-bold">24</span> resultados</p>
                             <div class="flex items-center gap-2">
                                 <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-border-light dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50" disabled>
@@ -212,7 +229,7 @@
                                     <span class="material-symbols-outlined text-[18px]">chevron_right</span>
                                 </button>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     
                 </div>
