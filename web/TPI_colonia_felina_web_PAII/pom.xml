@@ -28,6 +28,7 @@
             <groupId>com.prog</groupId>
             <artifactId>TPI_colonia_felina_PAII</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
         </dependency>
         
         <dependency>

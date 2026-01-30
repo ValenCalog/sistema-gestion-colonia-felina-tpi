@@ -15,6 +15,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
         tailwind.config = {
             darkMode: "class",
@@ -156,6 +158,91 @@
                                             <option value="<%= z.getIdZona() %>" <%= isSelected ? "selected" : "" %>><%= z.getNombre() %></option>
                                         <% } } %>
                                     </select>
+                                    <div class="md:col-span-2 mt-4">
+                                        <label class="flex flex-col gap-2">
+                                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                Ubicación Exacta (Haz clic en el mapa)
+                                            </span>
+
+                                            <div id="map" class="w-full h-64 rounded-lg border border-gray-300 z-0"></div>
+
+                                            <input type="hidden" id="latitud" name="latitud" 
+                                                   value="<%= (esEdicion && gato.getPuntoAvistamiento() != null) ? gato.getPuntoAvistamiento().getLatitud() : "" %>">
+
+                                            <input type="hidden" id="longitud" name="longitud" 
+                                                   value="<%= (esEdicion && gato.getPuntoAvistamiento() != null) ? gato.getPuntoAvistamiento().getLongitud() : "" %>">
+
+                                            <p class="text-xs text-gray-500 mt-1">Arrastra el marcador para ajustar la posición.</p>
+                                        </label>
+                                    </div>
+
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", function() {
+                                            // 1. Coordenadas por defecto (Posadas, Misiones - Cambia esto si es otra ciudad)
+                                            var defaultLat = -27.3671;
+                                            var defaultLng = -55.8961;
+                                            var zoomLevel = 13;
+
+                                            // 2. Verificamos si ya hay datos (Modo Edición)
+                                            var existingLat = document.getElementById('latitud').value;
+                                            var existingLng = document.getElementById('longitud').value;
+
+                                            var mapCenter = [defaultLat, defaultLng];
+                                            var hasLocation = false;
+
+                                            if (existingLat && existingLng) {
+                                                mapCenter = [parseFloat(existingLat), parseFloat(existingLng)];
+                                                hasLocation = true;
+                                                zoomLevel = 16; // Más zoom si ya hay ubicación
+                                            }
+
+                                            // 3. Inicializar Mapa
+                                            var map = L.map('map').setView(mapCenter, zoomLevel);
+
+                                            // 4. Capa de OpenStreetMap (Estética estándar)
+                                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                                attribution: '&copy; OpenStreetMap contributors'
+                                            }).addTo(map);
+
+                                            var marker;
+
+                                            // Función para actualizar los inputs ocultos
+                                            function updateInputs(lat, lng) {
+                                                document.getElementById('latitud').value = lat;
+                                                document.getElementById('longitud').value = lng;
+                                            }
+
+                                            // Si ya había ubicación, poner el marcador inicial
+                                            if (hasLocation) {
+                                                marker = L.marker(mapCenter, {draggable: true}).addTo(map);
+                                                marker.on('dragend', function(event) {
+                                                    var position = marker.getLatLng();
+                                                    updateInputs(position.lat, position.lng);
+                                                });
+                                            }
+
+                                            // 5. Evento de Clic en el Mapa
+                                            map.on('click', function(e) {
+                                                var lat = e.latlng.lat;
+                                                var lng = e.latlng.lng;
+
+                                                // Si ya hay marcador, lo movemos. Si no, creamos uno.
+                                                if (marker) {
+                                                    marker.setLatLng(e.latlng);
+                                                } else {
+                                                    marker = L.marker(e.latlng, {draggable: true}).addTo(map);
+                                                    // Agregar evento de arrastre al nuevo marcador
+                                                    marker.on('dragend', function(event) {
+                                                        var position = marker.getLatLng();
+                                                        updateInputs(position.lat, position.lng);
+                                                    });
+                                                }
+
+                                                // Guardar en los inputs ocultos
+                                                updateInputs(lat, lng);
+                                            });
+                                        });
+                                    </script>
                                 </label>
                             </div>
                         </div>
