@@ -1,6 +1,7 @@
 <%@page import="java.util.List"%>
 <%@page import="com.prog.tpi_colonia_felina_paii.modelo.Gato"%>
 <%@page import="com.prog.tpi_colonia_felina_paii.modelo.Zona"%>
+<%@page import="com.prog.tpi_colonia_felina_paii.enums.Sexo"%>
 <%@page import="com.prog.tpi_colonia_felina_paii.enums.Disponibilidad"%> <%@page import="com.prog.tpi_colonia_felina_paii.enums.EstadoSalud"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -178,12 +179,11 @@
 
                                     <script>
                                         document.addEventListener("DOMContentLoaded", function() {
-                                            // 1. Coordenadas por defecto (Posadas, Misiones - Cambia esto si es otra ciudad)
+                                            // Coordenadas por defecto (Posadas, Misiones)
                                             var defaultLat = -27.3671;
                                             var defaultLng = -55.8961;
                                             var zoomLevel = 13;
 
-                                            // 2. Verificamos si ya hay datos (Modo Edición)
                                             var existingLat = document.getElementById('latitud').value;
                                             var existingLng = document.getElementById('longitud').value;
 
@@ -196,10 +196,10 @@
                                                 zoomLevel = 16; // Más zoom si ya hay ubicación
                                             }
 
-                                            // 3. Inicializar Mapa
+                                            // Inicializar Mapa
                                             var map = L.map('map').setView(mapCenter, zoomLevel);
 
-                                            // 4. Capa de OpenStreetMap (Estética estándar)
+                                            // Capa de OpenStreetMap (Estética estándar)
                                             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                                                 attribution: '&copy; OpenStreetMap contributors'
                                             }).addTo(map);
@@ -221,7 +221,7 @@
                                                 });
                                             }
 
-                                            // 5. Evento de Clic en el Mapa
+                                            // Evento de Clic en el Mapa
                                             map.on('click', function(e) {
                                                 var lat = e.latlng.lat;
                                                 var lng = e.latlng.lng;
@@ -248,7 +248,28 @@
                         </div>
 
                         <hr class="border-gray-100 dark:border-gray-700"/>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                            <label class="flex flex-col gap-2">
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Sexo *</span>
+                                <select name="sexo" class="w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 h-12 px-4 focus:border-primary focus:ring-primary">
+                                    <% for(Sexo s : Sexo.values()) { 
+                                        String selected = (esEdicion && gato.getSexo() == s) ? "selected" : "";
+                                    %>
+                                        <option value="<%= s %>" <%= selected %>><%= s %></option>
+                                    <% } %>
+                                </select>
+                            </label>
 
+                            <label class="flex flex-col gap-2">
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">¿Está Esterilizado/Castrado? *</span>
+                                <select name="esterilizado" class="w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 h-12 px-4 focus:border-primary focus:ring-primary">
+                                    <option value="false" <%= (esEdicion && !gato.isEsterilizado()) ? "selected" : "" %>>NO</option>
+                                    <option value="true" <%= (esEdicion && gato.isEsterilizado()) ? "selected" : "" %>>SÍ</option>
+                                </select>
+                            </label>
+                        </div>
+                        
                         <div>
                             <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                                 <span class="material-symbols-outlined text-primary">visibility</span> Visual & Foto

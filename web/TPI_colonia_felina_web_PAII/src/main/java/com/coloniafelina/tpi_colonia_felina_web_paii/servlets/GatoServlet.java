@@ -7,7 +7,9 @@ import com.prog.tpi_colonia_felina_paii.modelo.Zona;
 import com.prog.tpi_colonia_felina_paii.modelo.PuntoDeAvistamiento; // Importante
 import com.prog.tpi_colonia_felina_paii.enums.Disponibilidad;
 import com.prog.tpi_colonia_felina_paii.enums.EstadoSalud;
+import com.prog.tpi_colonia_felina_paii.enums.Sexo;
 
+import com.prog.tpi_colonia_felina_paii.util.QRCodeUtil;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -118,7 +120,7 @@ public class GatoServlet extends HttpServlet {
         } else {
             gato.setZona(null); 
         }
-
+        
         // Lógica de IMAGEN
         Part filePart = request.getPart("foto"); 
         String rutaFoto = guardarImagen(filePart);
@@ -155,11 +157,36 @@ public class GatoServlet extends HttpServlet {
                 System.out.println("Error coordenadas: " + e.getMessage());
             }
         }
+        
+        try {
+            gato.setSexo(Sexo.valueOf(request.getParameter("sexo")));
+            // Boolean.parseBoolean devuelve true solo si el string es "true" (ignorando mayúsculas)
+            gato.setEsterilizado(Boolean.parseBoolean(request.getParameter("esterilizado")));
+        } catch (Exception e) { e.printStackTrace(); }        
 
+        // GUARDADO Y GENERACIÓN DE QR
         try {
             if (esNuevo) {
-                gatoDAO.guardarGato(gato);
+                // A) Primero guardamos para generar el ID en la BD
+                gatoDAO.guardarGato(gato); 
+
+                // B) Ahora que tiene ID, generamos el QR
+                // El texto del QR será una URL que apunte al detalle de este gato
+                String contenidoQR = "http://localhost:8080/TPI_colonia_felina_web_PAII/GatoServlet?accion=verDetalle&id=" + gato.getIdGato();
+                String nombreArchivoQR = "qr_gato_" + gato.getIdGato() + ".png";
+
+                // Usamos la misma ruta base que las fotos (C:\tpi_gatos_uploads)
+                String uploadPath = "C:\\tpi_gatos_uploads"; 
+
+                QRCodeUtil.generarQR(contenidoQR, uploadPath, nombreArchivoQR);
+
+                // C) Actualizamos el gato con la ruta del QR (ruta virtual)
+                gato.setQrCodePath("/imagenes-gatos/" + nombreArchivoQR);
+                gatoDAO.actualizar(gato);
+
             } else {
+                // Si es edición, solo actualizamos datos normales
+                // (Opcional: podrías regenerar el QR si cambió algo importante)
                 gatoDAO.actualizar(gato);
             }
         } catch (Exception e) {

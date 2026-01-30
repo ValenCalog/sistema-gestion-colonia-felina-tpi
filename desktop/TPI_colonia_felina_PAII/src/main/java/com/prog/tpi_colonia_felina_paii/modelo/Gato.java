@@ -3,8 +3,11 @@ package com.prog.tpi_colonia_felina_paii.modelo;
 
 import com.prog.tpi_colonia_felina_paii.enums.Disponibilidad;
 import com.prog.tpi_colonia_felina_paii.enums.EstadoSalud;
+import com.prog.tpi_colonia_felina_paii.enums.Sexo;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -68,6 +71,23 @@ public class Gato {
     
     @OneToMany(mappedBy = "gato")
     private List<Tarea> tareas = new ArrayList<>(); //tareas que se realizaron sobre el gato
+    
+    @Enumerated(EnumType.STRING)
+    private Sexo sexo; // NUEVO
+
+    private boolean esterilizado; // NUEVO (true = Si, false = No)
+    
+    private String qrCodePath; // NUEVO (Ruta de la imagen del QR)
+
+    public Sexo getSexo() { return sexo; }
+    public void setSexo(Sexo sexo) { this.sexo = sexo; }
+
+    public boolean isEsterilizado() { return esterilizado; } // Getter de boolean suele ser "is"
+    public void setEsterilizado(boolean esterilizado) { this.esterilizado = esterilizado; }
+
+    public String getQrCodePath() { return qrCodePath; }
+    public void setQrCodePath(String qrCodePath) { this.qrCodePath = qrCodePath; }
+    
 
     
     // ---Metodos
