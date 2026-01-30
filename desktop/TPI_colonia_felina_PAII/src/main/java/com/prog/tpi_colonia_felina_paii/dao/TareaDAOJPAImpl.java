@@ -39,9 +39,24 @@ public class TareaDAOJPAImpl implements ITareaDAO{
 
     @Override
     public List<Tarea> buscarPorUsuario(Long idUsuario) {
-        TypedQuery<Tarea> q = em.createQuery("SELECT t FROM Tarea t WHERE t.usuario.idUsuario := idUsuario ORDER BY t.fecha DESC, t.idTarea DESC", Tarea.class);
+        TypedQuery<Tarea> q = em.createQuery("SELECT t FROM Tarea t WHERE t.usuario.idUsuario = :idUsuario ORDER BY t.fecha DESC, t.idTarea DESC", Tarea.class);
         q.setParameter("idUsuario", idUsuario);
         return q.getResultList();
+    }
+    
+    // Agregar en TareaDAOJPAImpl.java
+    @Override
+    public void actualizar(Tarea tarea) {
+        try {
+            DBService.beginTransaction();
+            em.merge(tarea); // merge es para actualizar
+            DBService.commitTransaction();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
+        }
     }
     
 }
