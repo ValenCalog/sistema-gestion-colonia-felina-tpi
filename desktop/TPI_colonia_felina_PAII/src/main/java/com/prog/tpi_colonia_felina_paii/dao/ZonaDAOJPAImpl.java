@@ -13,6 +13,7 @@ public class ZonaDAOJPAImpl implements IZonaDAO{
     public ZonaDAOJPAImpl() {
     }
 
+    @Override
     public List<Zona> buscarTodas() {
         TypedQuery<Zona> q = em.createQuery(
             "SELECT z FROM Zona z ORDER BY z.nombre",
@@ -21,6 +22,7 @@ public class ZonaDAOJPAImpl implements IZonaDAO{
         return q.getResultList();
     }
     
+    @Override
     public void guardarZona(Zona zona) {
        try{
             DBService.beginTransaction();
@@ -35,8 +37,40 @@ public class ZonaDAOJPAImpl implements IZonaDAO{
     }
     
     @Override
-    public Zona buscarPorId(Long id){
-        return em.find(Zona.class,id);
+
+    public Zona buscarPorId(long id){
+        return em.find(Zona.class, id);
+    }
+    
+    @Override
+    public void actualizar(Zona zona) {
+        try{
+            DBService.beginTransaction();  
+            em.merge(zona);
+            DBService.commitTransaction();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback(); 
+            }
+            throw e; 
+        }
+    }
+    
+    @Override
+    public void eliminar(long id) {
+        try {
+            DBService.beginTransaction();
+            Zona zona = em.find(Zona.class, id);
+            if (zona != null){
+                em.remove(zona);   
+            }
+            DBService.commitTransaction();
+        } catch (Exception e) {
+                if (em.getTransaction().isActive()) {
+                    em.getTransaction().rollback();
+                }
+                throw e;
+        }
     }
 
 }

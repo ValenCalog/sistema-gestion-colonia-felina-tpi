@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GatoGestion - Panel de Administración</title>
+    <title>Panel de Administración</title>
     
     <jsp:include page="/WEB-INF/fragmentos/cabecera-estilos.jsp" />
     
@@ -42,7 +42,7 @@
                         <span class="material-symbols-outlined">group</span>
                         <span class="text-sm font-medium">Usuarios</span>
                     </a>
-                    <a class="sidebar-link" href="#">
+                    <a class="sidebar-link" href="ZonaServlet">
                         <span class="material-symbols-outlined">map</span>
                         <span class="text-sm font-medium">Zonas</span>
                     </a>
