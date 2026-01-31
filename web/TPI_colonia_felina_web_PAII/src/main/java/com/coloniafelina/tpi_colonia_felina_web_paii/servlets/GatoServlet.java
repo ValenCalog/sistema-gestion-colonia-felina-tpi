@@ -1,12 +1,14 @@
 package com.coloniafelina.tpi_colonia_felina_web_paii.servlets;
 
 import com.prog.tpi_colonia_felina_paii.dao.GatoDAOJPAImpl;
+import com.prog.tpi_colonia_felina_paii.dao.TareaDAOJPAImpl;
 import com.prog.tpi_colonia_felina_paii.dao.ZonaDAOJPAImpl;
 import com.prog.tpi_colonia_felina_paii.modelo.Gato;
 import com.prog.tpi_colonia_felina_paii.modelo.Zona;
 import com.prog.tpi_colonia_felina_paii.modelo.PuntoDeAvistamiento; // Importante
 import com.prog.tpi_colonia_felina_paii.enums.Disponibilidad;
 import com.prog.tpi_colonia_felina_paii.enums.EstadoSalud;
+import com.prog.tpi_colonia_felina_paii.modelo.Tarea;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +36,7 @@ public class GatoServlet extends HttpServlet {
 
         GatoDAOJPAImpl gatoDAO = new GatoDAOJPAImpl();
         ZonaDAOJPAImpl zonaDAO = new ZonaDAOJPAImpl();
+        TareaDAOJPAImpl tareaDAO = new TareaDAOJPAImpl();
 
         String accion = request.getParameter("accion");
         if (accion == null) accion = "listar";
@@ -58,6 +61,9 @@ public class GatoServlet extends HttpServlet {
                 try {
                     Long id = Long.parseLong(request.getParameter("id"));
                     Gato gato = gatoDAO.buscarPorId(id);
+                    
+                    List<Tarea> historial = tareaDAO.buscarPorGato(id);
+                    request.setAttribute("historialTareas", historial);
 
                     if (gato != null) {
                         request.setAttribute("gato", gato);
