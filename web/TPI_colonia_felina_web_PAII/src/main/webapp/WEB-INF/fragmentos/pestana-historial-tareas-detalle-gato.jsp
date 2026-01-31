@@ -2,9 +2,21 @@
 <%@page import="com.prog.tpi_colonia_felina_paii.modelo.*"%>
 <%
     List<Tarea> historial = (List<Tarea>) request.getAttribute("historialTareas");
+    Gato g = (Gato) request.getAttribute("gato");
 %>
 
 <div class="space-y-4 animate-fade-in">
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50 dark:bg-white/5 p-4 rounded-xl border border-border-light dark:border-border-dark mb-2">
+        <div>
+            <h4 class="font-bold text-ink dark:text-white text-sm">Bitácora de Tareas</h4>
+            <p class="text-xs text-ink-light">Registra cada cuidado para mantener el control.</p>
+        </div>
+        <a href="TareaServlet?accion=nueva&idGato=<%= g.getIdGato() %>" 
+           class="btn btn-primary shadow-lg shadow-primary/20 gap-2 text-sm px-5 py-2 whitespace-nowrap w-full sm:w-auto flex justify-center">
+            <span class="material-symbols-outlined text-[18px]">add_circle</span>
+            Registrar Nueva Tarea
+        </a>
+    </div>
     <% 
     if (historial != null && !historial.isEmpty()) {
         for (Tarea t : historial) {
