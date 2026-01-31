@@ -33,34 +33,89 @@
         <div class="flex-1">
             <h1 class="text-2xl font-bold mb-6">Gatos Disponibles</h1>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <%@page import="com.prog.tpi_colonia_felina_paii.enums.Sexo"%>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
                 <% 
-                List<Gato> gatos = (List<Gato>) request.getAttribute("gatos");
-                if (gatos != null && !gatos.isEmpty()) {
-                    for (Gato g : gatos) {
-                        String fotoUrl = (g.getFotografia() != null) ? request.getContextPath() + g.getFotografia() : "https://via.placeholder.com/300";
+                List<Gato> listaGatos = (List<Gato>) request.getAttribute("gatos");
+                if (listaGatos != null && !listaGatos.isEmpty()) {
+                    for (Gato g : listaGatos) {
+
+                        
+                        boolean esMacho = (g.getSexo() == Sexo.MACHO);
+                        String iconSexo = esMacho ? "male" : "female";
+                        
+                        String colorSexo = esMacho ? "text-blue-500" : "text-pink-500";
+
+                        
+                        boolean tieneFoto = (g.getFotografia() != null && !g.getFotografia().isEmpty());
+                        String fotoUrl = tieneFoto ? request.getContextPath() + g.getFotografia() : "";
+
+                        
+                        String disponibilidad = (g.getDisponibilidad().toString() != null) ? g.getDisponibilidad().toString() : "NO_DISPONIBLE";
+                        boolean disponible = disponibilidad.equalsIgnoreCase("DISPONIBLE");
+                        String badgeColor = disponible ? "bg-primary/90" : "bg-gray-500/90";
                 %>
-                <div class="card p-0 overflow-hidden group hover:shadow-lg transition-all">
-                    <div class="h-56 relative overflow-hidden">
-                        <img src="<%= fotoUrl %>" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
-                        <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-white">
-                            <h3 class="font-bold text-xl"><%= g.getNombre() %></h3>
+
+                <div class="group bg-white dark:bg-surface-cardDark rounded-2xl overflow-hidden border border-border-light dark:border-border-dark shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+
+                    <div class="relative aspect-[4/5] bg-gray-200 overflow-hidden">
+                        <% if (tieneFoto) { %>
+                            <img src="<%= fotoUrl %>" alt="<%= g.getNombre() %>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <% } else { %>
+                            <div class="w-full h-full flex flex-col items-center justify-center text-gray-300 dark:text-gray-600 bg-gray-50 dark:bg-white/5">
+                                <span class="material-symbols-outlined text-6xl mb-2 opacity-50">pets</span>
+                                <span class="text-xs font-bold uppercase tracking-widest text-gray-400">Foto próximamente</span>
+                            </div>
+                        <% } %>
+
+                        <div class="absolute bottom-4 left-4 flex gap-2">
+                            <span class="<%= badgeColor %> text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                                <%= disponibilidad %>
+                            </span>
                         </div>
                     </div>
-                    <div class="p-4">
-                        <p class="text-sm text-ink-light line-clamp-2 mb-4"><%= g.getCaracteristicas() %></p>
-                        <a href="GatoServlet?accion=verDetallePublico&id=<%= g.getIdGato() %>" class="btn btn-primary w-full">
-                            Ver Perfil y Adoptar
+
+                    <div class="p-5 flex flex-col flex-1">
+
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h4 class="text-xl font-bold text-ink dark:text-white leading-tight"><%= g.getNombre() %></h4>
+                                <p class="text-sm text-gray-500 font-medium mt-1">
+                                    <%= (g.getZona() != null) ? g.getZona().getNombre() : "Refugio Central" %>
+                                </p>
+                            </div>
+
+                            <span class="material-symbols-outlined text-2xl <%= colorSexo %> bg-gray-50 dark:bg-white/5 p-1 rounded-lg" title="<%= g.getSexo() %>">
+                                <%= iconSexo %>
+                            </span>
+                        </div>
+
+                        <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-6 flex-1">
+                            <%= (g.getCaracteristicas() != null && !g.getCaracteristicas().isEmpty()) 
+                                ? g.getCaracteristicas() 
+                                : "Un michi adorable esperando conocerte y encontrar un hogar." %>
+                        </p>
+
+                        <a href="GatoServlet?accion=verFichaPublica&id=<%= g.getIdGato() %>" 
+                           class="w-full bg-primary hover:bg-green-600 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+                            Ver Perfil
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
                         </a>
                     </div>
                 </div>
-                <% } } else { %>
-                    <div class="col-span-full py-12 text-center border-2 border-dashed border-gray-300 rounded-xl">
-                        <span class="material-symbols-outlined text-4xl text-gray-400">pets</span>
-                        <p class="mt-2 text-gray-500">¡Lo lamentamos! No hay gatos disponibles con estos filtros.</p>
-                        <a href="GatoServlet?accion=catalogo" class="text-primary font-bold hover:underline">Ver todos</a>
+
+                <% 
+                    } // Fin for
+                } else { 
+                %>
+                    <div class="col-span-full text-center py-20">
+                        <span class="material-symbols-outlined text-6xl text-gray-300 mb-4">pets</span>
+                        <p class="text-xl font-bold text-gray-500">No hay gatitos disponibles en este momento.</p>
                     </div>
                 <% } %>
+
             </div>
         </div>
     </main>

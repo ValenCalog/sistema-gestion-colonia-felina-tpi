@@ -80,6 +80,23 @@ public class GatoServlet extends HttpServlet {
                 }
                 break;
                 
+            case "verFichaPublica": // Acción para adoptantes
+                try {
+                    Long id = Long.parseLong(request.getParameter("id"));
+                    Gato g = gatoDAO.buscarPorId(id);
+
+                    if (g != null) {
+                        request.setAttribute("gato", g);
+                        // IMPORTANTE: Redirigir al JSP nuevo
+                        request.getRequestDispatcher("detalleGatoAdopcion.jsp").forward(request, response);
+                    } else {
+                        response.sendRedirect("index.jsp");
+                    }
+                } catch (Exception e) {
+                    response.sendRedirect("index.jsp");
+                }
+                break;
+                
             // En el case "catalogo"
             case "catalogo":
                 String filtroEsterilizado = request.getParameter("esterilizado"); // "true" o null
