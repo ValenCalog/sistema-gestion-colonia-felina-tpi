@@ -67,7 +67,7 @@
                                     
                                     String est = p.getEstado().toString();
                                     if(est.equals("PENDIENTE")) { progreso = 25; estadoTexto = "Evaluando perfil"; }
-                                    else if(est.equals("APROBADA")) { progreso = 100; estadoTexto = "¡Aprobada! Coordinando entrega"; colorBarra = "bg-green-500"; }
+                                    else if(est.equals("ACEPTADA")) { progreso = 100; estadoTexto = "¡Aprobada! Coordinando entrega"; colorBarra = "bg-green-500"; }
                                     else if(est.equals("RECHAZADA")) { progreso = 100; estadoTexto = "No aprobada"; colorBarra = "bg-red-500"; }
                                     
                                     // Foto Gato
@@ -148,7 +148,7 @@
                                     String fotoRec = "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba";
                                     if(g.getFotografia() != null) fotoRec = request.getContextPath() + g.getFotografia();
                             %>
-                                <a href="GatoServlet?accion=verDetalle&id=<%= g.getIdGato() %>" class="group relative aspect-[4/5] rounded-xl overflow-hidden shadow-sm">
+                                <a href="GatoServlet?accion=verFichaPublica&id=<%= g.getIdGato() %>" class="group relative aspect-[4/5] rounded-xl overflow-hidden shadow-sm">
                                     <img src="<%= fotoRec %>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80"></div>
                                     <div class="absolute bottom-3 left-3 text-white">
