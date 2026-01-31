@@ -5,10 +5,15 @@
 package com.coloniafelina.tpi_colonia_felina_web_paii.servlets;
 
 import com.prog.tpi_colonia_felina_paii.dao.GatoDAOJPAImpl;
+import com.prog.tpi_colonia_felina_paii.enums.EstadoPostulacion;
+import com.prog.tpi_colonia_felina_paii.enums.TipoAdopcion;
+import com.prog.tpi_colonia_felina_paii.modelo.Familia;
 import com.prog.tpi_colonia_felina_paii.modelo.Gato;
+import com.prog.tpi_colonia_felina_paii.modelo.Postulacion;
 import com.prog.tpi_colonia_felina_paii.modelo.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,32 +31,29 @@ public class PostulacionServlet extends HttpServlet {
             throws ServletException, IOException {
         
         String accion = request.getParameter("accion");
-        if (accion == null) accion = "listar"; // O lo que prefieras por defecto
+        if (accion == null) accion = "listar";
 
         switch (accion) {
             case "formulario":
                 mostrarFormulario(request, response);
                 break;
-            // ... otros casos ...
+            default:
+                break;
         }
     }
 
     private void mostrarFormulario(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        // 1. Validar Sesión (Solo usuarios logueados pueden adoptar)
         HttpSession session = request.getSession();
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
         
         if (usuario == null) {
-            // Si no está logueado, lo mandamos al login
-            // Guardamos la URL intentada para volver después (Opcional pero pro)
             request.setAttribute("mensaje", "Debes iniciar sesión para postularte.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
 
-        // 2. Obtener ID del Gato
         String idGatoStr = request.getParameter("idGato");
         
         if (idGatoStr != null && !idGatoStr.isEmpty()) {
@@ -60,11 +62,9 @@ public class PostulacionServlet extends HttpServlet {
                 Gato g = gatoDAO.buscarPorId(idGato);
                 
                 if (g != null) {
-                    // 3. Enviar objeto Gato al JSP
                     request.setAttribute("gato", g);
                     request.getRequestDispatcher("formPostulacion.jsp").forward(request, response);
                 } else {
-                    // Gato no encontrado
                     response.sendRedirect("GatoServlet?accion=listar&error=GatoNoEncontrado");
                 }
             } catch (NumberFormatException e) {
@@ -72,6 +72,51 @@ public class PostulacionServlet extends HttpServlet {
             }
         } else {
             response.sendRedirect("GatoServlet?accion=listar");
+        }
+    }
+    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            HttpSession session = request.getSession();
+            Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+            
+            if (usuario == null) {
+                response.sendRedirect("login.jsp");
+                return;
+            }
+            
+            Long idGato = Long.parseLong(request.getParameter("idGato"));
+            String tipoAdopcionStr = request.getParameter("tipoAdopcion"); 
+            String observacion = request.getParameter("observacion");
+            
+            Gato gato = gatoDAO.buscarPorId(idGato);
+            
+            Familia familia = usuario.getFamilia(); 
+            
+            if (familia == null) {
+                request.setAttribute("mensajeError", "Debes completar tu perfil familiar antes de adoptar.");
+                request.getRequestDispatcher("perfilUsuario.jsp").forward(request, response);
+                return;
+            }
+
+            Postulacion postulacion = new Postulacion();
+            postulacion.setFecha(LocalDate.now());
+            postulacion.setObservacion(observacion);
+            postulacion.setTipoAdopcion(TipoAdopcion.valueOf(tipoAdopcionStr));
+            postulacion.setEstado(EstadoPostulacion.PENDIENTE);
+            
+            postulacion.setGato(gato);
+            postulacion.setMiembroPostulante(usuario);
+            postulacion.setFamiliaPostulante(familia);
+            postulacionDAO.crear(postulacion);
+            
+            response.sendRedirect("GatoServlet?accion=listar&mensaje=PostulacionEnviada");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("GatoServlet?accion=listar&error=ErrorAlProcesar");
         }
     }
     
