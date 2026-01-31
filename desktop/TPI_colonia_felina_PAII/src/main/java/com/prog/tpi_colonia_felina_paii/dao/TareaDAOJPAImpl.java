@@ -44,7 +44,6 @@ public class TareaDAOJPAImpl implements ITareaDAO{
         return q.getResultList();
     }
     
-    // Agregar en TareaDAOJPAImpl.java
     @Override
     public void actualizar(Tarea tarea) {
         try {
@@ -57,6 +56,19 @@ public class TareaDAOJPAImpl implements ITareaDAO{
             }
             throw e;
         }
+    }
+    
+    @Override
+    public List<Tarea> obtenerTodas(){
+        TypedQuery<Tarea> q = em.createQuery("SELECT t FROM Tarea t ORDER BY t.fecha DESC, t.idTarea DESC", Tarea.class);
+        return q.getResultList();
+    }
+    
+    @Override
+    public List<Tarea> obtenerUltimas5(){
+        TypedQuery<Tarea> q = em.createQuery("SELECT t FROM Tarea t ORDER BY t.fecha DESC, t.idTarea DESC", Tarea.class)
+                .setMaxResults(5);
+        return q.getResultList();
     }
     
 }

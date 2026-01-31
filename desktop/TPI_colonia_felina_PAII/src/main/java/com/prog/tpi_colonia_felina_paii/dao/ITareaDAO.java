@@ -11,4 +11,6 @@ public interface ITareaDAO {
     public List<Tarea> buscarPorGato(Long idGato);
     public List<Tarea> buscarPorUsuario(Long idUsuario);
     public void actualizar(Tarea tarea);
+    public List<Tarea> obtenerTodas();
+    public List<Tarea> obtenerUltimas5();
 }
