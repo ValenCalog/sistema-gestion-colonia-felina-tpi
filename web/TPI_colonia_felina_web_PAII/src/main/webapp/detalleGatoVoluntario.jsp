@@ -40,11 +40,73 @@
     <jsp:include page="/WEB-INF/fragmentos/cabecera-estilos.jsp" />
     <style>
         /* para impresión de la tarjeta de identificación */
-        @media print {
-            body * { visibility: hidden; }
-            #printable-id-card, #printable-id-card * { visibility: visible; }
-            #printable-id-card { position: absolute; left: 0; top: 0; width: 100%; }
+    @media print {
+        /* configuración de la hoja */
+        @page { 
+            size: auto;   
+            margin: 0mm; 
         }
+
+        /* ocultamos todo lo que no sea la tarjeta */
+        body {
+            background-color: white; /* fondo blanco */
+            margin: 0;
+            padding: 0;
+        }
+        
+        body * { 
+            visibility: hidden; /* oculta todo */
+            height: 0; /* colapsa el espacio */
+        }
+
+        /* hacemos visible la tarjeta y sus hijos */
+        #printable-id-card, #printable-id-card * { 
+            visibility: visible;
+            height: auto;
+        }
+
+        /* estilos de  la tarjeta */
+        #printable-id-card {
+            position: absolute;
+            left: 50%;
+            top: 10%; 
+            transform: translateX(-50%); 
+            
+            width: 12cm !important; 
+            border: 2px solid #ccc !important; 
+            border-radius: 16px !important;
+            
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            background-color: white !important;
+            
+            box-shadow: none !important; 
+            filter: drop-shadow(0px 0px 2px rgba(0,0,0,0.3));
+        }
+
+        /* esta clase le ponemos a los botones que no queremos que salgan */
+        .no-print {
+            display: none !important;
+        }
+        
+        h2 { font-size: 24pt !important; color: black !important; }
+        p, span { color: black !important; }
+        
+        /* agrandamos el qr */
+        /* buscamos la imagen que contiene el Servlet del QR */
+        #printable-id-card img[src*='ImagenQrServlet'] {
+            width: 3cm !important; 
+            height: 3cm !important;
+            max-width: none !important; 
+        }
+
+        /* ajustamos el contenedor del QR para que no lo corte */
+        #printable-id-card img[src*='ImagenQrServlet'] {
+            padding: 0 !important;
+            background: transparent !important;
+        }
+    }
+</style>
     </style>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -134,7 +196,7 @@
                         <div class="w-full bg-gray-50 dark:bg-black/20 rounded-xl p-4 flex items-center justify-between border border-border-light dark:border-border-dark">
                             <div class="text-left">
                                 <p class="text-[10px] uppercase tracking-wider text-ink-light font-bold mb-1">Identidad Digital</p>
-                                <button onclick="window.print()" class="text-xs text-primary hover:underline flex items-center gap-1 font-bold">
+                                <button onclick="window.print()" class="no-print text-xs text-primary hover:underline flex items-center gap-1 font-bold">
                                     <span class="material-symbols-outlined text-[14px]">print</span> Imprimir Ficha
                                 </button>
                             </div>

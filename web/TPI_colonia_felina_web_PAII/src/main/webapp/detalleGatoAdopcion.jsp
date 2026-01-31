@@ -37,7 +37,7 @@
         <nav class="flex items-center text-sm text-ink-light mb-8 animate-fade-in">
             <a href="index.jsp" class="hover:text-primary transition-colors">Inicio</a>
             <span class="mx-2">/</span>
-            <a href="GatoServlet?accion=listar" class="hover:text-primary transition-colors">Gatos en Adopción</a>
+            <a href="GatoServlet?accion=catalogo" class="hover:text-primary transition-colors">Gatos en Adopción</a>
             <span class="mx-2">/</span>
             <span class="font-bold text-ink dark:text-white"><%= g.getNombre() %></span>
         </nav>
