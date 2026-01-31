@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -178,7 +179,7 @@ public class GatoServlet extends HttpServlet {
         // GUARDADO Y GENERACIÓN DE QR
         try {
             if (esNuevo) {
-                // A) Primero guardamos para generar el ID en la BD
+                gato.setFechaAlta(LocalDate.now());
                 gatoDAO.guardarGato(gato); 
 
                 // B) Ahora que tiene ID, generamos el QR
@@ -250,24 +251,10 @@ public class GatoServlet extends HttpServlet {
                                   ZonaDAOJPAImpl zonaDAO, Gato gatoEditar) 
             throws ServletException, IOException {
         
-        System.out.println("--- DIAGNÓSTICO ZONAS ---");
-        
-        // 1. Intentamos buscar
         List<Zona> zonas = zonaDAO.buscarTodas(); 
-        
-        // 2. Verificamos qué trajimos
-        if (zonas == null) {
-            System.out.println("ERROR: La lista de zonas es NULL.");
-        } else {
-            System.out.println("ÉXITO: Se encontraron " + zonas.size() + " zonas.");
-            for (Zona z : zonas) {
-                System.out.println(" - Zona: " + z.getNombre() + " (ID: " + z.getIdZona() + ")");
-            }
-        }
-        System.out.println("-------------------------");
-
         request.setAttribute("listaZonas", zonas);
         
+        // Si estamos editando, pasamos el gato al JSP
         if (gatoEditar != null) {
             request.setAttribute("gatoEditar", gatoEditar);
         }

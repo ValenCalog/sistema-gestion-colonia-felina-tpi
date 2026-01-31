@@ -17,6 +17,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.OrderBy;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,12 +74,24 @@ public class Gato {
     private List<Tarea> tareas = new ArrayList<>(); //tareas que se realizaron sobre el gato
     
     @Enumerated(EnumType.STRING)
-    private Sexo sexo; // NUEVO
+    private Sexo sexo;
 
-    private boolean esterilizado; // NUEVO (true = Si, false = No)
+    private boolean esterilizado; // true = Si, false = No
     
-    private String qrCodePath; // NUEVO (Ruta de la imagen del QR)
+    private String qrCodePath; // Ruta de la imagen del QR)
 
+    private LocalDate fechaAlta;
+
+    
+    
+    public LocalDate getFechaAlta() {
+        return fechaAlta;
+    }
+
+    public void setFechaAlta(LocalDate fechaAlta) {
+        this.fechaAlta = fechaAlta;
+    }
+    
     public Sexo getSexo() { return sexo; }
     public void setSexo(Sexo sexo) { this.sexo = sexo; }
 
@@ -89,8 +102,6 @@ public class Gato {
     public void setQrCodePath(String qrCodePath) { this.qrCodePath = qrCodePath; }
     
 
-    
-    // ---Metodos
     public Gato(){
        
     }
