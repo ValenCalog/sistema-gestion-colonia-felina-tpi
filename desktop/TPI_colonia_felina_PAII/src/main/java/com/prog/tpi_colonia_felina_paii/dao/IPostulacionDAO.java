@@ -8,5 +8,5 @@ public interface IPostulacionDAO {
     void actualizar(Postulacion postulacion);
     Postulacion buscarPorId(Long id);
     List<Postulacion> buscarTodas();
-    boolean existePostulacion(Long idGato, Long idFamilia);
+    Postulacion buscarPorGatoYFamilia(Long idGato, Long idFamilia);
 }

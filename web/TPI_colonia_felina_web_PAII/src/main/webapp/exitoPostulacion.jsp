@@ -10,7 +10,36 @@
     String tipo = request.getParameter("tipo"); // TEMPORAL o DEFINITIVA
     if (tipo == null) tipo = "Adopción";
     
-    String fechaHoy = LocalDate.now().format(DateTimeFormatter.ofPattern("dd 'de' MMMM, yyyy"));
+    String repetidoStr = request.getParameter("repetido");
+    boolean esRepetido = (repetidoStr != null && repetidoStr.equals("true"));
+    
+    // configuramos texto y estilos segun el caso que sea
+    String titulo, mensaje, icono, colorIcono, confettiDisplay;
+    
+    if (esRepetido) {
+        titulo = "¡Ya te has postulado!";
+        mensaje = "Ya tenemos registrada una solicitud tuya activa para <span class='font-bold text-ink dark:text-white'>" + nombreGato + "</span>. No es necesario enviarla de nuevo.";
+        icono = "info"; // Icono de información
+        colorIcono = "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400";
+        confettiDisplay = "hidden"; // Ocultamos el confeti
+    } else {
+        titulo = "¡Solicitud Enviada!";
+        mensaje = "Estamos muy emocionados por tu interés en <span class='font-bold text-primary'>" + nombreGato + "</span>. Un voluntario revisará tu perfil y te contactará en las próximas horas.";
+        icono = "check_circle"; // Icono de check
+        colorIcono = "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400";
+        confettiDisplay = "block"; // Mostramos el confeti
+    }
+    
+    String fechaParam = request.getParameter("fecha");
+    String fechaMostrar;
+
+    if (fechaParam != null && !fechaParam.isEmpty()) {
+            fechaMostrar = fechaParam; 
+    } else {
+        // si es una postulacion que se acaba de realizar mostramos la fecha de hoy
+        fechaMostrar = LocalDate.now().toString();
+    }
+   
 %>
 <!DOCTYPE html>
 <html lang="es">
@@ -28,27 +57,29 @@
             
             <div class="bg-white dark:bg-surface-cardDark rounded-3xl shadow-xl border border-border-light dark:border-border-dark overflow-hidden relative">
                 
-                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary via-yellow-400 to-blue-500"></div>
+                <div class="<%= confettiDisplay %> absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary via-yellow-400 to-blue-500"></div>
 
                 <div class="p-8 sm:p-12 flex flex-col items-center text-center">
                     
                     <div class="mb-8 relative">
-                        <div class="size-32 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center animate-bounce-slow">
-                            <span class="material-symbols-outlined text-6xl text-green-600 dark:text-green-400">
-                                check_circle
+                        <div class="size-32 rounded-full flex items-center justify-center animate-bounce-slow <%= colorIcono %>">
+                            <span class="material-symbols-outlined text-6xl">
+                                <%= icono %>
                             </span>
                         </div>
-                        <span class="material-symbols-outlined absolute -top-2 -right-2 text-yellow-400 text-4xl animate-pulse">celebration</span>
-                        <span class="material-symbols-outlined absolute bottom-0 -left-4 text-primary text-3xl opacity-50 rotate-[-15deg]">pets</span>
+                        
+                        <% if (!esRepetido) { %>
+                            <span class="material-symbols-outlined absolute -top-2 -right-2 text-yellow-400 text-4xl animate-pulse">celebration</span>
+                            <span class="material-symbols-outlined absolute bottom-0 -left-4 text-primary text-3xl opacity-50 rotate-[-15deg]">pets</span>
+                        <% } %>
                     </div>
 
                     <h1 class="text-3xl sm:text-4xl font-black text-ink dark:text-white mb-4 tracking-tight">
-                        ¡Solicitud Enviada!
+                        <%= titulo %>
                     </h1>
                     
                     <p class="text-lg text-ink-light max-w-md mx-auto mb-10 leading-relaxed">
-                        Estamos muy emocionados por tu interés en <span class="font-bold text-primary"><%= nombreGato %></span>. 
-                        Un voluntario revisará tu perfil y te contactará en las próximas 48 horas.
+                        <%= mensaje %>
                     </p>
 
                     <div class="w-full bg-surface-light dark:bg-black/20 rounded-2xl p-6 border border-border-light dark:border-border-dark mb-10">
@@ -77,7 +108,7 @@
                             <div class="flex flex-col md:items-center gap-1 border-t md:border-t-0 md:border-l border-border-light dark:border-gray-700 pt-4 md:pt-0">
                                 <span class="text-xs font-bold text-ink-light uppercase">Fecha</span>
                                 <span class="font-medium text-ink dark:text-white">
-                                    <%= fechaHoy %>
+                                    <%= fechaMostrar %>
                                 </span>
                             </div>
                         </div>

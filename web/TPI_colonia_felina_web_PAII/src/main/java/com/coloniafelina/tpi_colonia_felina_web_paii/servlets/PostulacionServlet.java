@@ -88,6 +88,32 @@ public class PostulacionServlet extends HttpServlet {
                 Long idGato = Long.parseLong(idGatoStr);
                 Gato g = gatoDAO.buscarPorId(idGato);
                 
+                HttpSession session = request.getSession();
+                
+                Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+
+                if (usuario == null) {
+                    response.sendRedirect("login.jsp");
+                    return;
+                }
+
+                Familia familia = usuario.getFamilia();
+                
+                if (familia != null) {
+
+                    Postulacion postExistente = postulacionDAO.buscarPorGatoYFamilia(idGato, familia.getIdFamilia());
+
+                    if (postExistente != null) {
+                        String nombreGato = postExistente.getGato().getNombre();
+                        String fechaOriginal = postExistente.getFecha().toString(); // Formato YYYY-MM-DD
+
+                        String nombreEncoded = URLEncoder.encode(nombreGato, "UTF-8");
+
+                        response.sendRedirect("exitoPostulacion.jsp?nombreGato=" + nombreEncoded + "&repetido=true&fecha=" + fechaOriginal);
+                        return; 
+                    }
+                }
+                
                 if (g != null) {
                     request.setAttribute("gato", g);
                     request.getRequestDispatcher("formPostulacion.jsp").forward(request, response);

@@ -57,19 +57,20 @@ public class PostulacionDAOJPAImpl implements IPostulacionDAO {
     }
     
     @Override
-    public boolean existePostulacion(Long idGato, Long idFamilia) {
+    public Postulacion buscarPorGatoYFamilia(Long idGato, Long idFamilia) {
         try {
-            String jpql = "SELECT COUNT(p) FROM Postulacion p WHERE p.gato.idGato = :idGato AND p.familiaPostulante.id = :idFamilia";
+            String jpql = "SELECT p FROM Postulacion p WHERE p.gato.idGato = :idGato AND p.familiaPostulante.id = :idFamilia";
 
-            Long count = (Long) em.createQuery(jpql)
+            Postulacion postulacion = (Postulacion) em.createQuery(jpql)
                     .setParameter("idGato", idGato)
                     .setParameter("idFamilia", idFamilia)
+                    .setMaxResults(1)
                     .getSingleResult();
 
-            return count > 0; //si da un numero mayor a 0 es porque existe una postulacion
+            return postulacion;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 }
