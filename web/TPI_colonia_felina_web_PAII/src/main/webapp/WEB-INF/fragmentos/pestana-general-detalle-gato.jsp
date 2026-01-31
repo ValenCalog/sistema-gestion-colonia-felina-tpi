@@ -1,3 +1,4 @@
+<%@page import="com.prog.tpi_colonia_felina_paii.enums.Sexo"%>
 <%@page import="com.prog.tpi_colonia_felina_paii.modelo.*"%>
 <%
     Gato g = (Gato) request.getAttribute("gato");
@@ -9,10 +10,32 @@
         <div class="bg-white dark:bg-surface-cardDark rounded-2xl p-6 border border-border-light dark:border-border-dark shadow-sm">
             <div class="flex items-center gap-2 mb-4 text-primary">
                 <span class="material-symbols-outlined">palette</span>
-                <h3 class="text-base font-bold text-ink dark:text-white">Atributos Físicos</h3>
+                <h3 class="text-base font-bold text-ink dark:text-white">Ficha Técnica</h3>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <p class="text-xs text-ink-light mb-1 uppercase font-bold">Sexo</p>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-lg <%= (g.getSexo() == Sexo.MACHO) ? "text-blue-500" : "text-pink-500" %>">
+                            <%= (g.getSexo() == Sexo.MACHO) ? "male" : "female" %>
+                        </span>
+                        <p class="text-sm font-medium"><%= g.getSexo() %></p>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-xs text-ink-light mb-1 uppercase font-bold">Esterilización</p>
+                    <% if(g.isEsterilizado()) { %>
+                        <p class="text-sm font-bold text-green-600 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[16px]">check_circle</span> Esterilizado/a
+                        </p>
+                    <% } else { %>
+                         <p class="text-sm font-bold text-amber-600 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[16px]">warning</span> No Esterilizado/a
+                        </p>
+                    <% } %>
+                </div>
                 <div>
                     <p class="text-xs text-ink-light mb-1 uppercase font-bold">Color / Pelaje</p>
                     <p class="text-sm font-medium"><%= g.getColor()%></p>
@@ -38,7 +61,7 @@
                     <p class="text-sm font-medium text-blue-600">
                         <%= (g.getDisponibilidad() != null) ? g.getDisponibilidad() : "N/A"%>
                     </p>
-                </div>
+                </div> 
             </div>
 
             <div class="pt-4 mt-4 border-t border-border-light dark:border-border-dark">
@@ -47,6 +70,15 @@
                     <%= (g.getCaracteristicas() != null) ? g.getCaracteristicas() : "Sin descripción detallada."%>
                 </p>
             </div>
+                
+            <div class="col-span-2 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700 mt-2">
+                        <div class="flex justify-between items-center">
+                            <p class="text-xs text-ink-light font-bold">Fecha de Registro:</p>
+                            <p class="text-sm font-mono font-medium text-ink dark:text-white">
+                                <%= (g.getFechaAlta() != null) ? g.getFechaAlta() : "--/--/----" %>
+                            </p>
+                        </div>
+            </div>    
         </div>
 
         <div class="bg-white dark:bg-surface-cardDark rounded-2xl p-6 border border-border-light dark:border-border-dark shadow-sm">

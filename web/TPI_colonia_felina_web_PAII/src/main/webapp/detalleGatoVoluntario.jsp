@@ -1,3 +1,4 @@
+<%@page import="com.prog.tpi_colonia_felina_paii.enums.Sexo"%>
 <%@page import="com.prog.tpi_colonia_felina_paii.modelo.*"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -104,7 +105,27 @@
                             <span class="bg-gray-100 dark:bg-white/10 px-2 py-0.5 rounded text-xs font-mono border border-border-light dark:border-border-dark">
                                 ID: <%= g.getIdGato() %>
                             </span>
-                        </div>
+                            <span class="bg-gray-100 dark:bg-white/10 px-2 py-0.5 rounded text-xs font-medium border border-border-light dark:border-border-dark text-ink-light flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[12px]">calendar_month</span>
+                                    <%= (g.getFechaAlta() != null) ? g.getFechaAlta() : "N/A" %>
+                                </span>
+                            </div>
+
+                            <div class="flex flex-wrap justify-center gap-2 mb-6 w-full">
+
+                                <% if (g.isEsterilizado()) { %>
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-green-50 text-green-700 border border-green-200 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[14px]">content_cut</span>
+                                        Esterilizado
+                                    </span>
+                                <% } else { %>
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[14px]">close</span>
+                                        No Esterilizado
+                                    </span>
+                                <% } %>
+
+                            </div>
 
                         <div class="flex flex-wrap justify-center gap-2 mb-6 w-full">
                            
