@@ -1,9 +1,11 @@
 package com.coloniafelina.tpi_colonia_felina_web_paii.servlets;
 
+import com.prog.tpi_colonia_felina_paii.dao.AdopcionDAOJPAImpl;
 import com.prog.tpi_colonia_felina_paii.dao.GatoDAOJPAImpl;
 import com.prog.tpi_colonia_felina_paii.dao.PostulacionDAOJPAImpl;
 import com.prog.tpi_colonia_felina_paii.enums.EstadoPostulacion;
 import com.prog.tpi_colonia_felina_paii.enums.TipoAdopcion;
+import com.prog.tpi_colonia_felina_paii.modelo.Adopcion;
 import com.prog.tpi_colonia_felina_paii.modelo.Familia;
 import com.prog.tpi_colonia_felina_paii.modelo.Gato;
 import com.prog.tpi_colonia_felina_paii.modelo.Postulacion;
@@ -22,9 +24,9 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "PostulacionServlet", urlPatterns = {"/PostulacionServlet"})
 public class PostulacionServlet extends HttpServlet {
 
-    
-    private GatoDAOJPAImpl gatoDAO = new GatoDAOJPAImpl();
-    private PostulacionDAOJPAImpl postulacionDAO = new PostulacionDAOJPAImpl();
+    private final GatoDAOJPAImpl gatoDAO = new GatoDAOJPAImpl();
+    private final PostulacionDAOJPAImpl postulacionDAO = new PostulacionDAOJPAImpl();
+    private final AdopcionDAOJPAImpl adopcionDAO = new AdopcionDAOJPAImpl();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -78,6 +80,7 @@ public class PostulacionServlet extends HttpServlet {
         }
     }
 
+
     private void mostrarFormulario(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -86,10 +89,9 @@ public class PostulacionServlet extends HttpServlet {
         if (idGatoStr != null && !idGatoStr.isEmpty()) {
             try {
                 Long idGato = Long.parseLong(idGatoStr);
-                Gato g = gatoDAO.buscarPorId(idGato);
+                Gato g = gatoDAO.buscarPorId(idGato); 
                 
                 HttpSession session = request.getSession();
-                
                 Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 
                 if (usuario == null) {
@@ -100,13 +102,11 @@ public class PostulacionServlet extends HttpServlet {
                 Familia familia = usuario.getFamilia();
                 
                 if (familia != null) {
-
                     Postulacion postExistente = postulacionDAO.buscarPorGatoYFamilia(idGato, familia.getIdFamilia());
 
                     if (postExistente != null) {
                         String nombreGato = postExistente.getGato().getNombre();
-                        String fechaOriginal = postExistente.getFecha().toString(); // Formato YYYY-MM-DD
-
+                        String fechaOriginal = postExistente.getFecha().toString();
                         String nombreEncoded = URLEncoder.encode(nombreGato, "UTF-8");
 
                         response.sendRedirect("exitoPostulacion.jsp?nombreGato=" + nombreEncoded + "&repetido=true&fecha=" + fechaOriginal);
@@ -187,17 +187,25 @@ public class PostulacionServlet extends HttpServlet {
                 
                 if(post != null) {
                     if("aceptar".equals(accion)) {
+                        
                         post.aceptarPostulacion(); 
+                        
+                        Adopcion nuevaAdopcion = new Adopcion();
+                        nuevaAdopcion.setFecha(LocalDate.now());
+                        nuevaAdopcion.setTipo(post.getTipoAdopcion());
+                        nuevaAdopcion.setEstado("ACTIVA");
+                        nuevaAdopcion.setGato(post.getGato());
+                        nuevaAdopcion.setFamiliaAdoptante(post.getFamiliaPostulante());
+                        
+                        adopcionDAO.guardar(nuevaAdopcion);
+
+                        gatoDAO.actualizar(post.getGato()); 
+
                     } else if ("rechazar".equals(accion)) {
                         post.rechazarPostulacion(); 
                     }
                     
                     postulacionDAO.actualizar(post);
-                    
-                    if("aceptar".equals(accion)) {
-                         Gato g = post.getGato();
-                         gatoDAO.actualizar(g);
-                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
