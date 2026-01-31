@@ -44,20 +44,32 @@ public class PostulacionDAOJPAImpl implements IPostulacionDAO {
 
     @Override
     public List<Postulacion> buscarTodas() {
-        // Traemos todas, ordenadas por fecha (las más recientes primero)
-        // y por estado (para ver las pendientes agrupadas si quisieras, 
-        // pero por fecha es lo más estándar).
         String jpql = "SELECT p FROM Postulacion p ORDER BY p.fecha DESC, p.idPostulacion DESC";
         TypedQuery<Postulacion> query = em.createQuery(jpql, Postulacion.class);
         return query.getResultList();
     }
     
-    // Método extra opcional: Buscar las de una familia específica
-    // (Útil para que la familia vea sus propias solicitudes)
     public List<Postulacion> buscarPorFamilia(Long idFamilia) {
         String jpql = "SELECT p FROM Postulacion p WHERE p.familiaPostulante.idFamilia = :idFamilia ORDER BY p.fecha DESC";
         TypedQuery<Postulacion> query = em.createQuery(jpql, Postulacion.class);
         query.setParameter("idFamilia", idFamilia);
         return query.getResultList();
+    }
+    
+    @Override
+    public boolean existePostulacion(Long idGato, Long idFamilia) {
+        try {
+            String jpql = "SELECT COUNT(p) FROM Postulacion p WHERE p.gato.idGato = :idGato AND p.familiaPostulante.id = :idFamilia";
+
+            Long count = (Long) em.createQuery(jpql)
+                    .setParameter("idGato", idGato)
+                    .setParameter("idFamilia", idFamilia)
+                    .getSingleResult();
+
+            return count > 0; //si da un numero mayor a 0 es porque existe una postulacion
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
