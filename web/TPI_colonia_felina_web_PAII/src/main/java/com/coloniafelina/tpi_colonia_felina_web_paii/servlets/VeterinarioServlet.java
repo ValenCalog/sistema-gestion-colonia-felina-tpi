@@ -109,7 +109,29 @@ public class VeterinarioServlet extends HttpServlet {
                     request.setAttribute("gato", gatoEmitir);
                     request.getRequestDispatcher("formEmitirCertificado.jsp").forward(request, response);
                     break;
+
+                case "buscar":
+                     String query = request.getParameter("q");
+
+                    if (query != null && !query.trim().isEmpty()) {
+                        query = query.trim();
+
+                        if (query.matches("\\d+")) {
+                            response.sendRedirect("VeterinarioServlet?accion=consultorio&idGato=" + query);
+                            return;
+                        }
+
+                        List<Gato> todosLosGatos = gatoDAO.buscarTodos();
+                        for (Gato g : todosLosGatos) {
+                            // Buscamos coincidencia exacta o parcial (ignoring case)
+                            if (g.getNombre().equalsIgnoreCase(query) || g.getNombre().toLowerCase().contains(query.toLowerCase())) {
+                                response.sendRedirect("VeterinarioServlet?accion=consultorio&idGato=" + g.getIdGato());
+                                return;
+                            }
+                        }
+                    }
+                    response.sendRedirect("VeterinarioServlet?accion=consultorio");
+                    break;
             }
         }
-
 }

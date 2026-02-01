@@ -107,7 +107,7 @@
                                             </div>
                                             <p class="text-xs text-red-500 font-bold mt-1">Diagnóstico Pendiente / Revisión</p>
                                         </div>
-                                        <a href="VeterinarioServlet?accion=panel&idGato=<%= g.getIdGato() %>" class="btn bg-white border border-gray-200 text-xs font-bold px-4 py-2 rounded-lg hover:border-primary hover:text-primary transition-colors">
+                                        <a href="VeterinarioServlet?accion=consultorio&idGato=<%= g.getIdGato() %>" class="btn bg-white border border-gray-200 text-xs font-bold px-4 py-2 rounded-lg hover:border-primary hover:text-primary transition-colors">
                                             Ver Historia
                                         </a>
                                     </div>
@@ -138,20 +138,6 @@
                                 </form>
                             </div>
                             <span class="material-symbols-outlined absolute -right-4 -bottom-4 text-9xl text-white/10 rotate-12">folder_shared</span>
-                        </div>
-                        
-                        <div class="bg-white dark:bg-surface-cardDark rounded-2xl p-5 border border-border-light dark:border-border-dark shadow-sm">
-                            <h3 class="text-sm font-bold uppercase tracking-wider text-ink-light mb-4">Accesos Rápidos</h3>
-                            
-                            <a href="GatoServlet?accion=listar" class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group mb-2">
-                                <div class="size-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                                    <span class="material-symbols-outlined">list</span>
-                                </div>
-                                <div>
-                                    <p class="font-bold text-sm text-ink dark:text-white">Listado Completo</p>
-                                    <p class="text-xs text-ink-light">Ver todos los pacientes</p>
-                                </div>
-                            </a>
                         </div>
                         
                     </div>
