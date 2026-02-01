@@ -80,6 +80,16 @@ public class VeterinarioServlet extends HttpServlet {
                         response.sendRedirect("VeterinarioServlet?accion=inicio");
                     }
                     break;
+                case "nuevoEstudio":
+                    try {
+                        Long idGato = Long.parseLong(request.getParameter("idGato"));
+                        Gato g = gatoDAO.buscarPorId(idGato);
+                        request.setAttribute("gato", g);
+                        request.getRequestDispatcher("formSubirEstudio.jsp").forward(request, response);
+                    } catch (Exception e) {
+                        response.sendRedirect("VeterinarioServlet?accion=inicio");
+                    }
+                    break;
             }
         }
 

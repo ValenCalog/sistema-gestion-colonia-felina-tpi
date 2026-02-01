@@ -11,7 +11,6 @@
     List<Gato> pacientes = (List<Gato>) request.getAttribute("listaPacientes");
     if (pacientes == null) pacientes = new ArrayList<>();
 
-    // El Veterinario
     Usuario veterinario = (Usuario) session.getAttribute("usuarioLogueado");
     String nombreVet = (veterinario != null) ? veterinario.getNombre() : "Dr. Veterinario";
 
@@ -21,6 +20,8 @@
     String idGato = hayGato ? String.valueOf(gato.getIdGato()) : "-";
     String fotoUrl = (hayGato && gato.getFotografia() != null) ? request.getContextPath() + gato.getFotografia() : "";
     boolean esEsterilizado = hayGato && gato.isEsterilizado();
+    
+    List<Estudio> listaEstudios = (List<Estudio>) request.getAttribute("historialEstudios");
 %>
 <!DOCTYPE html>
 <html lang="es" class="light">
@@ -188,102 +189,67 @@
                     </div>
 
                     <div id="view-estudios" class="hidden">
-    
-                        <div class="bg-white dark:bg-surface-cardDark rounded-xl shadow-sm border border-border-light dark:border-border-dark p-5 mb-6">
-                            <h3 class="text-lg font-bold text-ink dark:text-white mb-4 flex items-center gap-2">
-                                <span class="material-symbols-outlined text-primary">upload_file</span>
-                                Subir Nuevo Estudio
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-bold text-ink dark:text-white flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">science</span> Historial de Estudios
                             </h3>
-
-                            <form action="EstudioMedicoServlet" method="POST" enctype="multipart/form-data">
-                                <input type="hidden" name="accion" value="subir">
-                                <input type="hidden" name="idGato" value="<%= gato.getIdGato() %>">
-
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                    <div>
-                                        <label class="label">Tipo de Estudio</label>
-                                        <select name="tipoEstudio" class="input-field" required>
-                                            <option value="">Seleccione...</option>
-                                            <option>Hemograma Completo</option>
-                                            <option>Bioquímica Sanguínea</option>
-                                            <option>Test VIF/Leucemia</option>
-                                            <option>Radiografía</option>
-                                            <option>Ecografía</option>
-                                            <option>Citología/Biopsia</option>
-                                            <option>Otro</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="label">Fecha de Realización</label>
-                                        <input type="date" name="fecha" value="<%= java.time.LocalDate.now() %>" class="input-field" required>
-                                    </div>
-                                </div>
-
-                                <div class="mb-4">
-                                    <label class="label">Observaciones (Opcional)</label>
-                                    <textarea name="observaciones" rows="2" class="input-field" placeholder="Resultados clave o notas del laboratorio..."></textarea>
-                                </div>
-
-                                <div class="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-6 flex flex-col items-center justify-center text-center bg-gray-50 dark:bg-black/20 hover:bg-gray-100 transition-colors cursor-pointer mb-4 relative group">
-                                    <input type="file" name="archivo" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" required accept=".pdf,.jpg,.jpeg,.png">
-
-                                    <div class="group-hover:scale-110 transition-transform duration-200">
-                                        <span class="material-symbols-outlined text-4xl text-gray-400 mb-2">cloud_upload</span>
-                                    </div>
-                                    <p class="text-sm font-bold text-primary group-hover:underline">Haga clic o arrastre el archivo aquí</p>
-                                    <p class="text-xs text-ink-light mt-1">Soporta PDF, JPG, PNG (Max 10MB)</p>
-                                </div>
-
-                                <div class="flex justify-end">
-                                    <button type="submit" class="btn btn-primary flex items-center gap-2">
-                                        <span class="material-symbols-outlined">save</span>
-                                        Guardar Estudio
-                                    </button>
-                                </div>
-                            </form>
+                            <a href="VeterinarioServlet?accion=nuevoEstudio&idGato=<%= idGato%>" class="btn btn-primary px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 shadow-sm">
+                                <span class="material-symbols-outlined text-[18px]">cloud_upload</span> Subir Nuevo
+                            </a>
                         </div>
-
-                        <% 
-                            List<Estudio> listaEstudios = (List<Estudio>) request.getAttribute("historialEstudios"); 
-                            if (listaEstudios != null && !listaEstudios.isEmpty()) {
-                        %>
-                        <div class="bg-white dark:bg-surface-cardDark rounded-xl shadow-sm border border-border-light dark:border-border-dark p-5">
-                            <h3 class="text-sm font-bold uppercase tracking-wider text-ink-light mb-4">Estudios Registrados</h3>
-
-                            <div class="space-y-3">
-                                <% for(Estudio e : listaEstudios) { %>
-                                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition-colors">
+                        <% if (listaEstudios != null && !listaEstudios.isEmpty()) { %>
+                        <div class="bg-white dark:bg-surface-cardDark rounded-xl shadow-sm border border-border-light p-5 space-y-3">
+                            <% for (Estudio e : listaEstudios) { %>
+                            <div class="flex flex-col bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-gray-700 rounded-lg transition-colors">
+                                <div class="flex items-center justify-between p-3">
                                     <div class="flex items-center gap-3 overflow-hidden">
                                         <div class="p-2 rounded-lg bg-white dark:bg-white/10 text-primary border border-gray-200 dark:border-gray-600">
-                                            <% if(e.getRutaArchivo().endsWith(".pdf")) { %>
-                                                <span class="material-symbols-outlined">picture_as_pdf</span>
+                                            <% if (e.getRutaArchivo().endsWith(".pdf")) { %>
+                                            <span class="material-symbols-outlined">picture_as_pdf</span>
                                             <% } else { %>
-                                                <span class="material-symbols-outlined">image</span>
-                                            <% } %>
+                                            <span class="material-symbols-outlined">image</span>
+                                            <% }%>
                                         </div>
-
                                         <div class="min-w-0">
-                                            <p class="text-sm font-bold text-ink dark:text-white truncate"><%= e.getTipoDeEstudio() %></p>
+                                            <p class="text-sm font-bold text-ink dark:text-white truncate"><%= e.getTipoDeEstudio()%></p>
                                             <p class="text-xs text-ink-light">
-                                                <%= e.getFecha() %> • Dr. <%= e.getVeterinario().getNombre() %>
+                                                <%= e.getFecha()%> • Dr. <%= e.getVeterinario().getNombre()%>
                                             </p>
                                         </div>
                                     </div>
-
                                     <div class="flex items-center gap-2">
-                                        <a href="DescargarArchivoServlet?ruta=<%= e.getRutaArchivo() %>" target="_blank" class="btn bg-white border border-gray-200 text-xs px-3 py-1.5 rounded-lg hover:text-primary hover:border-primary font-bold">
+                                        <a href="DescargarArchivoServlet?ruta=<%= e.getRutaArchivo()%>" target="_blank" class="btn bg-white border border-gray-200 text-xs px-3 py-1.5 rounded-lg hover:text-primary hover:border-primary font-bold shadow-sm">
                                             Ver Archivo
                                         </a>
+                                        <button type="button" onclick="toggleObservacion('<%= e.getIdEstudio()%>')" class="p-1.5 rounded-lg text-gray-400 hover:text-primary hover:bg-gray-200 dark:hover:bg-white/10 transition-colors">
+                                            <span id="icon-<%= e.getIdEstudio()%>" class="material-symbols-outlined text-[20px] transition-transform duration-200">expand_more</span>
+                                        </button>
                                     </div>
                                 </div>
-                                <% } %>
+
+                                <div id="obs-<%= e.getIdEstudio()%>" class="hidden border-t border-gray-200 dark:border-gray-700 p-3 bg-white/50 dark:bg-white/5 rounded-b-lg">
+                                    <div class="flex gap-2">
+                                        <span class="material-symbols-outlined text-gray-400 text-lg">description</span>
+                                        <div class="text-sm text-ink-light">
+                                            <span class="font-bold text-ink dark:text-white text-xs uppercase block mb-1">Observaciones del Profesional:</span>
+                                            <p class="italic">
+                                                <%= (e.getObservaciones() != null && !e.getObservaciones().trim().isEmpty())
+                                                                ? e.getObservaciones()
+                                                                : "Sin observaciones registradas."%>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            <% } %>
                         </div>
+                    </div>
                         <% } else { %>
-                            <div class="text-center p-8 border-2 border-dashed border-gray-200 rounded-xl text-ink-light">
-                                <p>No hay estudios cargados para este paciente.</p>
-                            </div>
+                        <div class="text-center p-8 border-2 border-dashed border-gray-200 rounded-xl text-ink-light">
+                            <p>No hay estudios cargados para este paciente.</p>
+                        </div>
                         <% } %>
+
                     </div>
                     
                     <div id="view-certificado" class="bg-gradient-to-br from-blue-50 to-white dark:from-surface-cardDark dark:to-black/40 rounded-xl shadow-sm border border-blue-100 dark:border-blue-900/30 p-5">
@@ -381,6 +347,20 @@
             document.getElementById('view-estudios').classList.remove('hidden');
         } else if (tabName === 'certificado') {
              document.getElementById('view-certificado').scrollIntoView({behavior: 'smooth'});
+        }
+    }
+    
+    //esta funcion es para desplegar las observaciones de los estudios
+    function toggleObservacion(idEstudio) {
+        const content = document.getElementById('obs-' + idEstudio);
+        const icon = document.getElementById('icon-' + idEstudio);
+
+        if (content.classList.contains('hidden')) {
+            content.classList.remove('hidden');
+            icon.style.transform = 'rotate(180deg)'; // gira la flecha arriba
+        } else {
+            content.classList.add('hidden');
+            icon.style.transform = 'rotate(0deg)'; // queda normal la flecha
         }
     }
 </script>
