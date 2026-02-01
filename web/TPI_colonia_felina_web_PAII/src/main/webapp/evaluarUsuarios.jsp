@@ -1,3 +1,4 @@
+<%@page import="com.prog.tpi_colonia_felina_paii.modelo.Veterinario"%>
 <%@page import="java.util.List"%>
 <%@page import="com.prog.tpi_colonia_felina_paii.modelo.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -167,6 +168,17 @@
                                 </div>
                                 
                                 <div class="bg-surface-light dark:bg-black/20 rounded-xl p-3 flex flex-col gap-2 text-sm">
+                                    
+                                    <% if (u instanceof Veterinario && rol.equals("VETERINARIO")) { 
+                                         Veterinario vet = (Veterinario) u;
+                                         String matricula = (vet.getMatricula() != null) ? vet.getMatricula() : "No registrada";
+                                    %>
+                                    <div class="flex items-center gap-2 text-purple-600 dark:text-purple-400 font-bold bg-purple-50 dark:bg-purple-900/20 p-2 rounded-lg -mx-1 mb-1">
+                                        <span class="material-symbols-outlined text-base">verified</span>
+                                        <span class="truncate">Matricula: <%= matricula %></span>
+                                    </div>
+                                    <% } %>
+                                    
                                     <div class="flex items-center gap-2 text-ink-light">
                                         <span class="material-symbols-outlined text-base">mail</span>
                                         <span class="truncate"><%= u.getCorreo() %></span>

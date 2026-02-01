@@ -6,14 +6,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gestión Usuario - GatoGestion</title>
+    
     <jsp:include page="/WEB-INF/fragmentos/cabecera-estilos.jsp" />
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-surface-light dark:bg-surface-dark min-h-screen flex items-center justify-center p-4">
 
     <div class="card w-full max-w-2xl bg-white dark:bg-[#1a2632]">
         
         <% 
-            // 1. Recuperamos el usuario (puede ser NULL si es crear)
             Usuario u = (Usuario) request.getAttribute("usuarioEditar");
             boolean esEdicion = (u != null);
         %>
@@ -60,12 +62,25 @@
                     <input class="input-field" type="text" name="telefono" 
                            value="<%= esEdicion ? u.getTelefono() : "" %>">
                 </div>
-
+                
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-bold text-ink">
+                        Contraseña 
+                        <% if(esEdicion) { %> 
+                            <span class="text-xs font-normal text-gray-500">(Dejar en blanco para mantener la actual)</span>
+                        <% } else { %>
+                            <span class="text-red-500">*</span>
+                        <% } %>
+                    </label>
+                    <input class="input-field" type="password" name="contrasenia" 
+                           placeholder="<%= esEdicion ? "••••••••" : "Ingrese contraseña" %>"
+                           <%= !esEdicion ? "required" : "" %>>
+                </div>
+                
                 <div class="flex flex-col gap-2">
                     <label class="text-sm font-bold text-ink">Rol</label>
-                    <select name="rol" class="input-field h-12 cursor-pointer">
+                    <select name="rol" id="selectRol" class="input-field h-12 cursor-pointer">
                         <% for(com.prog.tpi_colonia_felina_paii.enums.Rol r : com.prog.tpi_colonia_felina_paii.enums.Rol.values()) { 
-                            // Solo marcamos "selected" si estamos editando Y coincide el rol
                             String selected = (esEdicion && u.getRol() == r) ? "selected" : "";
                         %>
                             <option value="<%= r %>" <%= selected %>>
@@ -74,12 +89,43 @@
                         <% } %>
                     </select>
                 </div>
+                
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const selectRol = document.getElementById('selectRol');
+                        
+                        // Convertimos el booleano de Java a booleano de JS correctamente
+                        const esEdicionJS = <%= esEdicion %>; 
+
+                        selectRol.addEventListener('change', function() {
+                            // Si elige VETERINARIO y NO estamos editando (es creación nueva)
+                            if (this.value === 'VETERINARIO' && !esEdicionJS) {
+                                
+                                Swal.fire({
+                                    title: 'Acción no permitida aquí',
+                                    text: "El alta de Veterinarios requiere datos específicos (Matrícula, Especialidad). Por favor, usa el formulario de registro público.",
+                                    icon: 'info',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#f97316',
+                                    confirmButtonText: 'Ir al Registro Veterinario',
+                                    cancelButtonText: 'Entendido, cambiaré el rol'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = 'registroVeterinario.jsp'; 
+                                    } else {
+                                        // Si cancela, volvemos a poner VOLUNTARIO
+                                        this.value = 'VOLUNTARIO'; 
+                                    }
+                                });
+                            }
+                        });
+                    });
+                </script>
 
                 <div class="flex flex-col gap-2">
                     <label class="text-sm font-bold text-ink">Estado</label>
                     <select name="estado" class="input-field h-12 cursor-pointer bg-orange-50 border-orange-200">
                         <% for(com.prog.tpi_colonia_felina_paii.enums.EstadoUsuario e : com.prog.tpi_colonia_felina_paii.enums.EstadoUsuario.values()) { 
-                            // Solo marcamos "selected" si estamos editando Y coincide el estado
                             String selected = (esEdicion && u.getEstado() == e) ? "selected" : "";
                         %>
                             <option value="<%= e %>" <%= selected %>>

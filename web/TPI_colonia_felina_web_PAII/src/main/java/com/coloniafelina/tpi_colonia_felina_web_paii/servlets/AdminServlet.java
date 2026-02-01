@@ -1,5 +1,6 @@
 package com.coloniafelina.tpi_colonia_felina_web_paii.servlets;
 
+import com.prog.tpi_colonia_felina_paii.util.PasswordHasher;
 import com.prog.tpi_colonia_felina_paii.dao.UsuarioDAOJPAImpl;
 import com.prog.tpi_colonia_felina_paii.modelo.Usuario;
 import com.prog.tpi_colonia_felina_paii.enums.Rol;
@@ -141,42 +142,55 @@ public class AdminServlet extends HttpServlet {
     }
 
     private void actualizarUsuario(HttpServletRequest request, HttpServletResponse response, UsuarioDAOJPAImpl dao) 
-            throws IOException {
-        
+        throws IOException {
+
         Long id = Long.parseLong(request.getParameter("idUsuario"));
         Usuario u = dao.buscarPorId(id);
-        
+
         u.setNombre(request.getParameter("nombre"));
         u.setApellido(request.getParameter("apellido"));
         u.setCorreo(request.getParameter("correo"));
         u.setTelefono(request.getParameter("telefono"));
-        
+
+        String nuevaPass = request.getParameter("contrasenia");
+        if (nuevaPass != null && !nuevaPass.isBlank()) {
+            String passHash = PasswordHasher.hash(nuevaPass);
+            u.setContrasenia(passHash);
+        }
+
         u.setRol(Rol.valueOf(request.getParameter("rol")));
         u.setEstado(EstadoUsuario.valueOf(request.getParameter("estado")));
 
         dao.editar(u);
-        
+
         response.sendRedirect("AdminServlet"); 
     }
     
     private void crearUsuario(HttpServletRequest request, HttpServletResponse response, UsuarioDAOJPAImpl dao) 
-            throws IOException {
-        
+        throws IOException {
+
         Usuario u = new Usuario();
-        
+
         u.setNombre(request.getParameter("nombre"));
         u.setApellido(request.getParameter("apellido"));
         u.setDNI(request.getParameter("dni")); 
         u.setCorreo(request.getParameter("correo"));
         u.setTelefono(request.getParameter("telefono"));
-        
-        u.setContrasenia("123456"); 
-        
+
+        String passRaw = request.getParameter("contrasenia");
+        if(passRaw != null && !passRaw.isBlank()) {
+            String passHash = PasswordHasher.hash(passRaw); // Encriptamos con BCrypt
+            u.setContrasenia(passHash);
+        } else {
+            // Por defecto en caso de que algo falle
+            u.setContrasenia(PasswordHasher.hash("123456")); 
+        }
+
         u.setRol(Rol.valueOf(request.getParameter("rol")));
         u.setEstado(EstadoUsuario.valueOf(request.getParameter("estado")));
-        
+
         dao.crear(u);
-        
+
         response.sendRedirect("AdminServlet");
     }
 }

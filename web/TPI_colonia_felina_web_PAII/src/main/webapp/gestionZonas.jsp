@@ -54,18 +54,22 @@
                 </div>
 
                 <nav class="flex flex-col gap-2 flex-1">
-                    <a class="sidebar-link" href="adminPanel.jsp">
-                        <span class="material-symbols-outlined">dashboard</span>
-                        <span class="text-sm">Dashboard</span>
+                    
+                    <a class="sidebar-link" href="AdminServlet?accion=evaluar">
+                        <span class="material-symbols-outlined">how_to_reg</span>
+                        <span class="text-sm">Evaluar Solicitudes</span>
                     </a>
+                    
                     <a class="sidebar-link" href="AdminServlet">
                         <span class="material-symbols-outlined">group</span>
                         <span class="text-sm font-medium">Usuarios</span>
                     </a>
+                    
                     <a class="sidebar-link-active" href="ZonaServlet">
                         <span class="material-symbols-outlined">map</span>
                         <span class="text-sm font-medium">Zonas</span>
                     </a>
+                    
                     <a class="sidebar-link" href="#">
                         <span class="material-symbols-outlined">file_present</span>
                         <span class="text-sm font-medium">Reportes</span>
@@ -79,7 +83,7 @@
                         </div>
                         <div class="flex flex-col">
                             <p class="text-sm font-bold">Admin User</p>
-                            <p class="text-xs text-ink-light">admin@misionmichi.com</p>
+                            <a href="LoginServlet?logout=true" class="text-xs text-red-500 hover:underline">Cerrar Sesión</a>
                         </div>
                     </div>
                 </div>
