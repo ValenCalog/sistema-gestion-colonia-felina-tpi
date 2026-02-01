@@ -77,7 +77,7 @@ public class GatoDAOJPAImpl implements IGatoDAO{
     }
     
     @Override
-    public List<Gato> buscarDisponibles() {
+    public List<Gato> buscarDisponibles() { 
         EntityManager em = DBService.getEntityManager();
         try {
             String jpql = "SELECT g FROM Gato g WHERE g.disponibilidad = :estado";
@@ -96,5 +96,24 @@ public class GatoDAOJPAImpl implements IGatoDAO{
         String jpql = "SELECT g FROM Gato g WHERE g.esterilizado = true";
         TypedQuery<Gato> query = em.createQuery(jpql, Gato.class);
         return query.getResultList();
+    }
+    
+    @Override
+    public List<Gato> buscarTodosOrdenadosPorGravedad() { //Este metodo es para la sidebar de la vista consultorioVeterinario
+        EntityManager em = DBService.getEntityManager();
+        try {
+            String jpql = "SELECT g FROM Gato g ORDER BY " +
+                          "CASE g.estadoSalud " +
+                          "   WHEN 'ENFERMO' THEN 1 " +
+                          "   WHEN 'EN_TRATAMIENTO' THEN 2 " +
+                          "   WHEN 'SANO' THEN 3 " +
+                          "   ELSE 4 " +
+                          "END ASC";
+
+            return em.createQuery(jpql, Gato.class).getResultList();
+        } catch (Exception e){
+             e.printStackTrace();
+            return new ArrayList<>(); 
+        }
     }
 }

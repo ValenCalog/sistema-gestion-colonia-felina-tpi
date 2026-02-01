@@ -18,4 +18,6 @@ public interface IGatoDAO {
     List<Gato> buscarDisponibles();
     
     public List<Gato> buscarEsterilizados();
+    
+    List<Gato> buscarTodosOrdenadosPorGravedad();
 }
