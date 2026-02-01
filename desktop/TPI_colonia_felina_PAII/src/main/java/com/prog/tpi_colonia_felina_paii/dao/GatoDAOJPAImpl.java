@@ -92,6 +92,7 @@ public class GatoDAOJPAImpl implements IGatoDAO{
     
     @Override
     public List<Gato> buscarEsterilizados() {
+        EntityManager em = DBService.getEntityManager();
         String jpql = "SELECT g FROM Gato g WHERE g.esterilizado = true";
         TypedQuery<Gato> query = em.createQuery(jpql, Gato.class);
         return query.getResultList();
