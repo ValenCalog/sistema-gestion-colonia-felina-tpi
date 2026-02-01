@@ -24,6 +24,7 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "PostulacionServlet", urlPatterns = {"/PostulacionServlet"})
 public class PostulacionServlet extends HttpServlet {
 
+    // Instancias únicas para toda la clase (Patrón correcto)
     private final GatoDAOJPAImpl gatoDAO = new GatoDAOJPAImpl();
     private final PostulacionDAOJPAImpl postulacionDAO = new PostulacionDAOJPAImpl();
     private final AdopcionDAOJPAImpl adopcionDAO = new AdopcionDAOJPAImpl();
@@ -33,23 +34,39 @@ public class PostulacionServlet extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        
-        if (usuario == null) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
+        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
+        if (u == null) { response.sendRedirect("login.jsp"); return; }
 
         String accion = request.getParameter("accion");
         if (accion == null) accion = "listar";
 
+
         switch (accion) {
+            case "listar":
+                List<Postulacion> lista = postulacionDAO.buscarTodas();
+                request.setAttribute("postulaciones", lista);
+                request.getRequestDispatcher("gestionPostulaciones.jsp").forward(request, response);
+                break;
+
+            case "verDetalle":
+                try {
+                    Long id = Long.parseLong(request.getParameter("id"));
+                    Postulacion p = postulacionDAO.buscarPorId(id);
+                    
+                    if (p != null) {
+                        request.setAttribute("postulacion", p);
+                        request.getRequestDispatcher("detallePostulacion.jsp").forward(request, response);
+                    } else {
+                        response.sendRedirect("PostulacionServlet?accion=listar");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    response.sendRedirect("PostulacionServlet?accion=listar");
+                }
+                break;
+
             case "formulario":
                 mostrarFormulario(request, response);
-                break;
-                
-            case "listar":
-                listarPostulaciones(request, response);
                 break;
                 
             default:
@@ -199,6 +216,7 @@ public class PostulacionServlet extends HttpServlet {
                         
                         adopcionDAO.guardar(nuevaAdopcion);
 
+                        // Actualización explícita del gato
                         gatoDAO.actualizar(post.getGato()); 
 
                     } else if ("rechazar".equals(accion)) {

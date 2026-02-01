@@ -49,7 +49,6 @@
             }
         }
         
-        // --- FUNCIÓN PARA LAS ALERTAS PERSONALIZADAS ---
         function confirmarAccion(boton, accion) {
             let titulo, texto, colorBtn, icono;
 
@@ -253,26 +252,11 @@
 
                 <% if(esPendiente) { %>
                 <div class="flex lg:flex-col flex-row gap-3 lg:w-48 shrink-0 justify-center">
-                    
-                    <form action="PostulacionServlet" method="POST" class="flex-1 lg:flex-none">
-                        <input type="hidden" name="idPostulacion" value="<%= p.getIdPostulacion() %>">
-                        <input type="hidden" name="accion" value="aceptar">
-                        
-                        <button type="button" onclick="confirmarAccion(this, 'aceptar')"
-                                class="w-full h-12 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl font-bold text-sm shadow-lg shadow-green-500/20 flex items-center justify-center gap-2 transition-all hover:-translate-y-0.5">
-                            <span class="material-symbols-outlined">check_circle</span> Aprobar
-                        </button>
-                    </form>
-
-                    <form action="PostulacionServlet" method="POST" class="flex-1 lg:flex-none">
-                        <input type="hidden" name="idPostulacion" value="<%= p.getIdPostulacion() %>">
-                        <input type="hidden" name="accion" value="rechazar">
-                        
-                        <button type="button" onclick="confirmarAccion(this, 'rechazar')"
-                                class="w-full h-12 bg-white border border-gray-200 text-gray-500 hover:text-red-500 hover:bg-red-50 hover:border-red-100 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all">
-                            <span class="material-symbols-outlined">cancel</span> Rechazar
-                        </button>
-                    </form>
+    
+                    <a href="PostulacionServlet?accion=verDetalle&id=<%= p.getIdPostulacion() %>" 
+                       class="w-full h-12 bg-white border-2 border-primary text-primary hover:bg-orange-50 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all">
+                        <span class="material-symbols-outlined">visibility</span> Evaluar
+                    </a>
 
                 </div>
                 <% } else { %>
