@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package com.coloniafelina.tpi_colonia_felina_web_paii.servlets;
 
 import com.prog.tpi_colonia_felina_paii.dao.GatoDAOJPAImpl;
@@ -20,10 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author mvale
- */
+
 @WebServlet(name = "VeterinarioServlet", urlPatterns = {"/VeterinarioServlet"})
 public class VeterinarioServlet extends HttpServlet {
 
@@ -65,7 +58,11 @@ public class VeterinarioServlet extends HttpServlet {
                         request.setAttribute("gatoSeleccionado", g);
 
                         HistorialMedico historial = historialDAO.buscarPorIdGato(g.getIdGato());
-                        request.setAttribute("historial", historial);
+                        HistorialMedico hm = historialDAO.buscarPorIdGato(g.getIdGato());
+                        if (hm != null) {
+                            request.setAttribute("historialEstudios", hm.getEstudios()); 
+                        }
+                        
                     }
 
                     request.getRequestDispatcher("consultorioVeterinario.jsp").forward(request, response);

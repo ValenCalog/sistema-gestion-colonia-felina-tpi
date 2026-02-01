@@ -188,39 +188,103 @@
                     </div>
 
                     <div id="view-estudios" class="hidden">
-                        <div class="bg-white dark:bg-surface-cardDark rounded-xl shadow-sm border border-border-light dark:border-border-dark p-5">
+    
+                        <div class="bg-white dark:bg-surface-cardDark rounded-xl shadow-sm border border-border-light dark:border-border-dark p-5 mb-6">
                             <h3 class="text-lg font-bold text-ink dark:text-white mb-4 flex items-center gap-2">
                                 <span class="material-symbols-outlined text-primary">upload_file</span>
-                                Subir Estudio Médico
+                                Subir Nuevo Estudio
                             </h3>
-                            
+
                             <form action="EstudioMedicoServlet" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" name="accion" value="subir">
                                 <input type="hidden" name="idGato" value="<%= gato.getIdGato() %>">
-                                
-                                <div class="mb-4">
-                                    <label class="label">Tipo de Estudio</label>
-                                    <select name="tipoEstudio" class="input-field">
-                                        <option>Análisis de Sangre</option>
-                                        <option>Radiografía</option>
-                                        <option>Ecografía</option>
-                                        <option>Test VIF/Leucemia</option>
-                                    </select>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label class="label">Tipo de Estudio</label>
+                                        <select name="tipoEstudio" class="input-field" required>
+                                            <option value="">Seleccione...</option>
+                                            <option>Hemograma Completo</option>
+                                            <option>Bioquímica Sanguínea</option>
+                                            <option>Test VIF/Leucemia</option>
+                                            <option>Radiografía</option>
+                                            <option>Ecografía</option>
+                                            <option>Citología/Biopsia</option>
+                                            <option>Otro</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="label">Fecha de Realización</label>
+                                        <input type="date" name="fecha" value="<%= java.time.LocalDate.now() %>" class="input-field" required>
+                                    </div>
                                 </div>
 
-                                <div class="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-8 flex flex-col items-center justify-center text-center bg-gray-50 dark:bg-black/20 hover:bg-gray-100 transition-colors cursor-pointer mb-4 relative">
-                                    <input type="file" name="archivo" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" required>
-                                    <span class="material-symbols-outlined text-4xl text-gray-400 mb-2">cloud_upload</span>
-                                    <p class="text-sm font-medium text-ink">Arrastre o click aquí para subir archivo</p>
-                                    <p class="text-xs text-ink-light mt-1">PDF, JPG, PNG (Max 10MB)</p>
+                                <div class="mb-4">
+                                    <label class="label">Observaciones (Opcional)</label>
+                                    <textarea name="observaciones" rows="2" class="input-field" placeholder="Resultados clave o notas del laboratorio..."></textarea>
                                 </div>
-                                
-                                <button type="submit" class="btn btn-secondary w-full">Confirmar Subida</button>
+
+                                <div class="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-6 flex flex-col items-center justify-center text-center bg-gray-50 dark:bg-black/20 hover:bg-gray-100 transition-colors cursor-pointer mb-4 relative group">
+                                    <input type="file" name="archivo" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" required accept=".pdf,.jpg,.jpeg,.png">
+
+                                    <div class="group-hover:scale-110 transition-transform duration-200">
+                                        <span class="material-symbols-outlined text-4xl text-gray-400 mb-2">cloud_upload</span>
+                                    </div>
+                                    <p class="text-sm font-bold text-primary group-hover:underline">Haga clic o arrastre el archivo aquí</p>
+                                    <p class="text-xs text-ink-light mt-1">Soporta PDF, JPG, PNG (Max 10MB)</p>
+                                </div>
+
+                                <div class="flex justify-end">
+                                    <button type="submit" class="btn btn-primary flex items-center gap-2">
+                                        <span class="material-symbols-outlined">save</span>
+                                        Guardar Estudio
+                                    </button>
+                                </div>
                             </form>
                         </div>
+
+                        <% 
+                            List<Estudio> listaEstudios = (List<Estudio>) request.getAttribute("historialEstudios"); 
+                            if (listaEstudios != null && !listaEstudios.isEmpty()) {
+                        %>
+                        <div class="bg-white dark:bg-surface-cardDark rounded-xl shadow-sm border border-border-light dark:border-border-dark p-5">
+                            <h3 class="text-sm font-bold uppercase tracking-wider text-ink-light mb-4">Estudios Registrados</h3>
+
+                            <div class="space-y-3">
+                                <% for(Estudio e : listaEstudios) { %>
+                                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary transition-colors">
+                                    <div class="flex items-center gap-3 overflow-hidden">
+                                        <div class="p-2 rounded-lg bg-white dark:bg-white/10 text-primary border border-gray-200 dark:border-gray-600">
+                                            <% if(e.getRutaArchivo().endsWith(".pdf")) { %>
+                                                <span class="material-symbols-outlined">picture_as_pdf</span>
+                                            <% } else { %>
+                                                <span class="material-symbols-outlined">image</span>
+                                            <% } %>
+                                        </div>
+
+                                        <div class="min-w-0">
+                                            <p class="text-sm font-bold text-ink dark:text-white truncate"><%= e.getTipoDeEstudio() %></p>
+                                            <p class="text-xs text-ink-light">
+                                                <%= e.getFecha() %> • Dr. <%= e.getVeterinario().getNombre() %>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center gap-2">
+                                        <a href="DescargarArchivoServlet?ruta=<%= e.getRutaArchivo() %>" target="_blank" class="btn bg-white border border-gray-200 text-xs px-3 py-1.5 rounded-lg hover:text-primary hover:border-primary font-bold">
+                                            Ver Archivo
+                                        </a>
+                                    </div>
+                                </div>
+                                <% } %>
+                            </div>
+                        </div>
+                        <% } else { %>
+                            <div class="text-center p-8 border-2 border-dashed border-gray-200 rounded-xl text-ink-light">
+                                <p>No hay estudios cargados para este paciente.</p>
+                            </div>
+                        <% } %>
                     </div>
-                    
-                </div> <div class="space-y-6">
                     
                     <div id="view-certificado" class="bg-gradient-to-br from-blue-50 to-white dark:from-surface-cardDark dark:to-black/40 rounded-xl shadow-sm border border-blue-100 dark:border-blue-900/30 p-5">
                         <h3 class="text-lg font-bold text-ink dark:text-white mb-3 flex items-center gap-2">

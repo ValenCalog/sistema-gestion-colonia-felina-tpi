@@ -36,7 +36,7 @@ public class EstudioMedicoServlet extends HttpServlet {
     private final HistorialMedicoDAOJPAImpl historialDAO = new HistorialMedicoDAOJPAImpl();
     private final EstudioDAOJPAImpl estudioDAO = new EstudioDAOJPAImpl();
     
-    // CARPETA DONDE SE GUARDAN LOS ARCHIVOS FÍSICOS
+    // CARPETA DONDE SE GUARDAN LOS ARCHIVOS FISICOS
     private static final String UPLOAD_DIR = "C:\\tpi_gatos_uploads\\estudios";
 
     @Override
