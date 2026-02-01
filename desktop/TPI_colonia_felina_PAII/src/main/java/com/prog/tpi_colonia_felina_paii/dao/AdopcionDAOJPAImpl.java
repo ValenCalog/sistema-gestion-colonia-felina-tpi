@@ -44,7 +44,6 @@ public class AdopcionDAOJPAImpl implements IAdopcionDAO {
 
     @Override
     public List<Adopcion> buscarTodas() {
-        // Ordenamos por fecha descendente (las más recientes primero)
         String jpql = "SELECT a FROM Adopcion a ORDER BY a.fecha DESC";
         TypedQuery<Adopcion> query = em.createQuery(jpql, Adopcion.class);
         return query.getResultList();

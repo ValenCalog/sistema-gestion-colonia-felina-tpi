@@ -85,4 +85,11 @@ public class GatoDAOJPAImpl implements IGatoDAO{
             return new ArrayList<>(); 
         }
     }
+    
+    @Override
+    public List<Gato> buscarEsterilizados() {
+        String jpql = "SELECT g FROM Gato g WHERE g.esterilizado = true";
+        TypedQuery<Gato> query = em.createQuery(jpql, Gato.class);
+        return query.getResultList();
+    }
 }

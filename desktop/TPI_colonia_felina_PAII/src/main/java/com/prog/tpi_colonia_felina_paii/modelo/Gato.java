@@ -66,19 +66,19 @@ public class Gato {
     @JoinColumn(name = "id_zona", nullable = true)
     private Zona zona;
     
-    @ManyToOne(cascade = CascadeType.ALL) // <--- ¡AGREGA ESTO!
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_punto_avistamiento", nullable = true)
     private PuntoDeAvistamiento puntoAvistamiento;
     
     @OneToMany(mappedBy = "gato")
-    private List<Tarea> tareas = new ArrayList<>(); //tareas que se realizaron sobre el gato
+    private List<Tarea> tareas = new ArrayList<>();
     
     @Enumerated(EnumType.STRING)
     private Sexo sexo;
 
     private boolean esterilizado; // true = Si, false = No
     
-    private String qrCodePath; // Ruta de la imagen del QR)
+    private String qrCodePath; // Ruta de la imagen del QR
 
     private LocalDate fechaAlta;
 

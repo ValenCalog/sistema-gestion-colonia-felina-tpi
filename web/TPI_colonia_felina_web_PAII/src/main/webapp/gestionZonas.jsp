@@ -70,7 +70,7 @@
                         <span class="text-sm font-medium">Zonas</span>
                     </a>
                     
-                    <a class="sidebar-link" href="#">
+                    <a class="sidebar-link" href="ReporteServlet">
                         <span class="material-symbols-outlined">file_present</span>
                         <span class="text-sm font-medium">Reportes</span>
                     </a>

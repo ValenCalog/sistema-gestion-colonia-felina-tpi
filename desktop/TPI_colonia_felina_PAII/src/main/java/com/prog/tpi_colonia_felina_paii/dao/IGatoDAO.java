@@ -16,4 +16,6 @@ public interface IGatoDAO {
     List<Gato> buscarTodos();
     
     List<Gato> buscarDisponibles();
+    
+    public List<Gato> buscarEsterilizados();
 }
