@@ -42,9 +42,9 @@ public class Diagnostico {
         mappedBy = "diagnostico",
         cascade = CascadeType.ALL,     
         orphanRemoval = true,          
-        fetch = FetchType.LAZY
+        fetch = FetchType.EAGER
     )
-    @OrderBy("fecha DESC")
+    @OrderBy("fechaTratamiento DESC")
     private List<Tratamiento> tratamientos = new ArrayList<>();
 
     public Diagnostico() {

@@ -64,7 +64,8 @@ public class VeterinarioServlet extends HttpServlet {
                         HistorialMedico historial = historialDAO.buscarPorIdGato(g.getIdGato());
                         HistorialMedico hm = historialDAO.buscarPorIdGato(g.getIdGato());
                         if (hm != null) {
-                            request.setAttribute("historialEstudios", hm.getEstudios()); 
+                            request.setAttribute("historialEstudios", hm.getEstudios());
+                            request.setAttribute("listaDiagnosticos", hm.getDiagnosticos());
                         }
                         
                         CertificadoAptitud cert = certificadoDAO.buscarPorIdGato(g.getIdGato());

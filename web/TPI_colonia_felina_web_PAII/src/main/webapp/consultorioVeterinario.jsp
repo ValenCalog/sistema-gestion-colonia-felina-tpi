@@ -195,30 +195,105 @@
                 </nav>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
-                <div class="lg:col-span-2 space-y-6">
+            <div class="max-w-4xl mx-auto w-full flex flex-col gap-6">
+                <div class="w-full space-y-6">
                     
-                    <div id="view-diagnostico">
-                        <div class="bg-white dark:bg-surface-cardDark rounded-2xl p-8 text-center border border-border-light dark:border-border-dark shadow-sm">
+                    <% 
+                        List<Diagnostico> listaDiagnosticos = (List<Diagnostico>) request.getAttribute("listaDiagnosticos"); 
+                    %>
 
-                            <div class="size-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                                <span class="material-symbols-outlined text-3xl">clinical_notes</span>
+                    <div id="view-diagnostico">
+
+                        <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
+                            <div>
+                                <h3 class="text-xl font-bold text-ink dark:text-white flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary">clinical_notes</span>
+                                    Historia Clínica
+                                </h3>
+                                <p class="text-sm text-ink-light">Evolución cronológica del paciente.</p>
                             </div>
 
-                            <h3 class="text-xl font-bold text-ink dark:text-white mb-2">Diagnóstico y Tratamientos</h3>
-                            <p class="text-ink-light mb-6 max-w-md mx-auto">
-                                Registre nuevos diagnósticos, cambios en el estado de salud y asigne tratamientos farmacológicos o procedimientos.
-                            </p>
-
-                            <a href="VeterinarioServlet?accion=nuevaEvolucion&idGato=<%= gato.getIdGato() %>" 
-                               class="btn btn-primary px-6 py-3 rounded-xl font-bold inline-flex items-center gap-2 shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
-                                <span class="material-symbols-outlined">add</span>
-                                Registrar Nueva Evolución
+                            <a href="VeterinarioServlet?accion=nuevaEvolucion&idGato=<%= idGato %>" 
+                               class="btn btn-primary px-6 py-2.5 rounded-xl font-bold inline-flex items-center gap-2 shadow-lg shadow-primary/20 hover:scale-105 transition-transform no-print">
+                                <span class="material-symbols-outlined">add</span> Nueva Evolución
                             </a>
-
                         </div>
 
+                        <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-300 before:to-transparent">
+
+                            <% if (listaDiagnosticos != null && !listaDiagnosticos.isEmpty()) { 
+                                 for (Diagnostico d : listaDiagnosticos) { 
+                            %>
+                                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white dark:border-surface-dark bg-blue-100 text-primary shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                                        <span class="material-symbols-outlined text-sm">event</span>
+                                    </div>
+
+                                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white dark:bg-surface-cardDark rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-5 hover:shadow-md transition-shadow">
+
+                                        <div class="flex justify-between items-start mb-3 pb-3 border-b border-gray-100 dark:border-gray-700">
+                                            <div>
+                                                <span class="text-xs font-bold text-gray-400 uppercase"><%= d.getFecha() %></span>
+                                                <div class="flex items-center gap-1 mt-1">
+                                                    <span class="material-symbols-outlined text-sm text-primary">person</span>
+                                                    <span class="text-xs font-bold text-ink">Dr. <%= (d.getVeterinario() != null) ? d.getVeterinario().getNombre() : "Veterinario" %></span>
+                                                </div>
+                                            </div>
+                                            <% if(d.getEstadoClinico() != null) { %>
+                                                <span class="px-2 py-1 rounded-lg text-[10px] font-bold uppercase bg-gray-100 text-gray-600">
+                                                    <%= d.getEstadoClinico() %>
+                                                </span>
+                                            <% } %>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <h4 class="text-md font-bold text-ink dark:text-white mb-1">Diagnóstico</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-300">
+                                                <%= (d.getDescDetallada() != null) ? d.getDescDetallada() : "Sin descripción." %>
+                                            </p>
+                                            <% if(d.getObservaciones() != null && !d.getObservaciones().isEmpty()) { %>
+                                                <p class="text-xs text-gray-400 italic mt-2">"<%= d.getObservaciones() %>"</p>
+                                            <% } %>
+                                        </div>
+
+                                        <% 
+                                            List<Tratamiento> listaTratamientos = d.getTratamientos(); // Esto funciona si pusiste EAGER
+                                            if (listaTratamientos != null && !listaTratamientos.isEmpty()) { 
+                                        %>
+                                            <div class="bg-blue-50/50 dark:bg-blue-900/10 rounded-xl p-3 border border-blue-100 dark:border-blue-800">
+                                                <p class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase mb-2 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-sm">prescriptions</span> Tratamientos Aplicados
+                                                </p>
+                                                <ul class="space-y-2">
+                                                    <% for(Tratamiento t : listaTratamientos) { %>
+                                                        <li class="text-sm bg-white dark:bg-black/20 p-2 rounded-lg border border-blue-100/50 shadow-sm">
+                                                            <div class="font-bold text-ink dark:text-white"><%= (t.getMedicacion() != null) ? t.getMedicacion() : "Procedimiento" %></div>
+                                                            <% if(t.getDescripcion() != null) { %>
+                                                                <div class="text-xs text-gray-500"><%= t.getDescripcion() %></div>
+                                                            <% } %>
+                                                        </li>
+                                                    <% } %>
+                                                </ul>
+                                            </div>
+                                        <% } %>
+
+                                    </div>
+                                </div>
+                            <% 
+                                 } 
+                               } else { 
+                            %>
+                                <div class="flex flex-col items-center justify-center py-12 text-center bg-gray-50 dark:bg-black/20 rounded-2xl border-2 border-dashed border-gray-200">
+                                    <div class="size-16 bg-gray-200 dark:bg-white/10 rounded-full flex items-center justify-center mb-4 text-gray-400">
+                                        <span class="material-symbols-outlined text-3xl">history_edu</span>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-ink dark:text-white">Sin historial registrado</h3>
+                                    <p class="text-sm text-ink-light max-w-xs mt-1 mb-4">Este paciente aún no tiene diagnósticos cargados.</p>
+                                </div>
+                            <% } %>
+
+                        </div>
                     </div>
 
                     <div id="view-estudios" class="hidden">
@@ -393,24 +468,6 @@
                         </div>
                         <% }%>
                     </div>
-
-                    <div class="bg-white dark:bg-surface-cardDark rounded-xl shadow-sm border border-border-light dark:border-border-dark p-5">
-                        <h3 class="text-lg font-bold text-ink dark:text-white mb-4">Historial Reciente</h3>
-                        <div class="space-y-4">
-                            <div class="relative pl-4 border-l-2 border-gray-200 dark:border-gray-700">
-                                <div class="mb-1 text-xs text-ink-light">Hoy</div>
-                                <div class="text-sm font-bold text-ink dark:text-white">Consulta General</div>
-                                <div class="text-xs text-ink-light">Dr. <%= nombreVet %></div>
-                            </div>
-                            <div class="relative pl-4 border-l-2 border-gray-200 dark:border-gray-700">
-                                <div class="mb-1 text-xs text-ink-light">Hace 2 días</div>
-                                <div class="text-sm font-bold text-ink dark:text-white">Vacunación Triple</div>
-                                <div class="text-xs text-ink-light">Vet. Auxiliar</div>
-                            </div>
-                        </div>
-                        <a href="#" class="block mt-4 text-center text-sm font-bold text-primary hover:underline">Ver Historial Completo</a>
-                    </div>
-
                 </div>
             </div>
 
@@ -427,33 +484,36 @@
 
 <script>
     function switchTab(tabName) {
-        // Ocultar todos los views
-        document.getElementById('view-diagnostico').classList.add('hidden');
-        document.getElementById('view-estudios').classList.add('hidden');
-        
-        
-        //Resetear estilos de botones
-        const tabs = ['diagnostico', 'estudios', 'certificado'];
-        tabs.forEach(t => {
-            const btn = document.getElementById('tab-' + t);
-            btn.classList.remove('border-primary', 'text-primary', 'font-bold');
-            btn.classList.add('border-transparent', 'text-ink-light', 'font-medium');
+        const views = ['view-diagnostico', 'view-estudios', 'view-certificado'];
+        const tabs = ['tab-diagnostico', 'tab-estudios', 'tab-certificado'];
+
+        views.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.classList.add('hidden'); 
         });
 
-        // Activar el actual
-        const activeBtn = document.getElementById('tab-' + tabName);
-        activeBtn.classList.remove('border-transparent', 'text-ink-light', 'font-medium');
-        activeBtn.classList.add('border-primary', 'text-primary', 'font-bold');
+        tabs.forEach(id => {
+            const btn = document.getElementById(id);
+            if(btn) {
+                btn.classList.remove('border-primary', 'text-primary', 'font-bold');
+                btn.classList.add('border-transparent', 'text-ink-light', 'font-medium');
+            }
+        });
 
-        // Mostrar contenido específico
-        if(tabName === 'diagnostico') {
-            document.getElementById('view-diagnostico').classList.remove('hidden');
-        } else if (tabName === 'estudios') {
-            document.getElementById('view-estudios').classList.remove('hidden');
-        } else if (tabName === 'certificado') {
-             const viewCert = document.getElementById('view-certificado');
-            viewCert.classList.remove('hidden');
-            viewCert.scrollIntoView({behavior: 'smooth'});
+        const activeView = document.getElementById('view-' + tabName);
+        const activeBtn = document.getElementById('tab-' + tabName);
+
+        if (activeView) {
+            activeView.classList.remove('hidden');
+            
+            if(tabName === 'certificado') {
+                activeView.scrollIntoView({behavior: 'smooth'});
+            }
+        }
+
+        if (activeBtn) {
+            activeBtn.classList.remove('border-transparent', 'text-ink-light', 'font-medium');
+            activeBtn.classList.add('border-primary', 'text-primary', 'font-bold');
         }
     }
     

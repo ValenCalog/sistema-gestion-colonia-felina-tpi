@@ -36,7 +36,7 @@ public class HistorialMedico {
         mappedBy = "historial",
         cascade = CascadeType.ALL,     
         orphanRemoval = true,          
-        fetch = FetchType.LAZY
+        fetch = FetchType.EAGER
     )
     @OrderBy("fecha DESC")
     private List<Diagnostico> diagnosticos = new ArrayList<>();
