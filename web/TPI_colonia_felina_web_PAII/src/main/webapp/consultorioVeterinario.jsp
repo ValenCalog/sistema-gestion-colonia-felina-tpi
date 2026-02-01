@@ -3,6 +3,8 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.prog.tpi_colonia_felina_paii.modelo.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.Collections"%>
+<%@page import="java.util.Comparator"%>
 <%
     // gato seleccionado actualmente
     Gato gato = (Gato) request.getAttribute("gatoSeleccionado");
@@ -72,6 +74,7 @@
             }
         }
     </style>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 </head>
 
 <body class="bg-surface-light dark:bg-surface-dark font-sans text-ink dark:text-white overflow-hidden h-screen flex flex-col">
@@ -86,19 +89,32 @@
                 <h2 class="text-base font-bold text-ink dark:text-white">Pacientes en Espera</h2>
                 <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full"><%= pacientes.size() %> Activos</span>
             </div>
-            <div class="relative">
-                <span class="material-symbols-outlined absolute left-3 top-2.5 text-gray-400 text-[20px]">search</span>
-                <input class="block w-full rounded-lg border-0 py-2.5 pl-10 text-sm bg-gray-50 dark:bg-black/20 ring-1 ring-inset ring-gray-200 dark:ring-gray-700 focus:ring-2 focus:ring-primary" 
-                       placeholder="Buscar por nombre o ID..." type="text"/>
+            <div class="flex gap-2 mb-4">
+                <div class="relative flex-1">
+                    <span class="material-symbols-outlined absolute left-3 top-2.5 text-gray-400 text-[20px]">search</span>
+                    <input id="buscadorPacientes" onkeyup="filtrarPacientes()" 
+                           class="block w-full rounded-lg border-0 py-2.5 pl-10 text-sm bg-gray-50 dark:bg-black/20 ring-1 ring-inset ring-gray-200 dark:ring-gray-700 focus:ring-2 focus:ring-primary" 
+                           placeholder="Buscar por nombre o ID..." type="text"/>
+                </div>
+                <button onclick="abrirEscaner()" class="btn p-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-ink dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors" title="Escanear QR">
+                    <span class="material-symbols-outlined">qr_code_scanner</span>
+                </button>
             </div>
         </div>
 
-        <div class="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-2">
+        <div id="listaPacientes" class="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-2">
             <% for (Gato p : pacientes) { 
                 boolean esElSeleccionado = (hayGato && p.getIdGato().equals(gato.getIdGato()));
                 String claseItem = esElSeleccionado ? "bg-primary/5 border-primary/50" : "hover:bg-gray-50 dark:hover:bg-white/5 border-transparent";
+                
+                // Lógica de colores para el Badge
+                String est = p.getEstadoSalud().toString();
+                String colorBadge = "bg-gray-100 text-gray-600"; // Default (Sano/Adoptado)
+                if("ENFERMO".equals(est)) colorBadge = "bg-red-100 text-red-700 border border-red-200";
+                if("EN_TRATAMIENTO".equals(est)) colorBadge = "bg-amber-100 text-amber-700 border border-amber-200";
+                if("SANO".equals(est)) colorBadge = "bg-green-100 text-green-700 border border-green-200";
             %>
-            <a href="VeterinarioServlet?accion=consultorio&idGato=<%= p.getIdGato() %>" class="block">
+            <a href="VeterinarioServlet?accion=consultorio&idGato=<%= p.getIdGato() %>" class="block item-paciente" data-search="<%= p.getNombre().toLowerCase() + " " + p.getIdGato() %>">
                 <div class="flex flex-col gap-2 p-3 border rounded-xl cursor-pointer transition-all <%= claseItem %> relative group">
                     <% if(esElSeleccionado) { %><div class="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-l-xl"></div><% } %>
                     
@@ -114,10 +130,10 @@
                         <div class="flex-1 min-w-0">
                             <div class="flex justify-between items-start">
                                 <h3 class="text-sm font-bold text-ink dark:text-white truncate"><%= p.getNombre() %></h3>
-                                <span class="text-xs text-ink-light"><%= p.getIdGato() %></span>
+                                <span class="text-xs text-ink-light">#<%= p.getIdGato() %></span>
                             </div>
                             <div class="flex items-center gap-2 mt-1">
-                                <span class="inline-flex items-center rounded bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 text-[10px] font-medium text-gray-600 dark:text-gray-300">
+                                <span class="inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-bold uppercase <%= colorBadge %>">
                                     <%= p.getEstadoSalud() %>
                                 </span>
                             </div>
@@ -126,7 +142,12 @@
                 </div>
             </a>
             <% } %>
+            
+            <div id="noResult" class="hidden text-center p-4 text-sm text-gray-400">
+                No se encontraron pacientes.
+            </div>
         </div>
+        
     </aside>
 
 
@@ -480,6 +501,22 @@
             </div>
         <% } %>
     </main>
+    <div id="modal-scanner" class="fixed inset-0 z-[60] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-surface-cardDark w-full max-w-md rounded-2xl overflow-hidden shadow-2xl relative">
+            <div class="p-4 border-b border-border-light dark:border-border-dark flex justify-between items-center bg-gray-50 dark:bg-black/20">
+                <h3 class="font-bold text-lg flex items-center gap-2 text-ink dark:text-white">
+                    <span class="material-symbols-outlined text-primary">qr_code_scanner</span> Escanear Michi
+                </h3>
+                <button onclick="cerrarEscaner()" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-4 bg-black relative">
+                <div id="reader" class="w-full h-[300px] bg-black"></div>
+            </div>
+            <div class="p-4 text-center text-sm text-gray-500">Apunta la cámara al código QR.</div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -528,6 +565,65 @@
         } else {
             content.classList.add('hidden');
             icon.style.transform = 'rotate(0deg)'; // queda normal la flecha
+        }
+    }
+    
+    function filtrarPacientes() {
+        const input = document.getElementById('buscadorPacientes');
+        const filter = input.value.toLowerCase();
+        const items = document.getElementsByClassName('item-paciente');
+        let visibleCount = 0;
+
+        for (let i = 0; i < items.length; i++) {
+            const data = items[i].getAttribute('data-search'); // Busca en nombre + ID
+            if (data.indexOf(filter) > -1) {
+                items[i].style.display = "";
+                visibleCount++;
+            } else {
+                items[i].style.display = "none";
+            }
+        }
+        
+        // mostrar mensaje si no hay resultados
+        const noResult = document.getElementById('noResult');
+        if(visibleCount === 0) noResult.classList.remove('hidden');
+        else noResult.classList.add('hidden');
+    }
+
+    // --- LÓGICA ESCÁNER QR ---
+    let html5QrcodeScanner = null;
+
+    function abrirEscaner() {
+        document.getElementById('modal-scanner').classList.remove('hidden');
+        html5QrcodeScanner = new Html5Qrcode("reader");
+        
+        html5QrcodeScanner.start(
+            { facingMode: "environment" }, 
+            { fps: 10, qrbox: { width: 250, height: 250 } },
+            onScanSuccess,
+            (err) => {} // Ignorar errores de frame
+        ).catch(err => {
+            alert("No se pudo acceder a la cámara. Revisa permisos.");
+            cerrarEscaner();
+        });
+    }
+
+    function cerrarEscaner() {
+        document.getElementById('modal-scanner').classList.add('hidden');
+        if (html5QrcodeScanner) {
+            html5QrcodeScanner.stop().then(() => {
+                html5QrcodeScanner.clear();
+            }).catch(err => console.error(err));
+        }
+    }
+
+    function onScanSuccess(decodedText, decodedResult) {
+        cerrarEscaner();
+        // intentamos navegar si es un número (ID)
+        if (!isNaN(decodedText)) {
+            window.location.href = "VeterinarioServlet?accion=consultorio&idGato=" + decodedText;
+        } else {
+            alert("El código QR no contiene un ID válido: " + decodedText);
         }
     }
 </script>

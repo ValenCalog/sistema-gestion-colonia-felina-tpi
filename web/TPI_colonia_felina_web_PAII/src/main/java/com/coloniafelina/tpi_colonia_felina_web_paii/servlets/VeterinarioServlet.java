@@ -28,7 +28,7 @@ public class VeterinarioServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         IGatoDAO gatoDAO = new GatoDAOJPAImpl();
-        List<Gato> listaPacientes = gatoDAO.buscarTodos(); // o buscarEnfermosYEnTratamiento()
+        List<Gato> listaPacientes = gatoDAO.buscarTodosOrdenadosPorGravedad();
         IHistorialMedicoDAO historialDAO = new HistorialMedicoDAOJPAImpl();
         ICertificadoDAO certificadoDAO = new CertificadoDAOJPAImpl();
         request.setAttribute("listaPacientes", listaPacientes);

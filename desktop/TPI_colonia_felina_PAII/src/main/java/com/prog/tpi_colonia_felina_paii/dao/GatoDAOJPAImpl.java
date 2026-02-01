@@ -2,6 +2,7 @@
 package com.prog.tpi_colonia_felina_paii.dao;
 
 import com.prog.tpi_colonia_felina_paii.enums.Disponibilidad;
+import com.prog.tpi_colonia_felina_paii.enums.EstadoSalud;
 import com.prog.tpi_colonia_felina_paii.modelo.Gato;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -99,20 +100,26 @@ public class GatoDAOJPAImpl implements IGatoDAO{
     }
     
     @Override
-    public List<Gato> buscarTodosOrdenadosPorGravedad() { //Este metodo es para la sidebar de la vista consultorioVeterinario
+    public List<Gato> buscarTodosOrdenadosPorGravedad() {
         EntityManager em = DBService.getEntityManager();
         try {
             String jpql = "SELECT g FROM Gato g ORDER BY " +
                           "CASE g.estadoSalud " +
-                          "   WHEN 'ENFERMO' THEN 1 " +
-                          "   WHEN 'EN_TRATAMIENTO' THEN 2 " +
-                          "   WHEN 'SANO' THEN 3 " +
+                          "   WHEN :e1 THEN 1 " +
+                          "   WHEN :e2 THEN 2 " +
+                          "   WHEN :e3 THEN 3 " +
                           "   ELSE 4 " +
                           "END ASC";
 
-            return em.createQuery(jpql, Gato.class).getResultList();
-        } catch (Exception e){
-             e.printStackTrace();
+            TypedQuery<Gato> query = em.createQuery(jpql, Gato.class);
+
+            query.setParameter("e1", EstadoSalud.ENFERMO);
+            query.setParameter("e2", EstadoSalud.EN_TRATAMIENTO);
+            query.setParameter("e3", EstadoSalud.SANO);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
             return new ArrayList<>(); 
         }
     }
