@@ -35,10 +35,11 @@
                 </div>
 
                 <nav class="flex flex-col gap-2 flex-1">
-                    <a class="sidebar-link" href="adminPanel.jsp">
-                        <span class="material-symbols-outlined">dashboard</span>
-                        <span class="text-sm">Dashboard</span>
-                    </a>
+                    <a class="sidebar-link" href="AdminServlet?accion=evaluar">
+                        <span class="material-symbols-outlined">how_to_reg</span>
+                        <span class="text-sm">Evaluar Solicitudes</span>
+                        </a>
+                    
                     <a class="sidebar-link-active" href="#">
                         <span class="material-symbols-outlined">group</span>
                         <span class="text-sm">Usuarios</span>
@@ -60,7 +61,7 @@
                         </div>
                         <div class="flex flex-col">
                             <p class="text-sm font-bold">Admin User</p>
-                            <p class="text-xs text-ink-light">admin@gatogestion.com</p>
+                            <a href="LoginServlet?logout=true" class="text-xs text-red-500 hover:underline">Cerrar Sesión</a>
                         </div>
                     </div>
                 </div>
@@ -83,15 +84,13 @@
                 <div class="max-w-[1200px] mx-auto flex flex-col gap-6">
                     
                     <div class="flex items-center gap-2 text-sm text-ink-light">
-                        <a href="#" class="hover:text-primary transition-colors">Inicio</a>
-                        <span>/</span>
-                        <span class="text-ink dark:text-white font-medium">Usuarios</span>
+                        <span class="text-ink dark:text-white font-medium">Gestión de Usuarios</span>
                     </div>
 
                     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
                         <div class="flex flex-col gap-2">
                             <h1 class="heading-xl !text-3xl md:!text-4xl">Gestión de Usuarios</h1>
-                            <p class="text-body max-w-2xl">Administra el acceso y permisos.</p>
+                            <p class="text-body max-w-2xl">Administra el acceso y permisos de la plataforma.</p>
                         </div>
 
                         <a href="AdminServlet?accion=crear" class="btn btn-primary shadow-lg shadow-primary/30">
@@ -117,10 +116,7 @@
                             <select name="filtroRol" class="input-field w-full md:w-48 h-11 py-0 cursor-pointer" onchange="this.form.submit()">
                                 <option value="">Todos los Roles</option>
                                 <% 
-                                   // Recuperamos el rol seleccionado actualmente para marcarlo
                                    String rolActual = (String) request.getAttribute("rolActual");
-
-                                   // Iteramos los roles (asumiendo que los pasaste desde el Servlet o usando el Enum directo)
                                    for(com.prog.tpi_colonia_felina_paii.enums.Rol r : com.prog.tpi_colonia_felina_paii.enums.Rol.values()) { 
                                        String selected = (rolActual != null && rolActual.equals(r.toString())) ? "selected" : "";
                                 %>
@@ -147,7 +143,6 @@
                                     <tr>
                                         <th class="table-header text-xs uppercase tracking-wider text-ink-light">Usuario</th>
                                         <th class="table-header text-xs uppercase tracking-wider text-ink-light">Rol</th>
-
                                         <th class="table-header text-xs uppercase tracking-wider text-ink-light">Estado</th>
                                         <th class="table-header text-right"></th> </tr>
                                 </thead>
@@ -192,8 +187,11 @@
                                                 <% 
                                                    String estadoStr = (u.getEstado() != null) ? u.getEstado().toString() : "DESCONOCIDO";
                                                    boolean isActivo = "ACTIVO".equals(estadoStr);
+                                                   String colorPunto = isActivo ? "bg-emerald-500" : "bg-gray-400";
+                                                   if("BLOQUEADO".equals(estadoStr)) colorPunto = "bg-red-500";
+                                                   if("PENDIENTE".equals(estadoStr)) colorPunto = "bg-yellow-500";
                                                 %>
-                                                <span class="h-2 w-2 rounded-full <%= isActivo ? "bg-emerald-500" : "bg-gray-400" %>"></span> 
+                                                <span class="h-2 w-2 rounded-full <%= colorPunto %>"></span> 
                                                 <%= estadoStr %>
                                             </div>
                                         </td>
@@ -217,19 +215,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        <!-- <div class="flex items-center justify-between px-6 py-4 border-t border-border-light dark:border-border-dark bg-surface-card dark:bg-surface-cardDark">
-                            <p class="text-sm text-ink-light">Mostrando <span class="font-bold text-ink dark:text-white">1-5</span> de <span class="font-bold">24</span> resultados</p>
-                            <div class="flex items-center gap-2">
-                                <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-border-light dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50" disabled>
-                                    <span class="material-symbols-outlined text-[18px]">chevron_left</span>
-                                </button>
-                                <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-white font-bold text-sm shadow-sm">1</button>
-                                <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-border-light dark:border-gray-700 hover:bg-gray-100 text-sm">2</button>
-                                <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-border-light dark:border-gray-700 hover:bg-gray-100">
-                                    <span class="material-symbols-outlined text-[18px]">chevron_right</span>
-                                </button>
-                            </div>
-                        </div> -->
                     </div>
                     
                 </div>

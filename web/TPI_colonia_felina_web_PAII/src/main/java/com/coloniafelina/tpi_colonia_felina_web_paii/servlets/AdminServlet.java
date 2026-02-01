@@ -19,7 +19,6 @@ public class AdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 1. Instanciamos el DAO por cada petición (Más seguro)
         UsuarioDAOJPAImpl usuarioDAO = new UsuarioDAOJPAImpl();
 
         String accion = request.getParameter("accion");
@@ -32,6 +31,11 @@ public class AdminServlet extends HttpServlet {
             case "crear":
                 mostrarFormularioCrear(request, response);
                 break;
+
+            case "evaluar":
+                listarPendientes(request, response, usuarioDAO);
+                break;
+
             case "listar":
             default:
                 listarUsuarios(request, response, usuarioDAO);
@@ -45,9 +49,13 @@ public class AdminServlet extends HttpServlet {
 
         UsuarioDAOJPAImpl usuarioDAO = new UsuarioDAOJPAImpl();
         
-        // Verificamos si viene un ID. 
-        // Si viene ID y no está vacío -> Es EDICIÓN.
-        // Si es null o vacío -> Es CREACIÓN.
+        String accion = request.getParameter("accion");
+        
+        if ("activar".equals(accion) || "bloquear".equals(accion)) {
+            procesarEvaluacion(request, response, usuarioDAO, accion);
+            return;
+        }
+
         String idStr = request.getParameter("idUsuario");
 
         if(idStr != null && !idStr.isEmpty()) {
@@ -57,31 +65,52 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
-    // ==========================================
-    // MÉTODOS AUXILIARES
-    // ==========================================
-    
+    private void listarPendientes(HttpServletRequest request, HttpServletResponse response, UsuarioDAOJPAImpl dao) 
+            throws ServletException, IOException {
+        
+        List<Usuario> pendientes = dao.buscarPorEstado(EstadoUsuario.PENDIENTE);
+        request.setAttribute("usuariosPendientes", pendientes);
+        request.getRequestDispatcher("evaluarUsuarios.jsp").forward(request, response);
+    }
+
+    private void procesarEvaluacion(HttpServletRequest request, HttpServletResponse response, UsuarioDAOJPAImpl dao, String accion) 
+            throws IOException {
+        
+        try {
+            Long id = Long.parseLong(request.getParameter("idUsuario"));
+            Usuario u = dao.buscarPorId(id);
+            
+            if (u != null) {
+                if ("activar".equals(accion)) {
+                    u.setEstado(EstadoUsuario.ACTIVO);
+                } else if ("bloquear".equals(accion)) {
+                    u.setEstado(EstadoUsuario.BLOQUEADO);
+                }
+                dao.editar(u); // Guardar cambios
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        response.sendRedirect("AdminServlet?accion=evaluar");
+    }
+
     private void listarUsuarios(HttpServletRequest request, HttpServletResponse response, UsuarioDAOJPAImpl dao) 
         throws ServletException, IOException {
     
-        //Capturamos lo que viene del JSP
         String busqueda = request.getParameter("busqueda");
         String rolStr = request.getParameter("filtroRol");
 
-        //Preparamos el Rol (si viene vacío es null)
         com.prog.tpi_colonia_felina_paii.enums.Rol rolFiltro = null;
         if (rolStr != null && !rolStr.isEmpty()) {
             rolFiltro = com.prog.tpi_colonia_felina_paii.enums.Rol.valueOf(rolStr);
         }
 
-        //Llamamos al DAO
         List<Usuario> lista = dao.buscarConFiltros(busqueda, rolFiltro);
 
-        //Guardamos la lista Y los filtros
         request.setAttribute("usuarios", lista);
         request.setAttribute("busquedaActual", busqueda);
         request.setAttribute("rolActual", rolStr);
-
         request.setAttribute("listaRoles", com.prog.tpi_colonia_felina_paii.enums.Rol.values());
 
         request.getRequestDispatcher("gestionUsuarios.jsp").forward(request, response);
@@ -90,10 +119,9 @@ public class AdminServlet extends HttpServlet {
     private void mostrarFormularioEditar(HttpServletRequest request, HttpServletResponse response, UsuarioDAOJPAImpl dao) 
             throws ServletException, IOException {
         
-        // Corregido: Parsear String a Long
         try {
             Long id = Long.parseLong(request.getParameter("id"));
-            Usuario u = dao.buscarPorId(id); // Usamos la instancia 'dao', NO la clase estática
+            Usuario u = dao.buscarPorId(id);
             
             request.setAttribute("usuarioEditar", u);
             request.setAttribute("listaRoles", Rol.values());
@@ -101,13 +129,12 @@ public class AdminServlet extends HttpServlet {
             
             request.getRequestDispatcher("formUsuario.jsp").forward(request, response);
         } catch (NumberFormatException e) {
-            response.sendRedirect("AdminServlet"); // Si el ID es inválido, volver a la lista
+            response.sendRedirect("AdminServlet"); 
         }
     }
 
     private void mostrarFormularioCrear(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        // No pasamos "usuarioEditar", así el formulario sabe que está vacío
         request.setAttribute("listaRoles", Rol.values());
         request.setAttribute("listaEstados", EstadoUsuario.values());
         request.getRequestDispatcher("formUsuario.jsp").forward(request, response);
@@ -117,21 +144,16 @@ public class AdminServlet extends HttpServlet {
             throws IOException {
         
         Long id = Long.parseLong(request.getParameter("idUsuario"));
-        
-        // Buscamos el original
         Usuario u = dao.buscarPorId(id);
         
-        // Actualizamos datos
         u.setNombre(request.getParameter("nombre"));
         u.setApellido(request.getParameter("apellido"));
-        u.setCorreo(request.getParameter("correo")); // Ojo: a veces el correo no se debe editar
+        u.setCorreo(request.getParameter("correo"));
         u.setTelefono(request.getParameter("telefono"));
         
-        // Enums
         u.setRol(Rol.valueOf(request.getParameter("rol")));
         u.setEstado(EstadoUsuario.valueOf(request.getParameter("estado")));
 
-        // Guardar
         dao.editar(u);
         
         response.sendRedirect("AdminServlet"); 
@@ -142,21 +164,17 @@ public class AdminServlet extends HttpServlet {
         
         Usuario u = new Usuario();
         
-        // Llenamos datos nuevos
         u.setNombre(request.getParameter("nombre"));
         u.setApellido(request.getParameter("apellido"));
-        u.setDNI(request.getParameter("dni")); // Asegúrate de tener este campo en el form si es obligatorio
+        u.setDNI(request.getParameter("dni")); 
         u.setCorreo(request.getParameter("correo"));
         u.setTelefono(request.getParameter("telefono"));
         
-        // Contraseña por defecto (OBLIGATORIO para crear)
-        // En un sistema real, aquí enviarías un email al usuario para que la cambie.
         u.setContrasenia("123456"); 
         
         u.setRol(Rol.valueOf(request.getParameter("rol")));
         u.setEstado(EstadoUsuario.valueOf(request.getParameter("estado")));
         
-        // Guardar nuevo
         dao.crear(u);
         
         response.sendRedirect("AdminServlet");

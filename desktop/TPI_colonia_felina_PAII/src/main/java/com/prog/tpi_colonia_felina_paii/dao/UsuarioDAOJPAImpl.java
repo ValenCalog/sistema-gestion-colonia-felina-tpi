@@ -1,6 +1,7 @@
 
 package com.prog.tpi_colonia_felina_paii.dao;
 
+import com.prog.tpi_colonia_felina_paii.enums.EstadoUsuario;
 import com.prog.tpi_colonia_felina_paii.enums.Rol;
 import com.prog.tpi_colonia_felina_paii.modelo.Usuario;
 import jakarta.persistence.EntityManager;
@@ -111,5 +112,14 @@ public class UsuarioDAOJPAImpl implements IUsuarioDAO {
 
         return query.getResultList();
     }
+    
+    @Override
+    public List<Usuario> buscarPorEstado(EstadoUsuario estado) {
+        String jpql = "SELECT u FROM Usuario u WHERE u.Estado = :estado ORDER BY u.idUsuario DESC";
+        TypedQuery<Usuario> query = em.createQuery(jpql, Usuario.class);
+        query.setParameter("estado", estado);
+        return query.getResultList();
+    }
+    
     
 }
