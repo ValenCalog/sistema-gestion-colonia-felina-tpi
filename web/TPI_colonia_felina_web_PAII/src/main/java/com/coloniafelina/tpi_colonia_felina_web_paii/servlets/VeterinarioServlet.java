@@ -90,6 +90,18 @@ public class VeterinarioServlet extends HttpServlet {
                         response.sendRedirect("VeterinarioServlet?accion=inicio");
                     }
                     break;
+                case "emitirCertificado":
+                    Long idParaEmitir = Long.parseLong(request.getParameter("idGato"));
+                    Gato gatoEmitir = gatoDAO.buscarPorId(idParaEmitir);
+
+                    if (!"SANO".equals(gatoEmitir.getEstadoSalud().toString())) {
+                        response.sendRedirect("VeterinarioServlet?accion=consultorio&idGato=" + idParaEmitir + "&error=noApto");
+                        return;
+                    }
+
+                    request.setAttribute("gato", gatoEmitir);
+                    request.getRequestDispatcher("formEmitirCertificado.jsp").forward(request, response);
+                    break;
             }
         }
 
