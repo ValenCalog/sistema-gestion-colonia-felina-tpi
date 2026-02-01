@@ -72,7 +72,13 @@ public class CertificadoAptitud {
     public void setGato(Gato gato) {
         this.gato = gato;
     }
-    
-    
+
+    public Veterinario getVeterinario() {
+        return veterinario;
+    }
+
+    public void setVeterinario(Veterinario veterinario) {
+        this.veterinario = veterinario;
+    }
 
 }

@@ -10,11 +10,10 @@ import java.util.List;
 
 
 public class GatoDAOJPAImpl implements IGatoDAO{
-
-    private final EntityManager em = DBService.getEntityManager();
     
     @Override
     public void guardarGato(Gato gato) {
+        EntityManager em = DBService.getEntityManager();
         try{
             DBService.beginTransaction();  
             em.persist(gato);
@@ -29,6 +28,7 @@ public class GatoDAOJPAImpl implements IGatoDAO{
 
     @Override
     public void actualizar(Gato g) {
+        EntityManager em = DBService.getEntityManager();
         try{
             DBService.beginTransaction();  
             em.merge(g);
@@ -43,6 +43,7 @@ public class GatoDAOJPAImpl implements IGatoDAO{
 
     @Override
     public void eliminar(Gato g) {
+        EntityManager em = DBService.getEntityManager();
         try {
             DBService.beginTransaction();
             Gato adjunto = g;
@@ -61,11 +62,13 @@ public class GatoDAOJPAImpl implements IGatoDAO{
 
     @Override
     public Gato buscarPorId(Long id) {
+        EntityManager em = DBService.getEntityManager();
         return em.find(Gato.class, id);
     }
 
     @Override
     public List<Gato> buscarTodos() {
+        EntityManager em = DBService.getEntityManager();
         TypedQuery<Gato> q = em.createQuery(
             "SELECT g FROM Gato g ORDER BY g.idGato",
             Gato.class
@@ -75,6 +78,7 @@ public class GatoDAOJPAImpl implements IGatoDAO{
     
     @Override
     public List<Gato> buscarDisponibles() {
+        EntityManager em = DBService.getEntityManager();
         try {
             String jpql = "SELECT g FROM Gato g WHERE g.disponibilidad = :estado";
             TypedQuery<Gato> query = em.createQuery(jpql, Gato.class);

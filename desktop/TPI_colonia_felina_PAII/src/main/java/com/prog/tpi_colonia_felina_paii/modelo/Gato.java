@@ -103,7 +103,8 @@ public class Gato {
     
 
     public Gato(){
-       
+        this.historialMedico = new HistorialMedico();
+        this.historialMedico.setGato(this);
     }
 
     public Gato(String nombre, String color, String caracteristicas, String fotografia, EstadoSalud estadoSalud, Disponibilidad disponibilidad, Zona zona, PuntoDeAvistamiento puntoAvistamiento) {
