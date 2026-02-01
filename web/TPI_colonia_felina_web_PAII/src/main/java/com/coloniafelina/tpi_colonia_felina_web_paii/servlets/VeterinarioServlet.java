@@ -1,9 +1,12 @@
 package com.coloniafelina.tpi_colonia_felina_web_paii.servlets;
 
+import com.prog.tpi_colonia_felina_paii.dao.CertificadoDAOJPAImpl;
 import com.prog.tpi_colonia_felina_paii.dao.GatoDAOJPAImpl;
 import com.prog.tpi_colonia_felina_paii.dao.HistorialMedicoDAOJPAImpl;
+import com.prog.tpi_colonia_felina_paii.dao.ICertificadoDAO;
 import com.prog.tpi_colonia_felina_paii.dao.IGatoDAO;
 import com.prog.tpi_colonia_felina_paii.dao.IHistorialMedicoDAO;
+import com.prog.tpi_colonia_felina_paii.modelo.CertificadoAptitud;
 import com.prog.tpi_colonia_felina_paii.modelo.Gato;
 import com.prog.tpi_colonia_felina_paii.modelo.HistorialMedico;
 import java.io.IOException;
@@ -27,6 +30,7 @@ public class VeterinarioServlet extends HttpServlet {
         IGatoDAO gatoDAO = new GatoDAOJPAImpl();
         List<Gato> listaPacientes = gatoDAO.buscarTodos(); // o buscarEnfermosYEnTratamiento()
         IHistorialMedicoDAO historialDAO = new HistorialMedicoDAOJPAImpl();
+        ICertificadoDAO certificadoDAO = new CertificadoDAOJPAImpl();
         request.setAttribute("listaPacientes", listaPacientes);
      
         String accion = request.getParameter("accion");
@@ -63,6 +67,8 @@ public class VeterinarioServlet extends HttpServlet {
                             request.setAttribute("historialEstudios", hm.getEstudios()); 
                         }
                         
+                        CertificadoAptitud cert = certificadoDAO.buscarPorIdGato(g.getIdGato());
+                        request.setAttribute("certificado", cert); 
                     }
 
                     request.getRequestDispatcher("consultorioVeterinario.jsp").forward(request, response);

@@ -12,7 +12,9 @@ public class HistorialMedicoDAOJPAImpl implements IHistorialMedicoDAO{
     @Override
     public HistorialMedico buscarPorIdGato(Long idGato) {
         try {
-            String jpql = "SELECT h FROM HistorialMedico h WHERE h.gato.idGato = :idGato";
+            String jpql = "SELECT h FROM HistorialMedico h " +
+                      "LEFT JOIN FETCH h.estudios " + 
+                      "WHERE h.gato.idGato = :idGato";
             return em.createQuery(jpql, HistorialMedico.class)
                      .setParameter("idGato", idGato)
                      .getSingleResult();

@@ -13,15 +13,16 @@
 
     Usuario veterinario = (Usuario) session.getAttribute("usuarioLogueado");
     String nombreVet = (veterinario != null) ? veterinario.getNombre() : "Dr. Veterinario";
-
     // datos auxiliares del gato seleccionado
     boolean hayGato = (gato != null);
     String nombreGato = hayGato ? gato.getNombre() : "Seleccione un paciente";
     String idGato = hayGato ? String.valueOf(gato.getIdGato()) : "-";
     String fotoUrl = (hayGato && gato.getFotografia() != null) ? request.getContextPath() + gato.getFotografia() : "";
     boolean esEsterilizado = hayGato && gato.isEsterilizado();
+    String estadoSalud = (hayGato && gato.getEstadoSalud() != null) ? gato.getEstadoSalud().toString() : "DESCONOCIDO";
     
     List<Estudio> listaEstudios = (List<Estudio>) request.getAttribute("historialEstudios");
+    CertificadoAptitud certificado = (CertificadoAptitud) request.getAttribute("certificado");
 %>
 <!DOCTYPE html>
 <html lang="es" class="light">
@@ -38,6 +39,38 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
         .dark .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #334155; }
+        
+        @media print {
+            body * {
+                visibility: hidden; 
+            }
+
+            #certificado-impresion, #certificado-impresion * {
+                visibility: visible;
+            }
+
+            #certificado-impresion {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 20px;
+                border: 2px solid black !important;
+                background: white !important;
+                color: black !important;
+                box-shadow: none !important;
+            }
+
+            .no-print, .btn { 
+                display: none !important; 
+            }
+            
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
     </style>
 </head>
 
@@ -252,41 +285,113 @@
 
                     </div>
                     
-                    <div id="view-certificado" class="bg-gradient-to-br from-blue-50 to-white dark:from-surface-cardDark dark:to-black/40 rounded-xl shadow-sm border border-blue-100 dark:border-blue-900/30 p-5">
-                        <h3 class="text-lg font-bold text-ink dark:text-white mb-3 flex items-center gap-2">
-                            <span class="material-symbols-outlined text-primary">verified_user</span>
-                            Aptitud Adopción
-                        </h3>
-                        <p class="text-sm text-ink-light mb-4">
-                            Emitir certificado si el paciente cumple con los requisitos de salud para ser adoptado.
-                        </p>
-                        
-                        <% if(gato.getEstadoSalud().toString().equals("SANO")) { %>
-                            <form action="CertificadoServlet" method="POST">
-                                <input type="hidden" name="accion" value="emitirAptitud">
-                                <input type="hidden" name="idGato" value="<%= gato.getIdGato() %>">
-                                
-                                <div class="bg-white dark:bg-black/20 p-4 rounded-lg border border-border-light dark:border-gray-700 mb-4">
-                                    <div class="flex items-start gap-3">
-                                        <input class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" id="check-apto" type="checkbox" required/>
-                                        <div class="text-sm">
-                                            <label class="font-medium text-ink dark:text-white" for="check-apto">Confirmo aptitud médica</label>
-                                            <p class="text-xs text-ink-light mt-1">El gato no presenta síntomas activos.</p>
+                    <div id="view-certificado" class="hidden">
+                        <% if (certificado != null) {%>
+                        <div class="flex flex-col items-center justify-center text-center p-4">
+
+                            <div id="certificado-impresion" class="bg-white border border-gray-200 rounded-3xl p-10 max-w-3xl w-full shadow-xl relative overflow-hidden text-left">
+
+                                <span class="material-symbols-outlined absolute -right-10 -bottom-10 text-[15rem] text-gray-50 opacity-50 pointer-events-none select-none">pets</span>
+
+                                <div class="absolute top-6 right-6 bg-green-100 text-green-700 text-xs font-bold px-3 py-1.5 rounded-full border border-green-200 uppercase tracking-wide no-print flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">check_circle</span> Vigente
+                                </div>
+
+                                <div class="text-center mb-8 relative z-10">
+                                    <div class="inline-flex items-center justify-center p-3 bg-primary/10 rounded-2xl mb-4 text-primary">
+                                        <span class="material-symbols-outlined text-4xl">verified_user</span>
+                                    </div>
+                                    <h2 class="text-3xl font-black text-ink dark:text-black tracking-tight mb-1">Certificado de Aptitud</h2>
+                                    <p class="text-sm font-medium text-gray-400 uppercase tracking-widest">Misión Michi</p>
+                                </div>
+
+                                <div class="space-y-8 relative z-10 font-sans text-ink">
+                                    <p class="text-lg text-gray-600 text-center max-w-2xl mx-auto leading-relaxed">
+                                        Por medio de la presente, se certifica que el paciente felino detallado a continuación ha sido evaluado clínicamente y cumple con los <strong class="text-primary">requisitos de salud</strong> para su adopción responsable.
+                                    </p>
+
+                                    <div class="bg-gray-50 border border-gray-100 rounded-2xl p-6 grid grid-cols-2 gap-y-6 gap-x-4 shadow-inner">
+                                        <div>
+                                            <span class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Paciente</span>
+                                            <span class="text-xl font-black text-ink capitalize"><%= nombreGato%></span>
+                                        </div>
+                                        <div>
+                                            <span class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">ID Registro</span>
+                                            <span class="text-xl font-bold text-ink">#<%= idGato%></span>
+                                        </div>
+                                        <div>
+                                            <span class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Sexo</span>
+                                            <span class="text-base font-medium text-gray-700 bg-white px-3 py-1 rounded-lg border border-gray-100 inline-block">
+                                                <%= gato.getSexo()%>
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Esterilizado</span>
+                                            <span class="text-base font-medium text-gray-700 bg-white px-3 py-1 rounded-lg border border-gray-100 inline-block">
+                                                <%= esEsterilizado ? "SÍ" : "NO"%>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-center gap-3 py-2">
+                                        <span class="text-gray-500 font-medium">Condición Actual:</span>
+                                        <span class="bg-green-100 text-green-700 px-4 py-1 rounded-lg font-black text-lg border border-green-200">
+                                            SANO / APTO
+                                        </span>
+                                    </div>
+
+                                    <div class="border-t border-gray-100 pt-6">
+                                        <strong class="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-2">Observaciones / Recomendaciones</strong>
+                                        <div class="bg-blue-50/50 rounded-xl p-4 border border-blue-100 text-gray-700 text-sm italic relative">
+                                            <span class="material-symbols-outlined absolute top-4 left-3 text-blue-200 text-xl">format_quote</span>
+                                            <p class="pl-6">
+                                                <%= (certificado.getObservaciones() != null && !certificado.getObservaciones().isEmpty()) ? certificado.getObservaciones() : "Sin observaciones particulares."%>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="w-full btn btn-primary flex items-center justify-center gap-2">
-                                    <span class="material-symbols-outlined">contract_edit</span>
-                                    Emitir Certificado
-                                </button>
-                            </form>
-                        <% } else { %>
-                            <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-200 dark:border-red-900/50 text-center">
-                                <span class="material-symbols-outlined text-red-500 text-3xl mb-2">block</span>
-                                <p class="text-sm font-bold text-red-700 dark:text-red-300">No apto para emisión</p>
-                                <p class="text-xs text-red-600 dark:text-red-400 mt-1">El gato debe estar marcado como "SANO".</p>
+
+                                <div class="flex justify-between items-end mt-12 pt-6 border-t border-gray-200 relative z-10">
+                                    <div>
+                                        <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Fecha de Emisión</p>
+                                        <p class="text-base font-bold text-ink"><%= certificado.getFechaEmision()%></p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="h-8"></div> <p class="text-base font-bold text-ink border-t-2 border-gray-300 pt-2 px-2 inline-block">Dr. <%= certificado.getVeterinario().getNombre() + " " + certificado.getVeterinario().getNombre()%></p>
+                                        <p class="text-[10px] font-bold text-gray-400 uppercase mt-1">Médico Veterinario</p>
+                                    </div>
+                                </div>
                             </div>
-                        <% } %>
+
+                            <button onclick="window.print()" class="mt-8 btn bg-primary text-white hover:bg-blue-700 font-bold py-3 px-8 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-primary/30 transition-all hover:scale-105 no-print">
+                                <span class="material-symbols-outlined">print</span> Imprimir Copia Oficial
+                            </button>
+                        </div>
+
+                        <% } else if ("SANO".equals(estadoSalud)) {%>
+                        <div class="bg-white dark:bg-surface-cardDark rounded-2xl p-8 text-center border border-border-light shadow-sm">
+                            <div class="size-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="material-symbols-outlined text-3xl">verified_user</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-ink dark:text-white mb-2">Paciente Apto para Adopción</h3>
+                            <p class="text-ink-light mb-6 max-w-md mx-auto">El paciente cumple con los requisitos clínicos. Puede emitir el certificado legal.</p>
+                            <a href="VeterinarioServlet?accion=emitirCertificado&idGato=<%= idGato%>" class="btn btn-primary px-8 py-3 rounded-xl font-bold text-lg shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined">edit_document</span> Iniciar Trámite
+                            </a>
+                        </div>
+
+                        <% } else {%>
+                        <div class="bg-white dark:bg-surface-cardDark rounded-2xl p-8 text-center border-2 border-red-100">
+                            <div class="size-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                                <span class="material-symbols-outlined text-3xl">block</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-red-600 mb-2">Emisión Bloqueada</h3>
+                            <p class="text-ink-light mb-6">El paciente figura como <strong class="text-red-500 uppercase"><%= estadoSalud%></strong>. Debe estar SANO.</p>
+                            <button onclick="switchTab('diagnostico')" class="text-primary font-bold hover:underline flex items-center justify-center gap-1 mx-auto">
+                                Ir a Diagnóstico <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </button>
+                        </div>
+                        <% }%>
                     </div>
 
                     <div class="bg-white dark:bg-surface-cardDark rounded-xl shadow-sm border border-border-light dark:border-border-dark p-5">
@@ -346,7 +451,9 @@
         } else if (tabName === 'estudios') {
             document.getElementById('view-estudios').classList.remove('hidden');
         } else if (tabName === 'certificado') {
-             document.getElementById('view-certificado').scrollIntoView({behavior: 'smooth'});
+             const viewCert = document.getElementById('view-certificado');
+            viewCert.classList.remove('hidden');
+            viewCert.scrollIntoView({behavior: 'smooth'});
         }
     }
     
