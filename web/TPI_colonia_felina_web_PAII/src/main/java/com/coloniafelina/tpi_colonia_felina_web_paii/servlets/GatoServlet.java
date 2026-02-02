@@ -122,8 +122,22 @@ public class GatoServlet extends HttpServlet {
 
             case "listar":
             default:
-                List<Gato> listaGatos = gatoDAO.buscarTodos();
+                String busqueda = request.getParameter("q"); // input de búsqueda textual
+                String saludStr = request.getParameter("salud");
+                String zonaStr = request.getParameter("zona");
+                String esterilizadoString = request.getParameter("esterilizado");
+                String dispStr = request.getParameter("disponibilidad");
+                EstadoSalud salud = (saludStr != null && !saludStr.equals("all") && !saludStr.isEmpty()) 
+                                    ? EstadoSalud.valueOf(saludStr) : null;
+                Boolean esterilizado = (esterilizadoString != null && !esterilizadoString.equals("all") && !esterilizadoString.isEmpty()) 
+                                       ? Boolean.parseBoolean(esterilizadoString) : null;
+                Disponibilidad disp = (dispStr != null && !dispStr.equals("all") && !dispStr.isEmpty()) 
+                                      ? Disponibilidad.valueOf(dispStr) : null;
+                if ("all".equals(zonaStr)) zonaStr = null;
+                List<Gato> listaGatos = gatoDAO.buscarConFiltrosVoluntarios(busqueda, salud, zonaStr, esterilizado, disp);
+                List<Zona> listaZonas = zonaDAO.buscarTodas();
                 request.setAttribute("gatos", listaGatos);
+                request.setAttribute("listaZonas", listaZonas); // Para el dropdown de filtros
                 request.getRequestDispatcher("listaGatos.jsp").forward(request, response);
                 break;
         }

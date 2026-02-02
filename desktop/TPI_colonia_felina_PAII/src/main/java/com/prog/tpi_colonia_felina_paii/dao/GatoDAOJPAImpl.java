@@ -157,4 +157,58 @@ public class GatoDAOJPAImpl implements IGatoDAO{
         } 
         
     }
+    
+    @Override
+    public List<Gato> buscarConFiltrosVoluntarios(String busqueda, EstadoSalud salud, String nombreZona, Boolean esEsterilizado, Disponibilidad disponibilidad) {
+        EntityManager em = DBService.getEntityManager();
+        try {
+            StringBuilder jpql = new StringBuilder("SELECT g FROM Gato g WHERE 1=1");
+
+            // filtro de Búsqueda (Nombre o ID)
+            if (busqueda != null && !busqueda.isEmpty()) {
+                jpql.append(" AND (LOWER(g.nombre) LIKE :busqueda OR STR(g.idGato) LIKE :busqueda)");
+            }
+
+            // filtro de Salud
+            if (salud != null) {
+                jpql.append(" AND g.estadoSalud = :salud");
+            }
+
+            // filtro de Zona
+            if (nombreZona != null && !nombreZona.isEmpty() && !"all".equals(nombreZona)) {
+                jpql.append(" AND g.zona.nombre = :nombreZona");
+            }
+
+            // filtro Esterilizado
+            if (esEsterilizado != null) {
+                jpql.append(" AND g.esterilizado = :esterilizado");
+            }
+
+            // filtro Disponibilidad
+            if (disponibilidad != null) {
+                jpql.append(" AND g.disponibilidad = :disponibilidad");
+            }
+
+            // ordenar por defecto
+            jpql.append(" ORDER BY g.idGato DESC");
+
+            TypedQuery<Gato> query = em.createQuery(jpql.toString(), Gato.class);
+
+            if (busqueda != null && !busqueda.isEmpty()) {
+                query.setParameter("busqueda", "%" + busqueda.toLowerCase() + "%");
+            }
+            if (salud != null) query.setParameter("salud", salud);
+            if (nombreZona != null && !nombreZona.isEmpty() && !"all".equals(nombreZona)) {
+                query.setParameter("nombreZona", nombreZona);
+            }
+            if (esEsterilizado != null) query.setParameter("esterilizado", esEsterilizado);
+            if (disponibilidad != null) query.setParameter("disponibilidad", disponibilidad);
+
+            return query.getResultList();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>(); 
+        } 
+    }
 }
