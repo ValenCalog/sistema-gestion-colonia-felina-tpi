@@ -81,7 +81,7 @@
                         
                         <div class="size-12 rounded-full overflow-hidden shrink-0 border border-gray-100 dark:border-gray-700 bg-gray-100 relative">
                             <% if(a.getGato().getFotografia() != null) { %>
-                                <img src="<%= a.getGato().getFotografia() %>" class="w-full h-full object-cover">
+                                <img src="<%= request.getContextPath() + a.getGato().getFotografia() %>" class="w-full h-full object-cover">
                             <% } else { %>
                                 <div class="w-full h-full flex items-center justify-center text-gray-400">
                                     <span class="material-symbols-outlined text-xl">pets</span>
@@ -129,7 +129,7 @@
                         <div class="flex items-center gap-4">
                             <div class="size-16 md:size-20 rounded-2xl overflow-hidden border-2 border-white dark:border-gray-700 shadow-md bg-gray-100 shrink-0">
                                 <% if(adopcionSeleccionada.getGato().getFotografia() != null) { %>
-                                    <img src="<%= adopcionSeleccionada.getGato().getFotografia() %>" class="w-full h-full object-cover">
+                                    <img src="<%= request.getContextPath() + adopcionSeleccionada.getGato().getFotografia() %>" class="w-full h-full object-cover">
                                 <% } else { %>
                                     <div class="w-full h-full flex items-center justify-center text-gray-400">
                                         <span class="material-symbols-outlined text-3xl">pets</span>
