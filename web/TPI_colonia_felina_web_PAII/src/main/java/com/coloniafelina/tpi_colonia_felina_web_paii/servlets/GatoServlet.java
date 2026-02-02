@@ -119,7 +119,20 @@ public class GatoServlet extends HttpServlet {
                 request.setAttribute("gatos", gatosFiltrados);
                 request.getRequestDispatcher("catalogoGatos.jsp").forward(request, response);
                 break;
-
+            case "verQr":
+                try {
+                    Long id = Long.valueOf(request.getParameter("id"));
+                    Gato gato = gatoDAO.buscarPorId(id);
+                    if (gato != null) {
+                        request.setAttribute("gato", gato);
+                        request.getRequestDispatcher("verQrGato.jsp").forward(request, response);
+                    } else {
+                        response.sendRedirect("GatoServlet?accion=listar");
+                    }
+                } catch (Exception e) {
+                    response.sendRedirect("GatoServlet?accion=listar");
+                }
+                break;
             case "listar":
             default:
                 String busqueda = request.getParameter("q"); // input de búsqueda textual
@@ -255,7 +268,7 @@ public class GatoServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        response.sendRedirect("GatoServlet?accion=listar");
+        response.sendRedirect("GatoServlet?accion=verQr&id=" + gato.getIdGato());
     }
 
     // MÉTODO PARA GUARDAR LA FOTO EN DISCO
