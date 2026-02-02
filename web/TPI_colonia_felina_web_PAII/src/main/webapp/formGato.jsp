@@ -1,15 +1,25 @@
+<%@page import="com.prog.tpi_colonia_felina_paii.modelo.Usuario"%>
 <%@page import="java.util.List"%>
 <%@page import="com.prog.tpi_colonia_felina_paii.modelo.Gato"%>
 <%@page import="com.prog.tpi_colonia_felina_paii.modelo.Zona"%>
 <%@page import="com.prog.tpi_colonia_felina_paii.enums.Sexo"%>
-<%@page import="com.prog.tpi_colonia_felina_paii.enums.Disponibilidad"%> <%@page import="com.prog.tpi_colonia_felina_paii.enums.EstadoSalud"%>
+<%@page import="com.prog.tpi_colonia_felina_paii.enums.Disponibilidad"%> 
+<%@page import="com.prog.tpi_colonia_felina_paii.enums.EstadoSalud"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%
+    // Lógica para el formulario del Gato
+    Gato gato = (Gato) request.getAttribute("gatoEditar");
+    boolean esEdicion = (gato != null);
+    List<Zona> listaZonas = (List<Zona>) request.getAttribute("listaZonas");
+%>
+
 <!DOCTYPE html>
 <html class="light" lang="es">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Registro de Gato - Misión Michi</title>
+    <title><%= esEdicion ? "Editar Gato" : "Registrar Gato" %> - Misión Michi</title>
     
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -18,6 +28,7 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
     <script>
         tailwind.config = {
             darkMode: "class",
@@ -26,7 +37,14 @@
                     colors: {
                         "primary": "#f97316",
                         "primary-hover": "#ea580c",
-                        "background-light": "#fff7ed",
+                        "ink": "#1e293b",
+                        "ink-light": "#64748b",
+                        "border-light": "#e2e8f0",
+                        "border-dark": "#334155",
+                        "surface-light": "#f8fafc",
+                        "surface-dark": "#0f172a",
+                        "surface-card": "#ffffff",
+                        "surface-cardDark": "#1e293b",
                         "background-dark": "#1a2632",
                     },
                     fontFamily: {
@@ -37,45 +55,15 @@
         }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-background-dark font-display text-gray-800 dark:text-white">
-    
-    <%
-        Gato gato = (Gato) request.getAttribute("gatoEditar");
-        boolean esEdicion = (gato != null);
-        List<Zona> listaZonas = (List<Zona>) request.getAttribute("listaZonas");
-    %>
+<body class="bg-surface-light dark:bg-background-dark font-display text-ink dark:text-white flex flex-col min-h-screen">
 
-<div class="flex min-h-screen w-full flex-row overflow-hidden">
-    
-    <aside class="hidden lg:flex flex-col w-64 border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1a2632] shrink-0 sticky top-0 h-screen">
-        <div class="flex flex-col h-full justify-between p-4">
-            <div class="flex flex-col gap-6">
-                <div class="flex items-center gap-3 px-2">
-                    <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 text-primary">
-                        <span class="material-symbols-outlined text-2xl">pets</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <h1 class="text-lg font-bold leading-none">Misión Michi</h1>
-                        <p class="text-xs text-gray-500 font-medium mt-1">Panel Admin</p>
-                    </div>
-                </div>
-                <nav class="flex flex-col gap-2">
-                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-orange-50 dark:hover:bg-gray-800 transition-colors" href="AdminServlet">
-                        <span class="material-symbols-outlined">dashboard</span> <span class="text-sm font-medium">Dashboard</span>
-                    </a>
-                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary font-bold" href="#">
-                        <span class="material-symbols-outlined">add_circle</span> <span class="text-sm">Registrar Gato</span>
-                    </a>
-                </nav>
-            </div>
-        </div>
-    </aside>
+    <jsp:include page="/WEB-INF/fragmentos/navbar-voluntario.jsp" />
 
-    <main class="flex-1 flex flex-col h-full min-h-screen overflow-y-auto">
+    <main class="flex-1 flex flex-col h-full w-full">
         
-        <div class="px-6 sm:px-10 py-4">
+        <div class="px-6 sm:px-10 py-6 max-w-[1600px] w-full mx-auto">
             <div class="flex flex-wrap items-center gap-2 text-sm">
-                <a class="text-gray-500 hover:text-primary transition-colors" href="GatoServlet?accion=listar">Listado</a>
+                <a class="text-gray-500 hover:text-primary transition-colors" href="GatoServlet?accion=listar">Listado de Gatos</a>
                 <span class="text-gray-400">/</span>
                 <span class="text-gray-900 dark:text-white font-medium"><%= esEdicion ? "Editar Gato" : "Nuevo Registro" %></span>
             </div>
@@ -153,12 +141,12 @@
                                         <option value="" selected>Sin zona asignada</option>
                                         <% if (listaZonas != null) {
                                             for(Zona z : listaZonas) { 
-                                                // Asumiendo que tu Zona tiene getId()
                                                 boolean isSelected = (esEdicion && gato.getZona() != null && gato.getZona().getIdZona() != null && gato.getZona().getIdZona().equals(z.getIdZona()));
-                                        %>
+                                            %>
                                             <option value="<%= z.getIdZona() %>" <%= isSelected ? "selected" : "" %>><%= z.getNombre() %></option>
                                         <% } } %>
                                     </select>
+                                    
                                     <div class="md:col-span-2 mt-4">
                                         <label class="flex flex-col gap-2">
                                             <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -179,7 +167,6 @@
 
                                     <script>
                                         document.addEventListener("DOMContentLoaded", function() {
-                                            // Coordenadas por defecto (Posadas, Misiones)
                                             var defaultLat = -27.3671;
                                             var defaultLng = -55.8961;
                                             var zoomLevel = 13;
@@ -193,26 +180,22 @@
                                             if (existingLat && existingLng) {
                                                 mapCenter = [parseFloat(existingLat), parseFloat(existingLng)];
                                                 hasLocation = true;
-                                                zoomLevel = 16; // Más zoom si ya hay ubicación
+                                                zoomLevel = 16;
                                             }
 
-                                            // Inicializar Mapa
                                             var map = L.map('map').setView(mapCenter, zoomLevel);
 
-                                            // Capa de OpenStreetMap (Estética estándar)
                                             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                                                 attribution: '&copy; OpenStreetMap contributors'
                                             }).addTo(map);
 
                                             var marker;
 
-                                            // Función para actualizar los inputs ocultos
                                             function updateInputs(lat, lng) {
                                                 document.getElementById('latitud').value = lat;
                                                 document.getElementById('longitud').value = lng;
                                             }
 
-                                            // Si ya había ubicación, poner el marcador inicial
                                             if (hasLocation) {
                                                 marker = L.marker(mapCenter, {draggable: true}).addTo(map);
                                                 marker.on('dragend', function(event) {
@@ -221,24 +204,19 @@
                                                 });
                                             }
 
-                                            // Evento de Clic en el Mapa
                                             map.on('click', function(e) {
                                                 var lat = e.latlng.lat;
                                                 var lng = e.latlng.lng;
 
-                                                // Si ya hay marcador, lo movemos. Si no, creamos uno.
                                                 if (marker) {
                                                     marker.setLatLng(e.latlng);
                                                 } else {
                                                     marker = L.marker(e.latlng, {draggable: true}).addTo(map);
-                                                    // Agregar evento de arrastre al nuevo marcador
                                                     marker.on('dragend', function(event) {
                                                         var position = marker.getLatLng();
                                                         updateInputs(position.lat, position.lng);
                                                     });
                                                 }
-
-                                                // Guardar en los inputs ocultos
                                                 updateInputs(lat, lng);
                                             });
                                         });
@@ -271,7 +249,7 @@
                         </div>
                         
                         <div>
-                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 mt-6">
                                 <span class="material-symbols-outlined text-primary">visibility</span> Visual & Foto
                             </h3>
                             <div class="flex flex-col gap-6">
@@ -308,8 +286,8 @@
                 </div>
             </div>
             
-             <div class="w-full xl:w-[320px] flex flex-col gap-6 shrink-0">
-                <div class="bg-white dark:bg-[#1a2632] rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 sticky top-6">
+            <div class="w-full xl:w-[320px] flex flex-col gap-6 shrink-0">
+                <div class="bg-white dark:bg-[#1a2632] rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 sticky top-24">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-lg font-bold text-gray-900 dark:text-white">Vista Previa</h3>
                         <span class="bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded">BORRADOR</span>
@@ -328,6 +306,5 @@
 
         </div>
     </main>
-</div>
 </body>
 </html>

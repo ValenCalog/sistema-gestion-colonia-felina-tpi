@@ -5,11 +5,8 @@
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    // recuperar listas del Servlet
     List<Tarea> tareasRecientes = (List<Tarea>) request.getAttribute("tareas");
     List<Postulacion> postulaciones = (List<Postulacion>) request.getAttribute("postulaciones");
-    
-    // recuperar usuario para el saludo
     Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
     String nombreUser = (u != null) ? u.getNombre() : "Voluntario";
 %>
@@ -39,7 +36,6 @@
                         <a href="GatoServlet?accion=crear" class="btn btn-secondary flex-1 md:flex-none gap-2">
                             <span class="material-symbols-outlined">add_circle</span> Nuevo Gato
                         </a>
-                     
                         <a href="TareaServlet?accion=nueva" class="btn btn-primary flex-1 md:flex-none gap-2 shadow-lg shadow-primary/20">
                             <span class="material-symbols-outlined">edit_square</span> Registrar Tarea
                         </a>
@@ -47,7 +43,6 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    
                     <div class="lg:col-span-2 flex flex-col gap-6">
                         <div class="flex items-center justify-between">
                             <h2 class="text-xl font-bold flex items-center gap-2">
@@ -56,67 +51,23 @@
                             </h2>
                             <a href="TareaServlet" class="text-sm font-bold text-primary hover:underline">Ver todas</a>
                         </div>
-
                         <div class="space-y-4">
-                            <% 
-                            if (tareasRecientes != null && !tareasRecientes.isEmpty()) {
-                                for (Tarea t : tareasRecientes) {
-                                    String inicialVol = "V";
-                                    if(t.getUsuario() != null && t.getUsuario().getNombre() != null) {
-                                        inicialVol = t.getUsuario().getNombre().substring(0, 1).toUpperCase();
-                                    }
-                                    
-                                    String iconoTarea = "task_alt";
-                                    String colorBg = "bg-blue-50 text-blue-600 dark:bg-blue-900/20";
-                                    if(t.getTipoDeTarea() != null && t.getTipoDeTarea().toString().equals("ALIMENTACION")) {
-                                        iconoTarea = "rice_bowl";
-                                        colorBg = "bg-orange-50 text-orange-600 dark:bg-orange-900/20";
-                                    } else if (t.getTipoDeTarea() != null && t.getTipoDeTarea().toString().equals("SALUD")) {
-                                        iconoTarea = "medical_services";
-                                        colorBg = "bg-red-50 text-red-600 dark:bg-red-900/20";
-                                    }
+                            <% if (tareasRecientes != null && !tareasRecientes.isEmpty()) {
+                                for (Tarea t : tareasRecientes) { 
+                                    String inicialVol = (t.getUsuario() != null && t.getUsuario().getNombre() != null) ? t.getUsuario().getNombre().substring(0,1).toUpperCase() : "V";
                             %>
-                            
                             <div class="card p-5 flex flex-row gap-4 items-start hover:border-primary/30 transition-colors group">
-                                <div class="size-12 rounded-xl <%= colorBg %> flex items-center justify-center shrink-0">
-                                    <span class="material-symbols-outlined"><%= iconoTarea %></span>
+                                <div class="size-12 rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-900/20 flex items-center justify-center shrink-0">
+                                    <span class="material-symbols-outlined">task_alt</span>
                                 </div>
                                 <div class="flex-1">
-                                    <div class="flex justify-between items-start">
-                                        <h3 class="font-bold text-lg group-hover:text-primary transition-colors">
-                                            <%= t.getTipoDeTarea() %>
-                                        </h3>
-                                        <span class="text-xs font-bold text-ink-light bg-gray-100 dark:bg-white/10 px-2 py-1 rounded">
-                                            <%= t.getFecha() %>
-                                        </span>
-                                    </div>
-                                    <p class="text-sm text-ink-light mt-1">
-                                        Aplicada a <strong class="text-ink dark:text-white"><%= t.getGato().getNombre() %></strong>. 
-                                        <%= (t.getObservaciones() != null) ? t.getObservaciones() : "" %>
-                                    </p>
-                                    
-                                    <div class="flex items-center gap-4 mt-3 text-xs font-medium text-ink-light">
-                                        <div class="flex items-center gap-2">
-                                            <div class="size-5 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-[10px] font-bold text-ink dark:text-white">
-                                                <%= inicialVol %>
-                                            </div>
-                                            <%= t.getUsuario().getNombre() %>
-                                        </div>
-                                        <div class="flex items-center gap-1">
-                                            <span class="material-symbols-outlined text-[16px]">location_on</span>
-                                            <%= (t.getUbicacion() != null) ? t.getUbicacion() : "Sin ubicación" %>
-                                        </div>
-                                    </div>
+                                    <h3 class="font-bold text-lg"><%= t.getTipoDeTarea() %></h3>
+                                    <p class="text-sm text-ink-light"><%= t.getObservaciones() %></p>
+                                    <span class="text-xs text-ink-light mt-2 block"><%= t.getFecha() %> • <%= t.getUsuario().getNombre() %></span>
                                 </div>
                             </div>
-                            
-                            <% 
-                                } // Fin for tareas
-                            } else { 
-                            %>
-                                <div class="p-8 text-center border-2 border-dashed border-gray-200 rounded-xl">
-                                    <p class="text-gray-500">No hay tareas recientes.</p>
-                                </div>
+                            <% }} else { %>
+                                <div class="p-8 text-center border-2 border-dashed border-gray-200 rounded-xl">No hay tareas recientes.</div>
                             <% } %>
                         </div>
                     </div>
@@ -127,66 +78,22 @@
                                 <span class="material-symbols-outlined text-red-500">favorite</span>
                                 Postulaciones
                             </h2>
-                            <span class="badge bg-red-100 text-red-700 border-red-200 px-2 py-0.5">Pendientes</span>
                         </div>
-
                         <div class="space-y-4">
-                            <% 
-                            if (postulaciones != null && !postulaciones.isEmpty()) {
-                                for (Postulacion p : postulaciones) {
-                                    // Inicial del Postulante
-                                    String inicialPost = "P";
-                                    String nombrePost = "Anónimo";
-                                    
-                                    if(p.getMiembroPostulante() != null) {
-                                        nombrePost = p.getMiembroPostulante().getNombre();
-                                        inicialPost = nombrePost.substring(0, 1).toUpperCase();
-                                    }
-                            %>
-                            
-                            <div class="card p-4 flex flex-col gap-3 relative overflow-hidden group hover:shadow-md transition-all">
-                                <div class="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-primary/10 to-transparent rounded-bl-full -mr-4 -mt-4 group-hover:from-primary/20 transition-colors"></div>
-                                
-                                <div class="flex items-center gap-3">
-                                    <div class="size-10 rounded-full bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark flex items-center justify-center text-primary font-bold text-sm shadow-sm">
-                                        <%= inicialPost %>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-bold text-sm"><%= nombrePost %></h4>
-                                        <p class="text-xs text-ink-light">Interesado en <strong class="text-primary"><%= p.getGato().getNombre() %></strong></p>
-                                    </div>
+                            <% if (postulaciones != null && !postulaciones.isEmpty()) {
+                                for (Postulacion p : postulaciones) { %>
+                                <div class="card p-4 flex flex-col gap-3">
+                                    <h4 class="font-bold"><%= p.getMiembroPostulante().getNombre() %></h4>
+                                    <p class="text-xs text-ink-light">Interesado en <%= p.getGato().getNombre() %></p>
+                                    <a href="PostulacionServlet?accion=verDetalle&id=<%= p.getIdPostulacion() %>" class="btn btn-sm btn-outline w-full">Revisar</a>
                                 </div>
-                                
-                                <div class="bg-surface-light dark:bg-white/5 p-2 rounded text-xs italic text-ink-light border border-border-light dark:border-border-dark">
-                                    "<%= (p.getObservacion() != null) ? p.getObservacion() : "Sin observaciones..." %>"
-                                </div>
-
-                                <div class="flex gap-2 mt-1">
-                                    <form action="PostulacionServlet" method="POST" class="flex-1">
-                                        <input type="hidden" name="id" value="<%= p.getIdPostulacion() %>">
-                                        <input type="hidden" name="accion" value="aceptar">
-                                        <button class="btn h-8 w-full text-xs bg-green-50 text-green-700 hover:bg-green-100 border border-green-200 font-bold">Aceptar</button>
-                                    </form>
-                                    <form action="PostulacionServlet" method="POST" class="flex-1">
-                                        <input type="hidden" name="id" value="<%= p.getIdPostulacion() %>">
-                                        <input type="hidden" name="accion" value="rechazar">
-                                        <button class="btn h-8 w-full text-xs bg-red-50 text-red-700 hover:bg-red-100 border border-red-200">Rechazar</button>
-                                    </form>
-                                </div>
-                            </div>
-                            
-                            <% 
-                                } // Fin for postulaciones
-                            } else { 
-                            %>
-                                <div class="p-6 text-center text-sm text-gray-500 card">
-                                    No hay postulaciones pendientes.
-                                </div>
+                            <% }} else { %>
+                                <div class="card p-6 text-center text-sm text-gray-500">No hay postulaciones.</div>
                             <% } %>
-
                         </div>
-
-                    </div> </div> </div>
+                    </div> 
+                </div> 
+            </div>
         </div>
     </main>
 </body>
