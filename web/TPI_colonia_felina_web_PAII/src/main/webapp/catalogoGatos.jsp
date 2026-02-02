@@ -12,20 +12,44 @@
     <main class="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row gap-8">
         
         <aside class="w-full md:w-64 shrink-0">
-            <div class="card p-5 sticky top-24">
-                <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary">filter_list</span> Filtros
+            <div class="bg-white dark:bg-surface-cardDark rounded-2xl p-5 border border-border-light dark:border-border-dark sticky top-24 shadow-sm">
+
+                <h3 class="font-bold text-lg mb-4 flex items-center gap-2 text-ink dark:text-white">
+                    <span class="material-symbols-outlined text-primary">filter_alt</span> Filtros
                 </h3>
-                <form action="GatoServlet" method="GET" class="space-y-4">
+
+                <form action="GatoServlet" method="GET" class="space-y-5">
                     <input type="hidden" name="accion" value="catalogo">
 
-                    <div class="flex items-center gap-2 mt-2">
-                        <input type="checkbox" name="esterilizado" value="true" class="rounded text-primary focus:ring-primary">
-                        <span class="text-sm">Solo Esterilizados</span>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Sexo</label>
+                        <select name="sexo" class="w-full rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-black/20 text-sm focus:ring-primary focus:border-primary">
+                            <option value="">Todos</option>
+                            <option value="MACHO" <%= "MACHO".equals(request.getParameter("sexo")) ? "selected" : ""%>>Macho</option>
+                            <option value="HEMBRA" <%= "HEMBRA".equals(request.getParameter("sexo")) ? "selected" : ""%>>Hembra</option>
+                        </select>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-full mt-2 text-sm">Aplicar Filtros</button>
-                    <a href="GatoServlet?accion=catalogo" class="btn btn-secondary w-full text-sm text-center block">Limpiar</a>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Esterilizado</label>
+                        <select name="esterilizado" class="w-full rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-black/20 text-sm focus:ring-primary focus:border-primary">
+                            <option value="">Indiferente</option>
+                            <option value="true" <%= "true".equals(request.getParameter("esterilizado")) ? "selected" : ""%>>Sí, esterilizado</option>
+                            <option value="false" <%= "false".equals(request.getParameter("esterilizado")) ? "selected" : ""%>>No (Sin operar)</option>
+                        </select>
+                    </div>
+
+                    <div class="pt-2 space-y-2">
+                        <button type="submit" class="w-full bg-primary hover:bg-green-600 text-white font-bold py-2 rounded-xl text-sm transition-colors shadow-lg shadow-primary/20">
+                            Aplicar Filtros
+                        </button>
+
+                        <% if (request.getParameter("sexo") != null || request.getParameter("esterilizado") != null) { %>
+                        <a href="GatoServlet?accion=catalogo" class="w-full block text-center bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-2 rounded-xl text-sm transition-colors">
+                            Borrar Filtros
+                        </a>
+                        <% } %>
+                    </div>
                 </form>
             </div>
         </aside>

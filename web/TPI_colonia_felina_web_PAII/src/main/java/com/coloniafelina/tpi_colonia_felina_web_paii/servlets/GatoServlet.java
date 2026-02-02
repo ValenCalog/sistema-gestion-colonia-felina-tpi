@@ -97,12 +97,25 @@ public class GatoServlet extends HttpServlet {
                 }
                 break;
                 
-            // En el case "catalogo"
             case "catalogo":
-                String filtroEsterilizado = request.getParameter("esterilizado"); // "true" o null
+                String sexoStr = request.getParameter("sexo");
+                String esterilizadoStr = request.getParameter("esterilizado");
 
-                List<Gato> gatosFiltrados = gatoDAO.buscarDisponibles();
+                Sexo sexoFiltro = null;
+                if (sexoStr != null && !sexoStr.isEmpty()) {
+                    try {
+                        sexoFiltro = Sexo.valueOf(sexoStr);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Sexo inválido recibido: " + sexoStr);
+                    }
+                }
 
+                Boolean esterilizadoFiltro = null;
+                if (esterilizadoStr != null && !esterilizadoStr.isEmpty()) {
+                    esterilizadoFiltro = Boolean.parseBoolean(esterilizadoStr);
+                }
+
+                List<Gato> gatosFiltrados = gatoDAO.buscarConFiltros(sexoFiltro, esterilizadoFiltro);
                 request.setAttribute("gatos", gatosFiltrados);
                 request.getRequestDispatcher("catalogoGatos.jsp").forward(request, response);
                 break;

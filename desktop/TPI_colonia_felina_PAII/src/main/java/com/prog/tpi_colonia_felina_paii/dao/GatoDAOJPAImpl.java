@@ -3,6 +3,7 @@ package com.prog.tpi_colonia_felina_paii.dao;
 
 import com.prog.tpi_colonia_felina_paii.enums.Disponibilidad;
 import com.prog.tpi_colonia_felina_paii.enums.EstadoSalud;
+import com.prog.tpi_colonia_felina_paii.enums.Sexo;
 import com.prog.tpi_colonia_felina_paii.modelo.Gato;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -122,5 +123,38 @@ public class GatoDAOJPAImpl implements IGatoDAO{
             e.printStackTrace();
             return new ArrayList<>(); 
         }
+    }
+    
+    @Override
+    public List<Gato> buscarConFiltros(Sexo sexo, Boolean esEsterilizado) {
+        EntityManager em = DBService.getEntityManager();
+        try {
+            StringBuilder jpql = new StringBuilder("SELECT g FROM Gato g WHERE g.disponibilidad = :d");
+
+            if (sexo != null) {
+                jpql.append(" AND g.sexo = :sexo");
+            }
+
+            if (esEsterilizado != null) {
+                jpql.append(" AND g.esterilizado = :esterilizado");
+            }
+
+            TypedQuery<Gato> query = em.createQuery(jpql.toString(), Gato.class);
+            query.setParameter("d", Disponibilidad.DISPONIBLE);
+            if (sexo != null) {
+                query.setParameter("sexo", sexo);
+            }
+
+            if (esEsterilizado != null) {
+                query.setParameter("esterilizado", esEsterilizado);
+            }
+
+            return query.getResultList();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>(); 
+        } 
+        
     }
 }
