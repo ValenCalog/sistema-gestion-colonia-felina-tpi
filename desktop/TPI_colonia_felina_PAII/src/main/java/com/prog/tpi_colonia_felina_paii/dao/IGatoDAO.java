@@ -1,6 +1,9 @@
 
 package com.prog.tpi_colonia_felina_paii.dao;
 
+import com.prog.tpi_colonia_felina_paii.enums.Disponibilidad;
+import com.prog.tpi_colonia_felina_paii.enums.EstadoSalud;
+import com.prog.tpi_colonia_felina_paii.enums.Sexo;
 import com.prog.tpi_colonia_felina_paii.modelo.Gato;
 import java.util.List;
 
@@ -18,4 +21,10 @@ public interface IGatoDAO {
     List<Gato> buscarDisponibles();
     
     public List<Gato> buscarEsterilizados();
+    
+    List<Gato> buscarTodosOrdenadosPorGravedad();
+    
+    List<Gato> buscarConFiltros(Sexo sexo, Boolean esEsterilizado);
+    
+    List<Gato> buscarConFiltrosVoluntarios(String busqueda, EstadoSalud salud, String nombreZona, Boolean esEsterilizado, Disponibilidad disponibilidad);
 }

@@ -97,20 +97,47 @@ public class GatoServlet extends HttpServlet {
                 }
                 break;
                 
-            // En el case "catalogo"
             case "catalogo":
-                String filtroEsterilizado = request.getParameter("esterilizado"); // "true" o null
+                String sexoStr = request.getParameter("sexo");
+                String esterilizadoStr = request.getParameter("esterilizado");
 
-                List<Gato> gatosFiltrados = gatoDAO.buscarDisponibles();
+                Sexo sexoFiltro = null;
+                if (sexoStr != null && !sexoStr.isEmpty()) {
+                    try {
+                        sexoFiltro = Sexo.valueOf(sexoStr);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Sexo inválido recibido: " + sexoStr);
+                    }
+                }
 
+                Boolean esterilizadoFiltro = null;
+                if (esterilizadoStr != null && !esterilizadoStr.isEmpty()) {
+                    esterilizadoFiltro = Boolean.parseBoolean(esterilizadoStr);
+                }
+
+                List<Gato> gatosFiltrados = gatoDAO.buscarConFiltros(sexoFiltro, esterilizadoFiltro);
                 request.setAttribute("gatos", gatosFiltrados);
                 request.getRequestDispatcher("catalogoGatos.jsp").forward(request, response);
                 break;
 
             case "listar":
             default:
-                List<Gato> listaGatos = gatoDAO.buscarTodos();
+                String busqueda = request.getParameter("q"); // input de búsqueda textual
+                String saludStr = request.getParameter("salud");
+                String zonaStr = request.getParameter("zona");
+                String esterilizadoString = request.getParameter("esterilizado");
+                String dispStr = request.getParameter("disponibilidad");
+                EstadoSalud salud = (saludStr != null && !saludStr.equals("all") && !saludStr.isEmpty()) 
+                                    ? EstadoSalud.valueOf(saludStr) : null;
+                Boolean esterilizado = (esterilizadoString != null && !esterilizadoString.equals("all") && !esterilizadoString.isEmpty()) 
+                                       ? Boolean.parseBoolean(esterilizadoString) : null;
+                Disponibilidad disp = (dispStr != null && !dispStr.equals("all") && !dispStr.isEmpty()) 
+                                      ? Disponibilidad.valueOf(dispStr) : null;
+                if ("all".equals(zonaStr)) zonaStr = null;
+                List<Gato> listaGatos = gatoDAO.buscarConFiltrosVoluntarios(busqueda, salud, zonaStr, esterilizado, disp);
+                List<Zona> listaZonas = zonaDAO.buscarTodas();
                 request.setAttribute("gatos", listaGatos);
+                request.setAttribute("listaZonas", listaZonas); // Para el dropdown de filtros
                 request.getRequestDispatcher("listaGatos.jsp").forward(request, response);
                 break;
         }
