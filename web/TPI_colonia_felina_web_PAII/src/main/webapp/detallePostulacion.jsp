@@ -65,7 +65,7 @@
                 <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm text-center">
                     <div class="w-40 h-40 mx-auto rounded-full overflow-hidden border-4 border-orange-100 mb-4">
                         <% if(p.getGato().getFotografia() != null) { %>
-                            <img src="<%= p.getGato().getFotografia() %>" class="w-full h-full object-cover">
+                            <img src="<%= request.getContextPath() + p.getGato().getFotografia() %>" class="w-full h-full object-cover">
                         <% } else { %>
                             <div class="w-full h-full bg-gray-100 flex items-center justify-center"><span class="material-symbols-outlined text-4xl text-gray-400">pets</span></div>
                         <% } %>

@@ -126,7 +126,7 @@
                 <div class="flex lg:flex-col items-center gap-4 lg:w-48 shrink-0">
                     <div class="relative w-24 h-24 lg:w-32 lg:h-32 rounded-2xl overflow-hidden shadow-md group-hover:scale-105 transition-transform duration-500">
                         <% if(p.getGato().getFotografia() != null) { %>
-                            <img src="<%= p.getGato().getFotografia() %>" class="w-full h-full object-cover">
+                            <img src="<%= request.getContextPath() + p.getGato().getFotografia() %>" class="w-full h-full object-cover">
                         <% } else { %>
                             <div class="w-full h-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-400">
                                 <span class="material-symbols-outlined text-4xl">pets</span>
