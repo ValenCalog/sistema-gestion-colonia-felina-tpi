@@ -175,17 +175,30 @@
 
                             <div class="flex flex-wrap justify-center gap-2 mb-6 w-full">
 
-                                <% if (g.isEsterilizado()) { %>
-                                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-green-50 text-green-700 border border-green-200 flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-[14px]">content_cut</span>
-                                        Esterilizado
-                                    </span>
-                                <% } else { %>
-                                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-[14px]">close</span>
-                                        No Esterilizado
-                                    </span>
-                                <% } %>
+                               <div class="bg-gray-50 dark:bg-black/20 p-3 rounded-lg flex flex-col justify-between h-full">
+                                   <div>
+                                       <p class="text-xs text-ink-light uppercase font-bold">Esterilizado</p>
+                                       <p class="text-sm font-medium <%= g.isEsterilizado() ? "text-green-600" : "text-amber-600"%> flex items-center gap-1">
+                                           <span class="material-symbols-outlined text-sm"><%= g.isEsterilizado() ? "check_circle" : "info"%></span> 
+                                           <%= g.isEsterilizado() ? "Sí" : "Pendiente"%>
+                                       </p>
+                                   </div>
+
+                                   <% if ((g != null) && !g.isEsterilizado()) {%>
+                                   <form action="GatoServlet" method="POST" class="mt-2">
+                                       <input type="hidden" name="accion" value="registrarCastracionExterna">
+                                       <input type="hidden" name="idGato" value="<%= g.getIdGato()%>">
+
+                                       <button type="submit" 
+                                               onclick="return confirm('ATENCIÓN: ¿Confirmas que este gato fue castrado en una campaña externa (ej. IMUSA)?')"
+                                               class="w-full text-[10px] uppercase font-bold bg-white dark:bg-surface-cardDark border border-amber-300 text-amber-700 hover:bg-amber-50 dark:hover:bg-white/10 px-2 py-1.5 rounded shadow-sm transition-colors flex items-center justify-center gap-1"
+                                               title="Registrar Castración realizada fuera del refugio">
+                                           <span class="material-symbols-outlined text-[14px]">content_cut</span>
+                                           Reg. Externo
+                                       </button>
+                                   </form>
+                                   <% }%>
+                               </div>
 
                             </div>
 

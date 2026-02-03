@@ -180,8 +180,29 @@ public class GatoServlet extends HttpServlet {
             }
             return;
         }
-        
         String idStr = request.getParameter("idGato");
+        
+        if ("registrarCastracionExterna".equals(accion)) {
+            try {
+                Long idGato = Long.parseLong(request.getParameter("idGato"));
+                Gato gato = gatoDAO.buscarPorId(idGato);
+
+                if (gato != null) {
+                    gato.setEsterilizado(true);                   
+                    String nota = " [Castrado externamente (Campaña) el " + java.time.LocalDate.now() + "]";
+                    String carac = (gato.getCaracteristicas() != null) ? gato.getCaracteristicas() : "";
+                    gato.setCaracteristicas(carac + nota);
+                    gatoDAO.actualizar(gato);
+                }
+
+                response.sendRedirect("GatoServlet?accion=verDetalle&id=" + idGato);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendRedirect("GatoServlet?accion=listar");
+            }
+            return; 
+        }
         
         Gato gato;
         boolean esNuevo = (idStr == null || idStr.isEmpty());
