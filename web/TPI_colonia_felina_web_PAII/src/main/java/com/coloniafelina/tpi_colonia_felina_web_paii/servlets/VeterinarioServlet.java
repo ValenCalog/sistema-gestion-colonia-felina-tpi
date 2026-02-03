@@ -10,7 +10,6 @@ import com.prog.tpi_colonia_felina_paii.modelo.CertificadoAptitud;
 import com.prog.tpi_colonia_felina_paii.modelo.Gato;
 import com.prog.tpi_colonia_felina_paii.modelo.HistorialMedico;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.ServletException;
@@ -132,6 +131,7 @@ public class VeterinarioServlet extends HttpServlet {
                     }
                     response.sendRedirect("VeterinarioServlet?accion=consultorio");
                     break;
-            }
-        }
+                
+                }
+            }      
 }

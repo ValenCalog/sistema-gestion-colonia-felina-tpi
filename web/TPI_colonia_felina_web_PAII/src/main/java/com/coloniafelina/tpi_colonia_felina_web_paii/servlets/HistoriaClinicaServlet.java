@@ -1,6 +1,4 @@
-
 package com.coloniafelina.tpi_colonia_felina_web_paii.servlets;
-
 import com.prog.tpi_colonia_felina_paii.dao.DiagnosticoDAOJPAImpl;
 import com.prog.tpi_colonia_felina_paii.dao.GatoDAOJPAImpl;
 import com.prog.tpi_colonia_felina_paii.dao.HistorialMedicoDAOJPAImpl;
@@ -15,7 +13,6 @@ import com.prog.tpi_colonia_felina_paii.modelo.Tratamiento;
 import com.prog.tpi_colonia_felina_paii.modelo.Usuario;
 import com.prog.tpi_colonia_felina_paii.modelo.Veterinario;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -114,6 +111,61 @@ public class HistoriaClinicaServlet extends HttpServlet {
             } catch (Exception e) {
                 e.printStackTrace();
                 response.sendRedirect("error.jsp");
+            }
+        }
+        
+        if ("registrarCastracion".equals(accion)) {
+            try {
+                Long idGato = Long.valueOf(request.getParameter("idGato"));
+                Gato gato = gatoDAO.buscarPorId(idGato);
+
+                if (gato != null) {
+                    HistorialMedico historial = gato.getHistorialMedico(); // Ojo: usar el del gato
+                    if (historial == null) {
+                        historial = historialDAO.buscarPorIdGato(idGato);
+                        if (historial == null) {
+                            historial = new HistorialMedico();
+                            historial.setGato(gato);
+                            historialDAO.crear(historial); // 
+                            gato.setHistorialMedico(historial); 
+                        }
+                    }
+
+                    String observacionesInput = request.getParameter("observaciones");
+                    String obsFinal = (observacionesInput != null && !observacionesInput.trim().isEmpty()) 
+                                    ? observacionesInput 
+                                    : "Procedimiento de rutina.";
+
+                    Diagnostico diag = new Diagnostico();
+                    diag.setFecha(LocalDate.now());
+                    diag.setDescDetallada("Esterilización quirúrgica (Protocolo Interno).");
+                    diag.setEstadoClinico(gato.getEstadoSalud().toString()); 
+                    diag.setObservaciones(obsFinal);
+                    diag.setVeterinario(veterinario);
+                    diag.setHistorial(historial);
+
+                    Tratamiento t = new Tratamiento();
+                    t.setMedicacion("Cirugía de Castración");
+                    t.setDescripcion("Procedimiento estándar.");
+                    t.setFechaTratamiento(LocalDate.now());
+                    t.setVeterinario(veterinario); 
+                    t.setDiagnostico(diag); 
+
+                    List<Tratamiento> listaT = new ArrayList<>();
+                    listaT.add(t);
+                    diag.setTratamientos(listaT);
+
+                    diagnosticoDAO.guardarDiagnostico(diag);
+
+                    gato.setEsterilizado(true);
+                    gatoDAO.actualizar(gato);
+                }
+
+                response.sendRedirect("VeterinarioServlet?accion=consultorio&idGato=" + idGato);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendRedirect("VeterinarioServlet?accion=inicio");
             }
         }
     }

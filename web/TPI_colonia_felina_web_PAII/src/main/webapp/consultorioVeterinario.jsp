@@ -191,12 +191,22 @@
                             <p class="text-xs text-ink-light uppercase font-bold">Ubicación</p>
                             <p class="text-sm font-medium"><%= (gato.getZona() != null) ? gato.getZona().getNombre() : "Sin asignar" %></p>
                         </div>
-                        <div class="bg-gray-50 dark:bg-black/20 p-3 rounded-lg">
-                            <p class="text-xs text-ink-light uppercase font-bold">Esterilizado</p>
-                            <p class="text-sm font-medium <%= esEsterilizado ? "text-green-600" : "text-amber-600" %>">
-                                <span class="material-symbols-outlined text-sm align-bottom"><%= esEsterilizado ? "check_circle" : "cancel" %></span> 
-                                <%= esEsterilizado ? "Sí" : "No" %>
-                            </p>
+                        <div class="bg-gray-50 dark:bg-black/20 p-3 rounded-lg flex flex-col justify-between h-full">
+                            <div>
+                                <p class="text-xs text-ink-light uppercase font-bold">Esterilizado</p>
+                                <p class="text-sm font-medium <%= esEsterilizado ? "text-green-600" : "text-amber-600"%> flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm"><%= esEsterilizado ? "check_circle" : "info"%></span> 
+                                    <%= esEsterilizado ? "Sí" : "Pendiente"%>
+                                </p>
+                            </div>
+
+                            <% if (hayGato && !esEsterilizado) {%>
+                                <button onclick="abrirModalCastracion()" type="button" 
+                                        class="w-full text-[10px] uppercase font-bold bg-white dark:bg-surface-cardDark border border-amber-300 text-amber-700 hover:bg-amber-50 dark:hover:bg-white/10 px-2 py-1.5 rounded shadow-sm transition-colors flex items-center justify-center gap-1">
+                                    <span class="material-symbols-outlined text-[14px]">content_cut</span>
+                                    Registrar
+                                </button>
+                            <% } %>
                         </div>
                     </div>
                 </div>
@@ -517,6 +527,45 @@
             <div class="p-4 text-center text-sm text-gray-500">Apunta la cámara al código QR.</div>
         </div>
     </div>
+    <div id="modal-castracion" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="cerrarModalCastracion()"></div>
+
+        <div class="relative flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white dark:bg-surface-cardDark w-full max-w-md rounded-2xl shadow-2xl overflow-hidden transform transition-all">
+
+                <div class="bg-amber-50 dark:bg-amber-900/20 p-4 border-b border-amber-100 flex justify-between items-center">
+                    <h3 class="font-bold text-amber-800 dark:text-amber-200 flex items-center gap-2">
+                        <span class="material-symbols-outlined">content_cut</span> Registrar Cirugía
+                    </h3>
+                    <button onclick="cerrarModalCastracion()" class="text-gray-400 hover:text-red-500">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <form action="HistoriaClinicaServlet" method="POST" class="p-6 space-y-4">
+                    <input type="hidden" name="accion" value="registrarCastracion">
+                    <input type="hidden" name="idGato" value="<%= idGato%>">
+
+                    <div class="p-3 bg-blue-50 text-blue-700 text-sm rounded-lg border border-blue-100">
+                        <p class="font-bold">¿Confirmas la esterilización?</p>
+                        <p class="text-xs mt-1">Esto cambiará el estado a <strong>Esterilizado: SÍ</strong> y generará el historial médico.</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-ink dark:text-white mb-2">Observaciones / Protocolo</label>
+                        <textarea name="observaciones" rows="3" 
+                                  class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-black/20 text-sm p-3 focus:ring-primary"
+                                  >Procedimiento de rutina realizado bajo anestesia total. Sin complicaciones intraoperatorias.</textarea>
+                    </div>
+
+                    <div class="flex gap-3 pt-2">
+                        <button type="button" onclick="cerrarModalCastracion()" class="flex-1 px-4 py-2 rounded-xl border border-gray-300 text-gray-600 font-bold hover:bg-gray-50">Cancelar</button>
+                        <button type="submit" class="flex-1 px-4 py-2 rounded-xl bg-amber-500 text-white font-bold hover:bg-amber-600 shadow-lg shadow-amber-500/20">Confirmar Cirugía</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -625,6 +674,13 @@
         } else {
             alert("El código QR no contiene un ID válido: " + decodedText);
         }
+    }
+    
+    function abrirModalCastracion() {
+        document.getElementById('modal-castracion').classList.remove('hidden');
+    }
+    function cerrarModalCastracion() {
+        document.getElementById('modal-castracion').classList.add('hidden');
     }
 </script>
 
