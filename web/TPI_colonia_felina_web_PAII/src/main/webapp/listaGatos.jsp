@@ -35,10 +35,16 @@
                 <h1 class="heading-xl text-3xl">Nuestros Habitantes 🐱</h1>
                 <p class="text-body text-ink-light">Gestión y seguimiento de la colonia.</p>
             </div>
-            <button onclick="abrirEscaner()" class="btn btn-primary shadow-lg shadow-primary/30 gap-2 animate-bounce">
-                <span class="material-symbols-outlined">qr_code_scanner</span>
-                Escanear QR
-            </button>
+            <div class="flex flex-wrap gap-3">
+                <a href="GatoServlet?accion=crear" class="btn bg-white dark:bg-surface-cardDark border border-gray-200 dark:border-gray-700 text-ink dark:text-white hover:border-primary hover:text-primary transition-all shadow-sm gap-2">
+                        <span class="material-symbols-outlined">add_circle</span>
+                         Nuevo Gato
+                </a>
+                <button onclick="abrirEscaner()" class="btn btn-primary shadow-lg shadow-primary/30 gap-2">
+                    <span class="material-symbols-outlined">qr_code_scanner</span>
+                    Escanear QR
+                </button>
+            </div>
         </div>
 
         <div class="flex flex-col lg:flex-row gap-8">
