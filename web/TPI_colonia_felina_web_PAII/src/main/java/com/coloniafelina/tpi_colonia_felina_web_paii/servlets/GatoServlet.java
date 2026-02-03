@@ -163,6 +163,24 @@ public class GatoServlet extends HttpServlet {
         GatoDAOJPAImpl gatoDAO = new GatoDAOJPAImpl();
         ZonaDAOJPAImpl zonaDAO = new ZonaDAOJPAImpl();
         
+        String accion = request.getParameter("accion");
+        if ("actualizarSalud".equals(accion)) {
+            try {
+                Long idGato = Long.parseLong(request.getParameter("idGato"));
+                EstadoSalud nuevoEstado = EstadoSalud.valueOf(request.getParameter("nuevoEstado"));
+                Gato gato = gatoDAO.buscarPorId(idGato);
+                if (gato != null) {
+                    gato.setEstadoSalud(nuevoEstado);
+                    gatoDAO.actualizar(gato);
+                }
+                response.sendRedirect("GatoServlet?accion=verDetalle&id=" + idGato);
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendRedirect("GatoServlet?accion=listar");
+            }
+            return;
+        }
+        
         String idStr = request.getParameter("idGato");
         
         Gato gato;
