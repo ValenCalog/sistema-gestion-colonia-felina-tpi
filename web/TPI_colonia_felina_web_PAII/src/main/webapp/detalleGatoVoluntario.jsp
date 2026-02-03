@@ -191,7 +191,7 @@
 
                                        <button type="submit" 
                                                onclick="return confirm('ATENCIÓN: ¿Confirmas que este gato fue castrado en una campaña externa (ej. IMUSA)?')"
-                                               class="w-full text-[10px] uppercase font-bold bg-white dark:bg-surface-cardDark border border-amber-300 text-amber-700 hover:bg-amber-50 dark:hover:bg-white/10 px-2 py-1.5 rounded shadow-sm transition-colors flex items-center justify-center gap-1"
+                                               class="w-full text-[10px] uppercase font-bold bg-white dark:bg-surface-cardDark border border-amber-300 text-amber-700 hover:bg-amber-50 dark:hover:bg-white/10 px-2 py-1.5 rounded shadow-sm transition-colors flex items-center justify-center gap-1 no-print"
                                                title="Registrar Castración realizada fuera del refugio">
                                            <span class="material-symbols-outlined text-[14px]">content_cut</span>
                                            Reg. Externo
