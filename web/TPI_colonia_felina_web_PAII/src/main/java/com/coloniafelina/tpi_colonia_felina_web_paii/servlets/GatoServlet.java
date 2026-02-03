@@ -119,7 +119,20 @@ public class GatoServlet extends HttpServlet {
                 request.setAttribute("gatos", gatosFiltrados);
                 request.getRequestDispatcher("catalogoGatos.jsp").forward(request, response);
                 break;
-
+            case "verQr":
+                try {
+                    Long id = Long.valueOf(request.getParameter("id"));
+                    Gato gato = gatoDAO.buscarPorId(id);
+                    if (gato != null) {
+                        request.setAttribute("gato", gato);
+                        request.getRequestDispatcher("verQrGato.jsp").forward(request, response);
+                    } else {
+                        response.sendRedirect("GatoServlet?accion=listar");
+                    }
+                } catch (Exception e) {
+                    response.sendRedirect("GatoServlet?accion=listar");
+                }
+                break;
             case "listar":
             default:
                 String busqueda = request.getParameter("q"); // input de búsqueda textual
@@ -149,6 +162,24 @@ public class GatoServlet extends HttpServlet {
 
         GatoDAOJPAImpl gatoDAO = new GatoDAOJPAImpl();
         ZonaDAOJPAImpl zonaDAO = new ZonaDAOJPAImpl();
+        
+        String accion = request.getParameter("accion");
+        if ("actualizarSalud".equals(accion)) {
+            try {
+                Long idGato = Long.parseLong(request.getParameter("idGato"));
+                EstadoSalud nuevoEstado = EstadoSalud.valueOf(request.getParameter("nuevoEstado"));
+                Gato gato = gatoDAO.buscarPorId(idGato);
+                if (gato != null) {
+                    gato.setEstadoSalud(nuevoEstado);
+                    gatoDAO.actualizar(gato);
+                }
+                response.sendRedirect("GatoServlet?accion=verDetalle&id=" + idGato);
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendRedirect("GatoServlet?accion=listar");
+            }
+            return;
+        }
         
         String idStr = request.getParameter("idGato");
         
@@ -255,7 +286,7 @@ public class GatoServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        response.sendRedirect("GatoServlet?accion=listar");
+        response.sendRedirect("GatoServlet?accion=verQr&id=" + gato.getIdGato());
     }
 
     // MÉTODO PARA GUARDAR LA FOTO EN DISCO

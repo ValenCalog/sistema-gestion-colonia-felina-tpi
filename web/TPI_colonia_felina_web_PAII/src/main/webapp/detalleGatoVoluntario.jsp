@@ -216,10 +216,10 @@
                         </a>
                         
                         <div class="grid grid-cols-2 gap-3">
-                            <a href="TareaServlet?accion=nueva&tipo=SALUD&idGato=<%= g.getIdGato() %>" class="btn bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 flex flex-col items-center gap-1 py-3 h-auto">
+                            <button onclick="abrirModalSalud()" class="btn bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 flex flex-col items-center gap-1 py-3 h-auto w-full rounded-xl transition-colors">
                                 <span class="material-symbols-outlined">healing</span>
-                                <span class="text-xs font-bold">Reportar Salud</span>
-                            </a>
+                                <span class="text-xs font-bold">Actualizar Salud</span>
+                            </button>
                             <a href="GatoServlet?accion=editar&id=<%= g.getIdGato() %>" class="btn bg-gray-50 hover:bg-gray-100 text-ink border border-gray-200 flex flex-col items-center gap-1 py-3 h-auto">
                                 <span class="material-symbols-outlined">add_a_photo</span>
                                 <span class="text-xs font-bold">Cambiar Foto</span>
@@ -262,7 +262,74 @@
                     <jsp:include page="/WEB-INF/fragmentos/pestana-historial-tareas-detalle-gato.jsp" />
                 </div>    
     </main>
+   
+    <div id="modal-salud" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="cerrarModalSalud()"></div>
+    
+    <div class="relative flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white dark:bg-surface-cardDark w-full max-w-md rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100">
+            
+            <div class="bg-red-50 dark:bg-red-900/20 p-4 border-b border-red-100 dark:border-red-900/30 flex justify-between items-center">
+                <h3 class="font-bold text-red-700 dark:text-red-300 flex items-center gap-2">
+                    <span class="material-symbols-outlined">healing</span> Actualizar Salud
+                </h3>
+                <button onclick="cerrarModalSalud()" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <form action="GatoServlet" method="POST" class="p-6 space-y-4">
+                <input type="hidden" name="accion" value="actualizarSalud">
+                <input type="hidden" name="idGato" value="<%= g.getIdGato() %>">
+                
+                <div>
+                    <label class="block text-sm font-bold text-ink dark:text-white mb-2">Nuevo Estado de Salud</label>
+                    <div class="grid grid-cols-1 gap-2">
+                        
+                        <label class="cursor-pointer">
+                            <input type="radio" name="nuevoEstado" value="SANO" class="peer sr-only" <%= g.getEstadoSalud().toString().equals("SANO") ? "checked" : "" %>>
+                            <div class="p-3 rounded-xl border border-gray-200 dark:border-gray-700 peer-checked:border-green-500 peer-checked:bg-green-50 dark:peer-checked:bg-green-900/20 peer-checked:text-green-700 dark:peer-checked:text-green-300 flex items-center gap-3 transition-all hover:bg-gray-50">
+                                <div class="bg-green-100 p-1 rounded-full text-green-600"><span class="material-symbols-outlined text-lg">check</span></div>
+                                <span class="font-bold">Sano</span>
+                            </div>
+                        </label>
+
+                        <label class="cursor-pointer">
+                            <input type="radio" name="nuevoEstado" value="EN_TRATAMIENTO" class="peer sr-only" <%= g.getEstadoSalud().toString().equals("EN_TRATAMIENTO") ? "checked" : "" %>>
+                            <div class="p-3 rounded-xl border border-gray-200 dark:border-gray-700 peer-checked:border-amber-500 peer-checked:bg-amber-50 dark:peer-checked:bg-amber-900/20 peer-checked:text-amber-700 dark:peer-checked:text-amber-300 flex items-center gap-3 transition-all hover:bg-gray-50">
+                                <div class="bg-amber-100 p-1 rounded-full text-amber-600"><span class="material-symbols-outlined text-lg">healing</span></div>
+                                <span class="font-bold">En Tratamiento</span>
+                            </div>
+                        </label>
+
+                        <label class="cursor-pointer">
+                            <input type="radio" name="nuevoEstado" value="ENFERMO" class="peer sr-only" <%= g.getEstadoSalud().toString().equals("ENFERMO") ? "checked" : "" %>>
+                            <div class="p-3 rounded-xl border border-gray-200 dark:border-gray-700 peer-checked:border-red-500 peer-checked:bg-red-50 dark:peer-checked:bg-red-900/20 peer-checked:text-red-700 dark:peer-checked:text-red-300 flex items-center gap-3 transition-all hover:bg-gray-50">
+                                <div class="bg-red-100 p-1 rounded-full text-red-600"><span class="material-symbols-outlined text-lg">medical_services</span></div>
+                                <span class="font-bold">Enfermo</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="cerrarModalSalud()" class="flex-1 px-4 py-2 rounded-xl border border-gray-300 text-gray-600 font-bold hover:bg-gray-50 transition-colors">Cancelar</button>
+                    <button type="submit" class="flex-1 px-4 py-2 rounded-xl bg-primary text-white font-bold hover:bg-primary-hover shadow-lg shadow-primary/20 transition-colors">Guardar Cambio</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+                                  
     <script>
+        
+        function abrirModalSalud() {
+            document.getElementById('modal-salud').classList.remove('hidden');
+        }
+
+        function cerrarModalSalud() {
+            document.getElementById('modal-salud').classList.add('hidden');
+        }
+
         function cambiarTab(nombreTab) {
             // 1. Ocultar todos
             document.getElementById('tab-general').classList.add('hidden');
