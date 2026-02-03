@@ -27,7 +27,6 @@ public class SeguimientoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 1. Verificar Sesión
         HttpSession session = request.getSession();
         Usuario uLogueado = (Usuario) session.getAttribute("usuarioLogueado");
         
@@ -36,7 +35,6 @@ public class SeguimientoServlet extends HttpServlet {
             return;
         }
 
-        // 2. Enrutamiento
         String accion = request.getParameter("accion");
         if (accion == null) accion = "listarAdopciones";
 
@@ -78,9 +76,6 @@ public class SeguimientoServlet extends HttpServlet {
         }
     }
 
-    // ==========================================
-    // MÉTODOS DE LÓGICA
-    // ==========================================
 
     private void listarAdopcionesFinalizadas(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
@@ -90,21 +85,18 @@ public class SeguimientoServlet extends HttpServlet {
         
         if (todas != null) {
             for (Adopcion a : todas) {
-                // Convertimos a String para evitar errores si el tipo de dato varía
                 String estadoActual = String.valueOf(a.getEstado());
                 
-                // FILTRO ROBUSTO: Aceptamos "ACEPTADA" o "ACTIVA"
                 if (estadoActual != null) {
                     String estadoUpper = estadoActual.toUpperCase();
                     if (estadoUpper.contains("ACEPTADA") || estadoUpper.contains("ACTIVA")) {
-                        finalizadas.add(a);
+                        finalizadas.add(a); 
                     }
                 }
             }
         }
 
         request.setAttribute("listaAdopciones", finalizadas);
-        // Al listar, también necesitamos el historial vacío o nulo para que el JSP no falle
         request.setAttribute("historialSeguimientos", null); 
         request.getRequestDispatcher("gestionSeguimientos.jsp").forward(request, response);
     }
@@ -117,11 +109,9 @@ public class SeguimientoServlet extends HttpServlet {
         if (idStr != null) {
             Long idAdopcion = Long.parseLong(idStr);
             
-            // Cargamos la adopción seleccionada y su historial
             Adopcion adopcion = adopcionDAO.buscarPorId(idAdopcion);
             List<Seguimiento> historial = seguimientoDAO.buscarPorAdopcion(idAdopcion);
             
-            // IMPORTANTE: También necesitamos volver a cargar la lista de la izquierda
             listarAdopcionesParaHistorial(request, adopcion, historial);
             
             request.getRequestDispatcher("gestionSeguimientos.jsp").forward(request, response);
@@ -130,8 +120,6 @@ public class SeguimientoServlet extends HttpServlet {
         }
     }
     
-    // Método auxiliar para no repetir código al mostrar historial
-    // Carga la lista lateral + el detalle central
     private void listarAdopcionesParaHistorial(HttpServletRequest request, Adopcion seleccionada, List<Seguimiento> historial) {
         List<Adopcion> todas = adopcionDAO.buscarTodas();
         List<Adopcion> finalizadas = new ArrayList<>();
@@ -190,7 +178,6 @@ public class SeguimientoServlet extends HttpServlet {
 
             seguimientoDAO.crear(s);
 
-            // Redirigir al historial para ver el nuevo registro
             response.sendRedirect("SeguimientoServlet?accion=historial&idAdopcion=" + idAdopcion);
 
         } catch (Exception e) {

@@ -12,28 +12,25 @@
     List<Seguimiento> historial = (List<Seguimiento>) request.getAttribute("historialSeguimientos");
     DateTimeFormatter fmtFecha = DateTimeFormatter.ofPattern("dd 'de' MMMM, yyyy");
     
-    // Recuperar datos de contacto enriquecidos
     String telefonoFamilia = "Sin teléfono registrado";
     String nombreContacto = "Familia";
     String direccionFamilia = "Sin dirección";
     
     if (adopcionSeleccionada != null && adopcionSeleccionada.getFamiliaAdoptante() != null) {
-        // Dirección de la familia
         if(adopcionSeleccionada.getFamiliaAdoptante().getDireccion() != null){
             direccionFamilia = adopcionSeleccionada.getFamiliaAdoptante().getDireccion();
         }
         
-        // Buscar un miembro con teléfono para mostrar como contacto principal
         List<Usuario> miembros = adopcionSeleccionada.getFamiliaAdoptante().getMiembrosFamilia();
         if (miembros != null && !miembros.isEmpty()) {
             for (Usuario miembro : miembros) {
                 if (miembro.getTelefono() != null && !miembro.getTelefono().trim().isEmpty()) {
                     telefonoFamilia = miembro.getTelefono();
-                    nombreContacto = miembro.getNombre(); // Guardamos el nombre de quien tiene el teléfono
+                    nombreContacto = miembro.getNombre();
                     break;
                 }
             }
-            // Si no encontramos nadie con teléfono, usamos el nombre del primer miembro al menos
+
             if(nombreContacto.equals("Familia") && !miembros.isEmpty()){
                 nombreContacto = miembros.get(0).getNombre();
             }
@@ -69,7 +66,6 @@
                     for (Adopcion a : listaAdopciones) {
                         boolean isSelected = (adopcionSeleccionada != null && adopcionSeleccionada.getIdAdopcion().equals(a.getIdAdopcion()));
                         
-                        // Estilos condicionales
                         String containerClass = isSelected 
                             ? "bg-white dark:bg-surface-cardDark border-primary ring-1 ring-primary/20 shadow-md transform scale-[1.02]" 
                             : "bg-white dark:bg-surface-cardDark border-transparent hover:border-gray-200 dark:hover:border-gray-700 hover:shadow-sm";
