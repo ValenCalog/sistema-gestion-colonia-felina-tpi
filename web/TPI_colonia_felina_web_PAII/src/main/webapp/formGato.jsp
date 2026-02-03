@@ -249,113 +249,114 @@
 
         </div>
     </main>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var defaultLat = -27.3671; // Posadas
-            var defaultLng = -55.8961;
-            var zoomLevel = 13;
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var defaultLat = -27.3671; // Posadas
+        var defaultLng = -55.8961;
+        var zoomLevel = 13;
 
-            var existingLat = document.getElementById('latitud').value;
-            var existingLng = document.getElementById('longitud').value;
+        var existingLat = document.getElementById('latitud').value;
+        var existingLng = document.getElementById('longitud').value;
 
-            var mapCenter = (existingLat && existingLng) 
-                            ? [parseFloat(existingLat), parseFloat(existingLng)] 
-                            : [defaultLat, defaultLng];
+        var mapCenter = (existingLat && existingLng) 
+                        ? [parseFloat(existingLat), parseFloat(existingLng)] 
+                        : [defaultLat, defaultLng];
+        
+        var initialZoom = (existingLat && existingLng) ? 16 : zoomLevel;
 
-            var initialZoom = (existingLat && existingLng) ? 16 : zoomLevel;
+        var map = L.map('map').setView(mapCenter, initialZoom);
 
-            var map = L.map('map').setView(mapCenter, initialZoom);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(map);
-
-
-            /* Ahora hacemos un diccionario con los datos de la zona
-             Clave: ID de zona, Valor: coordenadas */
-            const baseDeDatosZonas = {
-                <% if(listaZonas != null) {
-                    for(Zona z : listaZonas) {
-                        if(z.getCoordenadas() != null && !z.getCoordenadas().isEmpty()) { 
-                %>
-                            "<%= z.getIdZona() %>": <%= z.getCoordenadas() %>,
-                <%      }
-                    }
-                } %>
-            };
-
-            var capaZonaActual = null; // Para guardar el polígono que estamos dibujando
-
-            // función global (para llamarla desde el select)
-            window.actualizarZonaEnMapa = function() {
-                var select = document.getElementById('selectZona');
-                var idZona = select.value;
-
-                // limpiar zona anterior si existe
-                if (capaZonaActual) {
-                    map.removeLayer(capaZonaActual);
-                    capaZonaActual = null;
+        // Logica de zonas:
+        // hacemos un diccionario con los datos de las zonas
+        // Clave: ID de Zona, Valor: GeoJSON de coordenadas
+        const baseDeDatosZonas = {
+            <% if(listaZonas != null) {
+                for(Zona z : listaZonas) {
+                    // Validamos que no sea nulo y que tenga coordenadas guardadas
+                    if(z.getCoordenadas() != null && !z.getCoordenadas().isEmpty()) { 
+            %>
+                "<%= z.getIdZona() %>": <%= z.getCoordenadas() %>,
+            <%      }
                 }
+            } %>
+        };
 
-                // si hay zona seleccionada y tenemos sus coordenadas
-                if (idZona && baseDeDatosZonas[idZona]) {
-                    var geoJsonData = baseDeDatosZonas[idZona];
+        var capaZonaActual = null; // para guardar el poligono que estamos dibujando
 
-                    // dibujamos el polígono
-                    capaZonaActual = L.geoJSON(geoJsonData, {
-                        style: {
-                            color: "#f97316",)
-                            weight: 2,
-                            opacity: 0.8,
-                            fillOpacity: 0.2
-                        }
-                    }).addTo(map);
-
-                    // con esto hacemos zoom automático para que se vea toda la zona
-                    if (capaZonaActual.getBounds().isValid()) {
-                        map.fitBounds(capaZonaActual.getBounds());
-                    }
-                }
-            };
-
-            actualizarZonaEnMapa();
-
-            //logica para el marcador
-            var marker;
-
-            function updateInputs(lat, lng) {
-                document.getElementById('latitud').value = lat;
-                document.getElementById('longitud').value = lng;
+        // función global (para llamarla en el select)
+        window.actualizarZonaEnMapa = function() {
+            var select = document.getElementById('selectZona');
+            var idZona = select.value;
+            
+            // limpiar zona anterior si existe
+            if (capaZonaActual) {
+                map.removeLayer(capaZonaActual);
+                capaZonaActual = null;
             }
 
-            // si ya había ubicación guardada, poner marcador
-            if (existingLat && existingLng) {
-                marker = L.marker(mapCenter, {draggable: true}).addTo(map);
+            // si hay zona seleccionada y tenemos sus coordenadas
+            if (idZona && baseDeDatosZonas[idZona]) {
+                var geoJsonData = baseDeDatosZonas[idZona];
+                
+                // Dibujamos el polígono
+                capaZonaActual = L.geoJSON(geoJsonData, {
+                    style: {
+                        color: "#f97316",
+                        weight: 2,
+                        opacity: 0.8,
+                        fillOpacity: 0.2
+                    }
+                }).addTo(map);
 
+                // con esto hacemos zoom automático para que se vea toda la zona
+                if (capaZonaActual.getBounds().isValid()) {
+                    map.fitBounds(capaZonaActual.getBounds());
+                }
+            }
+        };
+        actualizarZonaEnMapa();
+
+
+        // Logica de marcador: 
+        var marker;
+
+        function updateInputs(lat, lng) {
+            document.getElementById('latitud').value = lat;
+            document.getElementById('longitud').value = lng;
+        }
+
+        // si ya había ubicación guardada, poner marcador
+        if (existingLat && existingLng) {
+            marker = L.marker(mapCenter, {draggable: true}).addTo(map);
+            
+            marker.on('dragend', function(event) {
+                var position = marker.getLatLng();
+                updateInputs(position.lat, position.lng);
+            });
+        }
+
+        // click en el mapa para mover/crear marcador
+        map.on('click', function(e) {
+            var lat = e.latlng.lat;
+            var lng = e.latlng.lng;
+
+            if (marker) {
+                marker.setLatLng(e.latlng);
+            } else {
+                marker = L.marker(e.latlng, {draggable: true}).addTo(map);
                 marker.on('dragend', function(event) {
                     var position = marker.getLatLng();
                     updateInputs(position.lat, position.lng);
                 });
             }
-
-            // click en el mapa para mover/crear marcador
-            map.on('click', function(e) {
-                var lat = e.latlng.lat;
-                var lng = e.latlng.lng;
-
-                if (marker) {
-                    marker.setLatLng(e.latlng);
-                } else {
-                    marker = L.marker(e.latlng, {draggable: true}).addTo(map);
-                    marker.on('dragend', function(event) {
-                        var position = marker.getLatLng();
-                        updateInputs(position.lat, position.lng);
-                    });
-                }
-                updateInputs(lat, lng);
-            });
+            updateInputs(lat, lng);
         });
-    </script>                        
+    });
+</script> 
 </body>
-</html>
 
+</html>
