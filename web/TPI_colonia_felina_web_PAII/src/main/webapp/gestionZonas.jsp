@@ -1,6 +1,16 @@
+<%@page import="com.prog.tpi_colonia_felina_paii.modelo.Usuario"%>
 <%@page import="com.prog.tpi_colonia_felina_paii.modelo.Zona"%>
 <%@page import="java.util.List" %>
 <%
+    Usuario uLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+    String inicialAdmin = "A"; 
+    String nombreCompleto = "Administrador"; 
+    
+    if (uLogueado != null && uLogueado.getNombre() != null && !uLogueado.getNombre().isEmpty()) {
+        inicialAdmin = uLogueado.getNombre().substring(0, 1).toUpperCase();
+        nombreCompleto = uLogueado.getNombre() + " " + (uLogueado.getApellido() != null ? uLogueado.getApellido() : "");
+    }
+
     List<Zona> zonas = (List<Zona>) request.getAttribute("listaZonas");
     Zona zonaEditar = (Zona) request.getAttribute("zonaSeleccionada");
 
@@ -25,11 +35,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
 
     <style>
-        /* Ajustes de Mapa y Scroll */
         #map { height: 100%; width: 100%; z-index: 1; }
         .leaflet-draw-toolbar a { color: #ee8c2b !important; }
         
-        /* Scrollbars finas */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
@@ -78,12 +86,15 @@
 
                 <div class="mt-auto border-t border-border-light dark:border-border-dark pt-4 px-2">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
-                            <img alt="Admin" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=100&auto=format&fit=crop"/>
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-orange-400 p-[2px]">
+                            <div class="w-full h-full rounded-full bg-white dark:bg-surface-cardDark flex items-center justify-center">
+                                <span class="font-bold text-primary"><%= inicialAdmin %></span>
+                            </div>
                         </div>
+                        
                         <div class="flex flex-col">
-                            <p class="text-sm font-bold">Admin User</p>
-                            <a href="LoginServlet?logout=true" class="text-xs text-red-500 hover:underline">Cerrar Sesión</a>
+                            <p class="text-sm font-bold truncate max-w-[140px]"><%= nombreCompleto %></p>
+                            <a href="LogoutServlet" class="text-xs text-red-500 hover:underline">Cerrar Sesión</a>
                         </div>
                     </div>
                 </div>

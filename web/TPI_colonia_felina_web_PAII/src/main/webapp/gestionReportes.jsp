@@ -1,8 +1,23 @@
+<%@page import="com.prog.tpi_colonia_felina_paii.modelo.Usuario"%>
 <%@page import="com.prog.tpi_colonia_felina_paii.modelo.Adopcion"%>
 <%@page import="com.prog.tpi_colonia_felina_paii.modelo.Gato"%>
 <%@page import="java.util.List"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%
+    Usuario uLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+    String inicialAdmin = "A"; 
+    String nombreCompleto = "Administrador"; 
+    
+    if (uLogueado != null && uLogueado.getNombre() != null && !uLogueado.getNombre().isEmpty()) {
+        inicialAdmin = uLogueado.getNombre().substring(0, 1).toUpperCase();
+        nombreCompleto = uLogueado.getNombre() + " " + (uLogueado.getApellido() != null ? uLogueado.getApellido() : "");
+    }
+
+    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+%>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -23,10 +38,6 @@
 </head>
 <body class="font-sans bg-surface-light dark:bg-surface-dark text-ink dark:text-white overflow-hidden">
     
-    <%
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    %>
-
     <div class="flex h-screen w-full">
         
         <aside class="flex w-72 flex-col border-r border-border-light dark:border-border-dark bg-surface-card dark:bg-surface-cardDark transition-all duration-300 hidden lg:flex">
@@ -62,12 +73,15 @@
 
                 <div class="mt-auto border-t border-border-light dark:border-border-dark pt-4 px-2">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center text-gray-500">
-                            <span class="material-symbols-outlined">person</span>
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-orange-400 p-[2px]">
+                            <div class="w-full h-full rounded-full bg-white dark:bg-surface-cardDark flex items-center justify-center">
+                                <span class="font-bold text-primary"><%= inicialAdmin %></span>
+                            </div>
                         </div>
+                        
                         <div class="flex flex-col">
-                            <p class="text-sm font-bold">Administrador</p>
-                            <a href="LoginServlet?logout=true" class="text-xs text-red-500 hover:underline">Cerrar Sesión</a>
+                            <p class="text-sm font-bold truncate max-w-[140px]"><%= nombreCompleto %></p>
+                            <a href="LogoutServlet" class="text-xs text-red-500 hover:underline">Cerrar Sesión</a>
                         </div>
                     </div>
                 </div>
@@ -77,6 +91,13 @@
         <main class="flex-1 flex flex-col h-full overflow-hidden relative">
             
             <header class="flex-none px-8 py-6 bg-surface-card dark:bg-surface-cardDark border-b border-border-light dark:border-border-dark flex justify-between items-center">
+                
+                <div class="lg:hidden flex items-center gap-3 mr-4">
+                    <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs border border-primary/20">
+                        <%= inicialAdmin %>
+                    </div>
+                </div>
+
                 <div>
                     <h2 class="text-2xl font-black text-ink dark:text-white"><%= request.getAttribute("titulo") != null ? request.getAttribute("titulo") : "Centro de Reportes" %></h2>
                     <p class="text-ink-light text-sm mt-1">Generación y visualización de datos históricos de la colonia.</p>

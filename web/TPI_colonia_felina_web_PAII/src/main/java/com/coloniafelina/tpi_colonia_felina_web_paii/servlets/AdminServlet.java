@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "AdminServlet", urlPatterns = {"/AdminServlet"})
 public class AdminServlet extends HttpServlet {
@@ -19,6 +20,23 @@ public class AdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        HttpSession session = request.getSession();
+        Usuario uLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+
+        if (uLogueado == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        if (uLogueado.getRol() != Rol.ADMIN) {
+            if (uLogueado.getRol() == Rol.VETERINARIO) {
+                response.sendRedirect("VeterinarioServlet");
+            } else {
+                response.sendRedirect("VoluntarioServlet");
+            }
+            return;
+        }
 
         UsuarioDAOJPAImpl usuarioDAO = new UsuarioDAOJPAImpl();
 
@@ -32,11 +50,9 @@ public class AdminServlet extends HttpServlet {
             case "crear":
                 mostrarFormularioCrear(request, response);
                 break;
-
             case "evaluar":
                 listarPendientes(request, response, usuarioDAO);
                 break;
-
             case "listar":
             default:
                 listarUsuarios(request, response, usuarioDAO);
@@ -47,6 +63,23 @@ public class AdminServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        HttpSession session = request.getSession();
+        Usuario uLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+
+        if (uLogueado == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        if (uLogueado.getRol() != Rol.ADMIN) {
+            if (uLogueado.getRol() == Rol.VETERINARIO) {
+                response.sendRedirect("VeterinarioServlet");
+            } else {
+                response.sendRedirect("VoluntarioServlet");
+            }
+            return;
+        }
 
         UsuarioDAOJPAImpl usuarioDAO = new UsuarioDAOJPAImpl();
         
@@ -87,7 +120,7 @@ public class AdminServlet extends HttpServlet {
                 } else if ("bloquear".equals(accion)) {
                     u.setEstado(EstadoUsuario.BLOQUEADO);
                 }
-                dao.editar(u); // Guardar cambios
+                dao.editar(u); 
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -144,24 +177,28 @@ public class AdminServlet extends HttpServlet {
     private void actualizarUsuario(HttpServletRequest request, HttpServletResponse response, UsuarioDAOJPAImpl dao) 
         throws IOException {
 
-        Long id = Long.parseLong(request.getParameter("idUsuario"));
-        Usuario u = dao.buscarPorId(id);
+        try {
+            Long id = Long.parseLong(request.getParameter("idUsuario"));
+            Usuario u = dao.buscarPorId(id);
 
-        u.setNombre(request.getParameter("nombre"));
-        u.setApellido(request.getParameter("apellido"));
-        u.setCorreo(request.getParameter("correo"));
-        u.setTelefono(request.getParameter("telefono"));
+            u.setNombre(request.getParameter("nombre"));
+            u.setApellido(request.getParameter("apellido"));
+            u.setCorreo(request.getParameter("correo"));
+            u.setTelefono(request.getParameter("telefono"));
 
-        String nuevaPass = request.getParameter("contrasenia");
-        if (nuevaPass != null && !nuevaPass.isBlank()) {
-            String passHash = PasswordHasher.hash(nuevaPass);
-            u.setContrasenia(passHash);
+            String nuevaPass = request.getParameter("contrasenia");
+            if (nuevaPass != null && !nuevaPass.isBlank()) {
+                String passHash = PasswordHasher.hash(nuevaPass);
+                u.setContrasenia(passHash);
+            }
+
+            u.setRol(Rol.valueOf(request.getParameter("rol")));
+            u.setEstado(EstadoUsuario.valueOf(request.getParameter("estado")));
+
+            dao.editar(u);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        u.setRol(Rol.valueOf(request.getParameter("rol")));
-        u.setEstado(EstadoUsuario.valueOf(request.getParameter("estado")));
-
-        dao.editar(u);
 
         response.sendRedirect("AdminServlet"); 
     }
@@ -169,27 +206,30 @@ public class AdminServlet extends HttpServlet {
     private void crearUsuario(HttpServletRequest request, HttpServletResponse response, UsuarioDAOJPAImpl dao) 
         throws IOException {
 
-        Usuario u = new Usuario();
+        try {
+            Usuario u = new Usuario();
 
-        u.setNombre(request.getParameter("nombre"));
-        u.setApellido(request.getParameter("apellido"));
-        u.setDNI(request.getParameter("dni")); 
-        u.setCorreo(request.getParameter("correo"));
-        u.setTelefono(request.getParameter("telefono"));
+            u.setNombre(request.getParameter("nombre"));
+            u.setApellido(request.getParameter("apellido"));
+            u.setDNI(request.getParameter("dni")); 
+            u.setCorreo(request.getParameter("correo"));
+            u.setTelefono(request.getParameter("telefono"));
 
-        String passRaw = request.getParameter("contrasenia");
-        if(passRaw != null && !passRaw.isBlank()) {
-            String passHash = PasswordHasher.hash(passRaw); // Encriptamos con BCrypt
-            u.setContrasenia(passHash);
-        } else {
-            // Por defecto en caso de que algo falle
-            u.setContrasenia(PasswordHasher.hash("123456")); 
+            String passRaw = request.getParameter("contrasenia");
+            if(passRaw != null && !passRaw.isBlank()) {
+                String passHash = PasswordHasher.hash(passRaw);
+                u.setContrasenia(passHash);
+            } else {
+                u.setContrasenia(PasswordHasher.hash("123456")); 
+            }
+
+            u.setRol(Rol.valueOf(request.getParameter("rol")));
+            u.setEstado(EstadoUsuario.valueOf(request.getParameter("estado")));
+
+            dao.crear(u);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        u.setRol(Rol.valueOf(request.getParameter("rol")));
-        u.setEstado(EstadoUsuario.valueOf(request.getParameter("estado")));
-
-        dao.crear(u);
 
         response.sendRedirect("AdminServlet");
     }
