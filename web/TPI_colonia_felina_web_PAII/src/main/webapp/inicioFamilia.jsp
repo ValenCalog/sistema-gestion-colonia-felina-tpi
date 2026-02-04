@@ -9,9 +9,11 @@
     // Validaciones para evitar NullPointer
     String nombreUser = (u != null) ? u.getNombre() : "Familia";
     String codigoFamilia = (familia != null) ? familia.getCodigoFamilia() : "---";
-    List<Postulacion> postulaciones = (familia != null) ? familia.getPostulaciones() : null;
     List<Adopcion> adopciones = (familia != null) ? familia.getAdopciones() : null;
     List<Usuario> miembros = (familia != null) ? familia.getMiembrosFamilia() : null;
+    
+    List<Postulacion> postulaciones = (List<Postulacion>) request.getAttribute("postulacionesVisibles");
+    Long cantidadPendientes = (Long) request.getAttribute("cantidadPendientes");
 %>
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
@@ -46,73 +48,92 @@
                 <div class="lg:col-span-2 space-y-8">
                     
                     <section class="card bg-white dark:bg-surface-cardDark p-6 border border-border-light dark:border-border-dark">
+
+
                         <div class="flex items-center justify-between mb-6">
                             <h2 class="text-xl font-bold flex items-center gap-2">
                                 <span class="material-symbols-outlined text-primary">assignment_ind</span>
                                 Solicitudes en Curso
                             </h2>
-                            <% if(postulaciones != null && !postulaciones.isEmpty()) { %>
-                                <span class="badge bg-primary/10 text-primary"><%= postulaciones.size() %> Activas</span>
+                            <% if (cantidadPendientes != null && cantidadPendientes > 0) {%>
+                            <span class="badge bg-primary/10 text-primary font-bold px-3 py-1 rounded-full text-xs animate-pulse">
+                                <%= cantidadPendientes%> En Revisión
+                            </span>
                             <% } %>
                         </div>
 
                         <div class="space-y-4">
-                            <% 
-                            if (postulaciones != null && !postulaciones.isEmpty()) {
-                                for (Postulacion p : postulaciones) {
-                                    // Calcular Progreso Visual según Estado
-                                    int progreso = 10;
-                                    String estadoTexto = "Recibido";
-                                    String colorBarra = "bg-primary";
-                                    
-                                    String est = p.getEstado().toString();
-                                    if(est.equals("PENDIENTE")) { progreso = 25; estadoTexto = "Evaluando perfil"; }
-                                    else if(est.equals("ACEPTADA")) { progreso = 100; estadoTexto = "¡Aprobada! Coordinando entrega"; colorBarra = "bg-green-500"; }
-                                    else if(est.equals("RECHAZADA")) { progreso = 100; estadoTexto = "No aprobada"; colorBarra = "bg-red-500"; }
-                                    
-                                    // Foto Gato
-                                    String fotoGato = "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=200";
-                                    if(p.getGato().getFotografia() != null) fotoGato = request.getContextPath() + p.getGato().getFotografia();
+                            <%
+                                if (postulaciones != null && !postulaciones.isEmpty()) {
+                                    for (Postulacion p : postulaciones) {
+                                        String est = p.getEstado().toString();
+
+                                        // Configuración visual 
+                                        String estiloCard = "bg-surface-light dark:bg-white/5";
+                                        String estadoTexto = "No aprobada";
+                                        int progreso = 100;
+                                        String colorBarra = "bg-gray-400"; // Default (Rechazada)
+
+                                        if ("PENDIENTE".equals(est)) {
+                                            estiloCard = "bg-white dark:bg-surface-cardDark border-l-4 border-l-primary shadow-sm";
+                                            estadoTexto = "Evaluando perfil";
+                                            progreso = 25;
+                                            colorBarra = "bg-primary";
+                                        }
+
+                                        String urlFoto = null;
+                                        if (p.getGato().getFotografia() != null && !p.getGato().getFotografia().isEmpty()) {
+                                            urlFoto = request.getContextPath() + p.getGato().getFotografia();
+                                        }
                             %>
-                            
-                            <div class="flex flex-col sm:flex-row gap-4 p-4 rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-white/5">
-                                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-lg bg-gray-200 shrink-0 overflow-hidden">
-                                    <img src="<%= fotoGato %>" class="w-full h-full object-cover">
+
+                            <div class="flex flex-col sm:flex-row gap-4 p-4 rounded-xl border border-border-light dark:border-border-dark transition-all hover:shadow-md <%= estiloCard%>">
+
+                                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-lg bg-gray-200 dark:bg-gray-700 shrink-0 overflow-hidden relative flex items-center justify-center">
+                                    <% if (urlFoto != null) {%>
+                                        <img src="<%= urlFoto%>" class="w-full h-full object-cover">
+                                    <% } else { %>
+                                        <span class="material-symbols-outlined text-4xl text-gray-400 dark:text-gray-500 opacity-50">pets</span>
+                                    <% } %>
                                 </div>
-                                
+
                                 <div class="flex-1 flex flex-col justify-center w-full">
                                     <div class="flex justify-between items-start mb-2">
                                         <div>
                                             <p class="text-xs font-bold text-ink-light uppercase">Solicitud #<%= p.getIdPostulacion() %></p>
-                                            <h3 class="font-bold text-lg">Interés por <span class="text-primary"><%= p.getGato().getNombre() %></span></h3>
+                                            <h3 class="font-bold text-lg leading-tight">
+                                                Interés por <span class="text-primary"><%= p.getGato().getNombre() %></span>
+                                            </h3>
                                         </div>
-                                        <span class="text-xs font-bold px-2 py-1 rounded bg-gray-100 dark:bg-white/10"><%= p.getFecha() %></span>
+                                        <span class="text-xs font-bold px-2 py-1 rounded bg-gray-100 dark:bg-white/10 whitespace-nowrap ml-2"><%= p.getFecha() %></span>
                                     </div>
-                                    
+
                                     <div class="space-y-1">
                                         <div class="flex justify-between text-xs font-medium">
-                                            <span>Estado: <%= estadoTexto %></span>
-                                            <span><%= progreso %>%</span>
+                                            <span class="<%= "PENDIENTE".equals(est) ? "text-primary font-bold animate-pulse" : "text-gray-500" %>">
+                                                <%= estadoTexto %>
+                                            </span>
+                                            <% if("PENDIENTE".equals(est)) { %> <span>En revisión...</span> <% } %>
                                         </div>
-                                        <div class="h-2 w-full rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
-                                            <div class="h-full rounded-full <%= colorBarra %> transition-all duration-1000" style="width: <%= progreso %>%;"></div>
+                                        <div class="h-1.5 w-full rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+                                            <div class="h-full rounded-full <%= colorBarra %>" style="width: <%= progreso %>%;"></div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
-                            
-                            <% 
-                                } 
-                            } else { 
+                            <%
+                                    }
+                                } else {
                             %>
                                 <div class="text-center py-8 border-2 border-dashed border-gray-200 rounded-xl">
-                                    <p class="text-ink-light mb-2">No tienes solicitudes pendientes.</p>
-                                    <a href="GatoServlet?accion=catalogo" class="text-primary font-bold text-sm hover:underline">Buscar un compañero</a>
+                                    <p class="text-ink-light mb-2">No hay solicitudes pendientes.</p>
+                                    <a href="GatoServlet?accion=catalogo" class="text-primary font-bold text-sm hover:underline">Buscar otro compañero</a>
                                 </div>
                             <% } %>
                         </div>
-                    </section>
-
+                    </section> 
+                    
                     <% if (adopciones != null && !adopciones.isEmpty()) { %>
                     <section>
                          <h2 class="text-xl font-bold flex items-center gap-2 mb-4">

@@ -9,4 +9,6 @@ public interface IPostulacionDAO {
     Postulacion buscarPorId(Long id);
     List<Postulacion> buscarTodas();
     Postulacion buscarPorGatoYFamilia(Long idGato, Long idFamilia);
+    List<Postulacion> buscarActivasPorFamilia(Long idFamilia);
+    Long contarPendientesPorFamilia(Long idFamilia);
 }

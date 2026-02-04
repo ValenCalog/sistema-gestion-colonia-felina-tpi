@@ -1,5 +1,6 @@
 package com.prog.tpi_colonia_felina_paii.dao;
 
+import com.prog.tpi_colonia_felina_paii.enums.EstadoPostulacion;
 import com.prog.tpi_colonia_felina_paii.modelo.Postulacion;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -68,6 +69,53 @@ public class PostulacionDAOJPAImpl implements IPostulacionDAO {
                     .getSingleResult();
 
             return postulacion;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    // Este metodo es para mostrarle a las familias todas sus postulaciones que todavia no fueron aceptadas o que fueron rechazadas
+    @Override
+    public List<Postulacion> buscarActivasPorFamilia(Long idFamilia) {
+        EntityManager em = DBService.getEntityManager();
+        try {
+            /* Explicacion de la consulta:
+            Primero filtramos por id familia
+           Despues nos fijamos que NO sea ACEPTADA (p.estado <> :aceptada)
+             ordenamos con CASE: Si es PENDIENTE vale 1, sino vale 2. (menor va primero)
+             ordenamos por ID descendente por si hay empate (las más nuevas primero). */
+
+            String jpql = "SELECT p FROM Postulacion p " +
+                          "WHERE p.familiaPostulante.idFamilia = :idFamilia " +
+                          "AND p.estado <> :aceptada " +
+                          "ORDER BY " +
+                          "CASE WHEN p.estado = :pendiente THEN 1 ELSE 2 END ASC, " +
+                          "p.idPostulacion DESC";
+
+            return em.createQuery(jpql, Postulacion.class)
+                     .setParameter("idFamilia", idFamilia)
+                     .setParameter("aceptada", EstadoPostulacion.ACEPTADA)
+                     .setParameter("pendiente", EstadoPostulacion.PENDIENTE)
+                     .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Long contarPendientesPorFamilia(Long idFamilia) {
+        EntityManager em = DBService.getEntityManager();
+        try {
+            String jpql = "SELECT COUNT(p) FROM Postulacion p " +
+                          "WHERE p.familiaPostulante.idFamilia = :idFamilia " +
+                          "AND p.estado = :pendiente";
+
+            return em.createQuery(jpql, Long.class)
+                     .setParameter("idFamilia", idFamilia)
+                     .setParameter("pendiente", EstadoPostulacion.PENDIENTE)
+                     .getSingleResult();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
