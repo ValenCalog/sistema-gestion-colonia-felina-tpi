@@ -80,7 +80,7 @@ public class TareaServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        request.setCharacterEncoding("UTF-8");
         // 1. Verificar Sesión (Usuario Voluntario)
         HttpSession session = request.getSession();
         Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
