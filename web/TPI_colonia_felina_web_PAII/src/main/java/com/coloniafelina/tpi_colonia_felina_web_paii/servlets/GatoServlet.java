@@ -159,7 +159,7 @@ public class GatoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        request.setCharacterEncoding("UTF-8");
         GatoDAOJPAImpl gatoDAO = new GatoDAOJPAImpl();
         ZonaDAOJPAImpl zonaDAO = new ZonaDAOJPAImpl();
         

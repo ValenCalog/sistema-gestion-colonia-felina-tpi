@@ -22,7 +22,7 @@ public class RegistroMiembroServlet extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            
+            request.setCharacterEncoding("UTF-8");
             String nombre = request.getParameter("nombre");
             String apellido = request.getParameter("apellido");
             String dni = request.getParameter("dni");

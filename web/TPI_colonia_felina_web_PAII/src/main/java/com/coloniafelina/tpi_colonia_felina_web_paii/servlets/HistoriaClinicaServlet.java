@@ -33,7 +33,7 @@ public class HistoriaClinicaServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        request.setCharacterEncoding("UTF-8");
         String accion = request.getParameter("accion");
         HttpSession session = request.getSession();
         Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
