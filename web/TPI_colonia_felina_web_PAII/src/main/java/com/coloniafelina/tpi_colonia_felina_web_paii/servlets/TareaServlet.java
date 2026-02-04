@@ -67,14 +67,9 @@ public class TareaServlet extends HttpServlet {
                 Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
                 
                 if (u != null) {
-                    // Listamos las tareas hechas por ESTE usuario
                     List<Tarea> misTareas = tareaDAO.buscarPorUsuario(u.getIdUsuario());
-                    request.setAttribute("tareas", misTareas);
-                    // Redirigir a un JSP de listado (cuando lo tengas)
-                    // request.getRequestDispatcher("listarTareas.jsp").forward(request, response);
-                    
-                    // Por ahora, para probar, mandamos al formulario vacío:
-                    cargarFormulario(request, response, gatoDAO, null);
+                    request.setAttribute("misTareas", misTareas);
+                    request.getRequestDispatcher("misTareas.jsp").forward(request, response);
                 } else {
                     response.sendRedirect("login.jsp");
                 }

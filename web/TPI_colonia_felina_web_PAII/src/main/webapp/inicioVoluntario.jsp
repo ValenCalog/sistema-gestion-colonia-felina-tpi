@@ -49,7 +49,6 @@
                                 <span class="material-symbols-outlined text-primary">assignment</span>
                                 Últimas Tareas Realizadas
                             </h2>
-                            <a href="TareaServlet" class="text-sm font-bold text-primary hover:underline">Ver todas</a>
                         </div>
                         <div class="space-y-4">
                             <% if (tareasRecientes != null && !tareasRecientes.isEmpty()) {
