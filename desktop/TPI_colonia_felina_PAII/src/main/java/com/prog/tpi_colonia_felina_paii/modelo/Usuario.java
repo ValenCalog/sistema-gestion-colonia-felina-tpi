@@ -48,9 +48,6 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private Rol rol;
     
-    @OneToOne(mappedBy = "usuario", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY, optional = true)
-    private Reputacion reputacion;
-    
     //Relacion con familia si tiene rol MIEMBRO_FAMILIA:
     @ManyToOne
     @JoinColumn(name = "id_familia", nullable = true)
@@ -140,14 +137,6 @@ public class Usuario {
 
     public void setRol(Rol rol) {
         this.rol = rol;
-    }
-
-    public Reputacion getReputacion() {
-        return reputacion;
-    }
-
-    public void setReputacion(Reputacion reputacion) {
-        this.reputacion = reputacion;
     }
 
     public Familia getFamilia() {
